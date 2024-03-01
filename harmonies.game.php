@@ -50,8 +50,8 @@ class Harmonies extends Table {
             LAST_TURN => 10, // last turn is the id of the last player, 0 if it's not last turn
             //    "my_second_global_variable" => 11,
             //      ...
-            //    "my_first_game_variant" => 100,
-            //    "my_second_game_variant" => 101,
+            "NatureSSpiritCards" => 100,
+            "BoardSide" => 101,
             //      ...
         ));
         /*$this->destinations = $this->getNew("module.common.deck");
@@ -63,6 +63,17 @@ class Harmonies extends Table {
         // Used for translations and stuff. Please do not modify.
         return "harmonies";
     }
+
+    /********** OPTIONS */
+
+    public function isSpiritCardsOn() {
+        return $this->gamestate->table_globals[100] == 1;
+    }
+
+    public function isBoardSideA() {
+        return $this->gamestate->table_globals[101] == 1;
+    }
+    /********** end OPTIONS */
 
     /*
         setupNewGame:

@@ -1,1 +1,31 @@
-{}
+{
+	"100": {
+		"name": "Nature’s Spirit cards",
+		"values": {
+			"0": {
+				"name": "Off"
+			},
+			"1": {
+				"name": "On",
+				"description": "Use Nature’s Spirit cards to enjoy a richer game experience with new ways of scoring",
+				"nobeginner": true
+			}
+		},
+		"default": 1
+	},
+	"101": {
+		"name": "Board choice",
+		"values": {
+			"1": {
+				"name": "Side A",
+				"description": "Smaller board, blue tokens are used to form the longest river"
+			},
+			"2": {
+				"name": "Side B",
+				"description": "Bigger board, blue tokens forms islands, each island scores 5 points",
+				"nobeginner": true
+			}
+		},
+		"default": 1
+	}
+}
