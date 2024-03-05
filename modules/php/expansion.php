@@ -3,27 +3,48 @@
 trait ExpansionTrait {
 
     /**
-     * List the destination tickets that will be used for the game.
+     * List the colored tokens that will be used for the game.
      */
-    function getDestinationToGenerate() {
-        $destinations = [];
+    function getColoredTokensToGenerate() {
+        $cards = [];
         $expansion = EXPANSION;
 
         switch ($expansion) {
             default:
-                foreach ($this->DESTINATIONS[1] as $typeArg => $destination) {
-                    if ($typeArg != 0) {//starting point is excluded
-                        $destinations[] = ['type' => 1, 'type_arg' => $typeArg, 'nbr' => 1];
-                    }
+                $cards = array(
+                    array('type' => 1, 'type_arg' => BLUE, 'nbr' => 23),
+                    array('type' => 1, 'type_arg' => GRAY, 'nbr' => 23),
+                    array('type' => 1, 'type_arg' => BROWN, 'nbr' => 21),
+                    array('type' => 1, 'type_arg' => GREEN, 'nbr' => 19),
+                    array('type' => 1, 'type_arg' => YELLOW, 'nbr' => 19),
+                    array('type' => 1, 'type_arg' => RED, 'nbr' => 15),
+                );
+                break;
+        }
+
+        return $cards;
+    }
+
+    /**
+     * List the animal cards that will be used for the game.
+     */
+    function getAnimalCardsToGenerate() {
+        $cards = [];
+        $expansion = EXPANSION;
+
+        switch ($expansion) {
+            default:
+                foreach ($this->ANIMAL_CARDS[1] as $typeArg => $card) {
+                    $cards[] = ['type' => 1, 'type_arg' => $typeArg, 'nbr' => 1];
                 }
                 break;
         }
 
-        return $destinations;
+        return $cards;
     }
 
     /**
-     * Return the number of destinations cards shown at the beginning.
+     * Return the number of ANIMAL_CARDS cards shown at the beginning.
      */
     function getInitialDestinationCardNumber(): int {
         $playerCount = $this->getPlayerCount();
@@ -36,7 +57,7 @@ trait ExpansionTrait {
     }
 
     /**
-     * Return the minimum number of destinations cards to keep at the beginning.
+     * Return the minimum number of ANIMAL_CARDS cards to keep at the beginning.
      */
     function getInitialDestinationMinimumKept() {
         switch (EXPANSION) {
@@ -46,7 +67,7 @@ trait ExpansionTrait {
     }
 
     /**
-     * Return the number of destinations cards shown at pick destination action.
+     * Return the number of ANIMAL_CARDS cards shown at pick destination action.
      */
     function getAdditionalDestinationCardNumber() {
         switch (EXPANSION) {

@@ -13,6 +13,8 @@ trait StateTrait {
 
     function stDealInitialSetup() {
         $playersIds = $this->getPlayersIds();
+        $this->fillCentralBoard();
+        $this->refillAnimalCards();
 
         foreach ($playersIds as $playerId) {
             //$this->pickInitialDestinationCards($playerId);
@@ -74,7 +76,7 @@ trait StateTrait {
 
         //end of game points
 
-        // failed destinations 
+        // failed ANIMAL_CARDS 
         /* $destinationsResults = [];
         $completedDestinationsCount = [];
         foreach ($players as $playerId => $playerDb) {
@@ -82,9 +84,9 @@ trait StateTrait {
             $uncompletedDestinations = [];
             $completedDestinations = [];
 
-            $destinations = $this->getDestinationsFromDb($this->destinations->getCardsInLocation('hand', $playerId));
+            $ANIMAL_CARDS = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('hand', $playerId));
 
-            foreach ($destinations as &$destination) {
+            foreach ($ANIMAL_CARDS as &$destination) {
                 $completed = boolval(self::getUniqueValueFromDb("SELECT `completed` FROM `destination` WHERE `card_id` = $destination->id"));
                 if ($completed) {
                     $completedDestinationsCount[$playerId]++;

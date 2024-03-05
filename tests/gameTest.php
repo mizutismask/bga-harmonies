@@ -17,7 +17,7 @@ class GameTest extends Harmonies { // this is your game class defined in ggg.gam
     // class tests
     function testYourTestName() {
 
-      /*  $result = $this->getDestinationRoutes(1, $this->DESTINATIONS[1][20]);
+      /*  $result = $this->getDestinationRoutes(1, $this->coloredTokens[1][20]);
 
         $equal = $result == null;
 

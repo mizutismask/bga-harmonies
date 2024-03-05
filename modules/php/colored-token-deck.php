@@ -1,36 +1,67 @@
 <?php
 
-//require_once(__DIR__ . '/objects/destination.php');
+require_once(__DIR__ . '/objects/coloredToken.php');
 
-trait DestinationDeckTrait {
+trait ColoredTokenDeckTrait {
 
     /**
      * Create destination cards.
      */
-   /* public function createDestinations() {
-        $destinations = $this->getDestinationToGenerate();
-
-        $this->destinations->createCards($destinations, 'deck');
-        $this->destinations->shuffle('deck');
-    }*/
+    public function createTokens() {
+        $tokens = $this->getColoredTokensToGenerate();
+        $this->coloredTokens->createCards($tokens, 'deck');
+        $this->coloredTokens->shuffle('deck');
+    }
 
     /**
      * Pick destination cards for beginning choice.
      */
-   /* public function pickInitialDestinationCards(int $playerId) {
+    public function pickInitialDestinationCards(int $playerId) {
         $cardsNumber = $this->getInitialDestinationCardNumber();
         $cards = $this->pickDestinationCards($playerId, $cardsNumber);
         $this->keepInitialDestinationCards($playerId, $this->getDestinationIds($cards), $this->getInitialDestinationCardNumber());
         return $cards;
-    }*/
+    }
 
-   /* public function checkVisibleSharedCardsAreEnough() {
-        $visibleCardsCount = intval($this->destinations->countCardInLocation('shared'));
+    /**
+     * Pick tokens to fill central board.
+     */
+    public function fillCentralBoard() {
+        $tokenCount = 3;
+        $tokensByHole = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $tokens = $this->pickTokensForCentralBoard($tokenCount, $i);
+            $tokensByHole[$i] = $tokens;
+        }
+        $this->notifyAllPlayers('coloredTokenMove', "", [
+            'tokensByHole' => $tokensByHole,
+        ]);
+    }
+
+    /**
+     * Pick tokens to refill central board.
+     */
+    public function refillCentralBoard() {
+        $tokenCount = 3;
+        $hole = self::getGameStateValue(EMPTIED_HOLE);
+        $tokens = $this->pickTokensForCentralBoard($tokenCount, $hole);
+        if (count($tokens) != $tokenCount) {
+            //end of game
+        } else {
+            $this->notifyAllPlayers('coloredTokenMove', "", [
+                'tokens' => [$hole => $this->getColoredTokensFromDb($this->coloredTokens->getCards($tokens))],
+            ]);
+        }
+        return $tokens;
+    }
+
+    /* public function checkVisibleSharedCardsAreEnough() {
+        $visibleCardsCount = intval($this->coloredTokens->countCardInLocation('shared'));
         if ($visibleCardsCount < NUMBER_OF_SHARED_DESTINATION_CARDS) {
             $spots = [];
             $citiesNames = [];
             for ($i = $visibleCardsCount; $i < NUMBER_OF_SHARED_DESTINATION_CARDS; $i++) {
-                $newCard = $this->getDestinationFromDb($this->destinations->pickCardForLocation('deck', 'shared', $i));
+                $newCard = $this->getColoredTokenFromDb($this->coloredTokens->pickCardForLocation('deck', 'shared', $i));
                 $citiesNames[] = $this->CITIES[$newCard->to];
                 $spots[] = $newCard;
             }
@@ -60,7 +91,7 @@ trait DestinationDeckTrait {
      * Get destination picked cards (cards player can choose).
      */
     public function getPickedDestinationCards(int $playerId) {
-        $cards = $this->getDestinationsFromDb($this->destinations->getCardsInLocation("pick$playerId"));
+        $cards = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation("pick$playerId"));
         return $cards;
     }
 
@@ -68,7 +99,7 @@ trait DestinationDeckTrait {
      * Get destination cards in player hand.
      */
     public function getPlayerDestinationCards(int $playerId) {
-        $cards = $this->getDestinationsFromDb($this->destinations->getCardsInLocation("hand", $playerId));
+        $cards = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation("hand", $playerId));
         return $cards;
     }
 
@@ -76,20 +107,28 @@ trait DestinationDeckTrait {
      * get remaining destination cards in deck.
      */
     public function getRemainingDestinationCardsInDeck() {
-        $remaining = intval($this->destinations->countCardInLocation('deck'));
+        $remaining = intval($this->coloredTokens->countCardInLocation('deck'));
 
         if ($remaining == 0) {
-            $remaining = intval($this->destinations->countCardInLocation('discard'));
+            $remaining = intval($this->coloredTokens->countCardInLocation('discard'));
         }
 
         return $remaining;
     }
 
     /**
-     * place a number of destinations cards to pick$playerId.
+     * place a number of tokens cards to pick$playerId.
      */
     private function pickDestinationCards($playerId, int $number) {
-        $cards = $this->getDestinationsFromDb($this->destinations->pickCardsForLocation($number, 'deck', "pick$playerId"));
+        $cards = $this->getColoredTokensFromDb($this->coloredTokens->pickCardsForLocation($number, 'deck', "pick$playerId"));
+        return $cards;
+    }
+
+    /**
+     * place a number of tokens cards to pick$playerId.
+     */
+    private function pickTokensForCentralBoard(int $count, int $holeNumber) {
+        $cards = $this->getColoredTokensFromDb($this->coloredTokens->pickCardsForLocation($count, "deck", 'centralBoard', $holeNumber));
         return $cards;
     }
 
@@ -108,13 +147,13 @@ trait DestinationDeckTrait {
             ) {
                 throw new BgaUserException("Selected cards are not available.");
             }
-            $this->destinations->moveCard($keptDestinationsId, 'hand', $playerId);
-            $this->destinations->moveCard($discardedDestinationId, 'discard');
+            $this->coloredTokens->moveCard($keptDestinationsId, 'hand', $playerId);
+            $this->coloredTokens->moveCard($discardedDestinationId, 'discard');
 
-            $remainingCardsInPick = intval($this->destinations->countCardInLocation("pick$playerId"));
+            $remainingCardsInPick = intval($this->coloredTokens->countCardInLocation("pick$playerId"));
             if ($remainingCardsInPick > 0) {
                 // we discard remaining cards in pick
-                $this->destinations->moveAllCardsInLocationKeepOrder("pick$playerId", 'discard');
+                $this->coloredTokens->moveAllCardsInLocationKeepOrder("pick$playerId", 'discard');
             }
         }
         $this->notifyAllPlayers('destinationsPicked', clienttranslate('${player_name} trades ${count} destination'), [
@@ -125,8 +164,8 @@ trait DestinationDeckTrait {
             'remainingDestinationsInDeck' => $this->getRemainingDestinationCardsInDeck(),
             '_private' => [
                 $playerId => [
-                    'destinations' => $this->getDestinationsFromDb([$this->destinations->getCard($keptDestinationsId)]),
-                    'discardedDestination' => $this->getDestinationFromDb($this->destinations->getCard($discardedDestinationId)),
+                    'tokens' => $this->getColoredTokensFromDb([$this->coloredTokens->getCard($keptDestinationsId)]),
+                    'discardedDestination' => $this->getColoredTokenFromDb($this->coloredTokens->getCard($discardedDestinationId)),
                 ],
             ],
         ]);
@@ -136,8 +175,8 @@ trait DestinationDeckTrait {
      * Move selected cards to player hand.
      */
     private function keepInitialDestinationCards(int $playerId, array $ids) {
-        $this->destinations->moveCards($ids, 'hand', $playerId);
-        $this->notifyAllPlayers('destinationsPicked', clienttranslate('${player_name} keeps ${count} destinations'), [
+        $this->coloredTokens->moveCards($ids, 'hand', $playerId);
+        $this->notifyAllPlayers('destinationsPicked', clienttranslate('${player_name} keeps ${count} tokens'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
             'count' => count($ids),
@@ -145,7 +184,7 @@ trait DestinationDeckTrait {
             'remainingDestinationsInDeck' => $this->getRemainingDestinationCardsInDeck(),
             '_private' => [
                 $playerId => [
-                    'destinations' => $this->getDestinationsFromDb($this->destinations->getCards($ids)),
+                    'tokens' => $this->getColoredTokensFromDb($this->coloredTokens->getCards($ids)),
                 ],
             ],
         ]);

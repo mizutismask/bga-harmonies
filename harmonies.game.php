@@ -24,7 +24,8 @@ require_once('modules/php/utils.php');
 require_once('modules/php/states.php');
 require_once('modules/php/args.php');
 require_once('modules/php/actions.php');
-//require_once('modules/php/destination-deck.php');
+require_once('modules/php/animal-cards-deck.php');
+require_once('modules/php/colored-token-deck.php');
 require_once('modules/php/debug-util.php');
 require_once('modules/php/expansion.php');
 
@@ -33,7 +34,8 @@ class Harmonies extends Table {
     use ActionTrait;
     use StateTrait;
     use ArgsTrait;
-    //use DestinationDeckTrait;
+    use ColoredTokenDeckTrait;
+    use AnimalCardDeckTrait;
     use DebugUtilTrait;
     use ExpansionTrait;
 
@@ -48,15 +50,19 @@ class Harmonies extends Table {
 
         self::initGameStateLabels(array(
             LAST_TURN => 10, // last turn is the id of the last player, 0 if it's not last turn
-            //    "my_second_global_variable" => 11,
+            EMPTIED_HOLE => 11,
             //      ...
             "NatureSSpiritCards" => 100,
             "BoardSide" => 101,
             //      ...
         ));
-        /*$this->destinations = $this->getNew("module.common.deck");
-        $this->destinations->init("destination");
-        $this->destinations->autoreshuffle = true;    */
+        $this->coloredTokens = $this->getNew("module.common.deck");
+        $this->coloredTokens->init("coloredToken");
+        $this->coloredTokens->autoreshuffle = false; //end of game when empty
+
+        $this->animalCards = $this->getNew("module.common.deck");
+        $this->animalCards->init("animalCard");
+        $this->animalCards->autoreshuffle = true;
     }
 
     protected function getGameName() {
@@ -105,18 +111,28 @@ class Harmonies extends Table {
         /************ Start the game initialization *****/
 
         // Init global values with their initial values
-        //self::setGameStateInitialValue( 'my_first_global_variable', 0 );
+        $this->setGameStateInitialValue(EMPTIED_HOLE, 0);
         //initialize everything to be compliant with undo framework
         //foreach ($this->GAMESTATELABELS as $value_label => $ID) if ($ID >= 10 && $ID < 90) $this->setGameStateInitialValue($value_label, 0);
 
         $this->initStats();
 
         // TODO: setup the initial game situation here
+        $this->setupTable();
 
         // Activate first player (which is in general a good idea :) )
         $this->activateNextPlayerCustom();
 
         /************ End of the game initialization *****/
+    }
+
+    function setupTable() {
+        $this->setupSharedItems();
+    }
+
+    function setupSharedItems() {
+        $this->createTokens();
+        $this->createAnimalCards();
     }
 
     /*
@@ -150,6 +166,8 @@ class Harmonies extends Table {
 
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
         $result['expansion'] = EXPANSION;
+        $result['boardSide'] = $this->isBoardSideA() ? "sideA" : "sideB";
+
         if ($isEnd) {
             $maxScore = max(array_map(fn ($player) => intval($player['score']), $result['players']));
             $result['winners'] = array_keys(array_filter($result['players'], fn ($player) => intval($player['score'] == $maxScore)));

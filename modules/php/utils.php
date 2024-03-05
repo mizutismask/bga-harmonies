@@ -1,5 +1,5 @@
 <?php
-//require_once(__DIR__ . '/objects/destination.php');
+//require_once(__DIR__ . '/objects/coloredToken.php');
 //require_once(__DIR__ . '/objects/route.php');
 
 trait UtilTrait {
@@ -91,21 +91,41 @@ trait UtilTrait {
     /**
      * Transforms a Destination Db object to Destination class.
      */
-    /* function getDestinationFromDb($dbObject) {
+     function getColoredTokenFromDb($dbObject) {
         if (!$dbObject || !array_key_exists('id', $dbObject)) {
-            throw new BgaSystemException("Destination doesn't exists " . json_encode($dbObject));
+            throw new BgaSystemException("Colored token doesn't exists " . json_encode($dbObject));
         }
 
         //self::dump('************type_arg*******', $dbObject["type_arg"]);
-        //self::dump('*******************', $this->DESTINATIONS[$dbObject["type"]][$dbObject["type_arg"]]);
-        return new Destination($dbObject, $this->DESTINATIONS);
-    }*/
+        //self::dump('*******************', $this->coloredTokens[$dbObject["type"]][$dbObject["type_arg"]]);
+        return new ColoredToken($dbObject);
+    }
 
     /**
-     * Transforms a Destination Db object array to Destination class array.
+     * Transforms a Destination Db object to Destination class.
      */
-    function getDestinationsFromDb(array $dbObjects) {
-        return array_map(fn ($dbObject) => $this->getDestinationFromDb($dbObject), array_values($dbObjects));
+     function getAnimalCardFromDb($dbObject) {
+        if (!$dbObject || !array_key_exists('id', $dbObject)) {
+            throw new BgaSystemException("Animal card doesn't exists " . json_encode($dbObject));
+        }
+
+        //self::dump('************type_arg*******', $dbObject["type_arg"]);
+        //self::dump('*******************', $this->coloredTokens[$dbObject["type"]][$dbObject["type_arg"]]);
+        return new AnimalCard($dbObject, $this->ANIMAL_CARDS);
+    }
+
+    /**
+     * Transforms a ColoredToken Db object array to ColoredToken class array.
+     */
+    function getColoredTokensFromDb(array $dbObjects) {
+        return array_map(fn ($dbObject) => $this->getColoredTokenFromDb($dbObject), array_values($dbObjects));
+    }
+
+    /**
+     * Transforms a AnimalCard Db object array to AnimalCard class array.
+     */
+    function getAnimalCardsFromDb(array $dbObjects) {
+        return array_map(fn ($dbObject) => $this->getAnimalCardFromDb($dbObject), array_values($dbObjects));
     }
 
     /**

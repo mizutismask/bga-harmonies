@@ -29,12 +29,12 @@ trait DebugUtilTrait {
     }*/
 
     /*function debugEmptyDestinationDeck() {
-        $this->destinations->moveAllCardsInLocation('deck', 'void');
+        $this->coloredTokens->moveAllCardsInLocation('deck', 'void');
     }*/
 
     /*function debugAlmostEmptyDestinationDeck() {
         $moveNumber = $this->getRemainingDestinationCardsInDeck() - 1;
-        $this->destinations->pickCardsForLocation($moveNumber, 'deck', 'discard');
+        $this->coloredTokens->pickCardsForLocation($moveNumber, 'deck', 'discard');
     }*/
 
 

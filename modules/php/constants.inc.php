@@ -20,6 +20,15 @@ const MATERIAL_LOCATION_STOCK = "STOCK";
  * Game constants 
  */
 //define('INITIAL_ARROW_COUNT', 45);
+const BLUE = 1;
+const GRAY = 2;
+const BROWN = 3;
+const GREEN = 4;
+const YELLOW = 5;
+const RED = 6;
+const VISIBLE_ANIMAL_CARDS_COUNT = 5;
+
+const EMPTIED_HOLE = "EMPTIED_HOLE";
 
 
 /**

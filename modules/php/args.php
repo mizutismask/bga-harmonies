@@ -14,13 +14,13 @@ trait ArgsTrait {
     /*function argChooseAdditionalDestinations() {
         $playerId = intval(self::getActivePlayerId());
 
-        $destinations = $this->getPickedDestinationCards($playerId);
+        $ANIMAL_CARDS = $this->getPickedDestinationCards($playerId);
 
         return [
             'minimum' => 3,
             '_private' => [          // Using "_private" keyword, all data inside this array will be made private
                 'active' => [       // Using "active" keyword inside "_private", you select active player(s)
-                    'destinations' => $destinations,   // will be send only to active player(s)
+                    'ANIMAL_CARDS' => $ANIMAL_CARDS,   // will be send only to active player(s)
                 ]
             ],
         ];

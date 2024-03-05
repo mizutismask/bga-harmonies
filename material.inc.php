@@ -21,17 +21,16 @@
  */
 
 
-/*
-
-Example:
-
-$this->card_types = array(
-    1 => array( "card_name" => ...,
-                ...
-              )
-);
-
-*/
+ $this->ANIMAL_CARDS = [
+  1 => [
+    1 => new AnimalCardInfo([8,9,4]),
+    2 => new AnimalCardInfo([8,9,4]),
+    3 => new AnimalCardInfo([8,9,4]),
+    4 => new AnimalCardInfo([8,9,4]),
+    5 => new AnimalCardInfo([8,9,4]),
+    6 => new AnimalCardInfo([8,9,4]),
+  ]
+];
 
 
 
