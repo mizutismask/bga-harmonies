@@ -30,11 +30,13 @@ trait ArgsTrait {
     function argChooseAction() {
         $playerId = intval(self::getActivePlayerId());
 
-        $canPass = true;
+        $canTakeTokens =  $this->getGlobalVariable(TOKENS_IN_HOLE) === null;
+        $canPass = !$canTakeTokens;
         return [
-            'canPass' => $canPass,
+            'canTakeTokens' => $canTakeTokens,
             'canTakeAnimalCard' => boolval(self::getGameStateValue(TOOK_ANIMAL_CARD)) === false && count($this->getPlayerAnimalCards($playerId)) < 4,
             'canPlaceAnimal' => false,
+            'canPass' => $canPass,
         ];
     }
 }

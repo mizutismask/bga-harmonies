@@ -34,4 +34,17 @@ trait ActionTrait {
 
         $this->gamestate->nextState('nextPlayer');
     }
+
+    function takeTokens($holeNumber) {
+        self::checkAction('takeTokens');
+
+        $args = $this->argChooseAction();
+
+        if (!$args['canTakeTokens']) {
+            throw new BgaUserException("You already took colored tokens");
+        }
+
+        $this->setGlobalVariable(TOKENS_IN_HOLE, $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard', $holeNumber)));
+        $this->gamestate->nextState('continue');
+    }
 }

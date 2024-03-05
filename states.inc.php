@@ -85,14 +85,14 @@ $playerActionsGameStates = [
 
     ST_PLAYER_CHOOSE_ACTION => [
         "name" => "chooseAction",
-        "description" => clienttranslate('${actplayer} must start/continue an expedition or use tickets'),
-        "descriptionmyturn" => clienttranslate('${you} must start/continue an expedition or use tickets'),
+        "description" => clienttranslate('${actplayer} must take/place tokens or take an animal card or place an animal cube'),
+        "descriptionmyturn" => clienttranslate('${you} must take/place tokens or take an animal card or place an animal cube'),
         "descriptionLoop" => clienttranslate('${actplayer} made a loop and has to continue the expedition'),
         "descriptionmyturnLoop" => clienttranslate('${you} made a loop and have to continue the expedition from any point'),
         "type" => "activeplayer",
         "args" => "argChooseAction",
         "possibleactions" => [
-            "pass",
+            "pass", "takeTokens", "placeToken", "takeAnimalCard", "placeAnimal"
         ],
         "transitions" => [
             "nextPlayer" => ST_NEXT_PLAYER,

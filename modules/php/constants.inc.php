@@ -65,7 +65,7 @@ define('LAST_TURN', 'LAST_TURN');
 /*
  * Global variables (objects)
  */
-//define('LAST_BLUE_ROUTES', 'LAST_BLUE_ROUTES'); //array of the 3 last arrows
+define('TOKENS_IN_HOLE', 'TOKENS_IN_HOLE'); //chosen colored tokens during mandatory action
 
 /*
     Stats

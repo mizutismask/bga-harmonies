@@ -227,7 +227,7 @@ class Harmonies implements HarmoniesGame {
 	//                  You can use this method to perform some user interface changes at this moment.
 	//
 	public onEnteringState(stateName: string, args: any) {
-		console.log('Entering state: ' + stateName)
+		console.log('Entering state: ' + stateName, args)
 
 		switch (stateName) {
 			/* Example:

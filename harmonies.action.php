@@ -71,4 +71,14 @@ class action_harmonies extends APP_GameAction {
 
         self::ajaxResponse();
     }
+
+    public function takeTokens() {
+        self::setAjaxMode();
+        self::checkVersion();
+
+        $hole = self::getArg( "hole", AT_posint, true );
+        $this->game->takeTokens($hole);
+
+        self::ajaxResponse();
+    }
 }
