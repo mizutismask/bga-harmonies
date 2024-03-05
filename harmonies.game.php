@@ -51,6 +51,7 @@ class Harmonies extends Table {
         self::initGameStateLabels(array(
             LAST_TURN => 10, // last turn is the id of the last player, 0 if it's not last turn
             EMPTIED_HOLE => 11,
+            TOOK_ANIMAL_CARD => 12,
             //      ...
             "NatureSSpiritCards" => 100,
             "BoardSide" => 101,
@@ -112,6 +113,7 @@ class Harmonies extends Table {
 
         // Init global values with their initial values
         $this->setGameStateInitialValue(EMPTIED_HOLE, 0);
+        $this->setGameStateInitialValue(TOOK_ANIMAL_CARD, 0);
         //initialize everything to be compliant with undo framework
         //foreach ($this->GAMESTATELABELS as $value_label => $ID) if ($ID >= 10 && $ID < 90) $this->setGameStateInitialValue($value_label, 0);
 

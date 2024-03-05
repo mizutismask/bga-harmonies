@@ -57,6 +57,7 @@ trait StateTrait {
      */
     function activateNextPlayerCustom() {
         $player_id = $this->activeNextPlayer();
+        self::setGameStateValue(TOOK_ANIMAL_CARD, 0);
         $this->giveExtraTime($player_id);
         $this->incStat(1, 'turns_number', $player_id);
         $this->incStat(1, 'turns_number');

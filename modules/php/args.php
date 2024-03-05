@@ -33,6 +33,8 @@ trait ArgsTrait {
         $canPass = true;
         return [
             'canPass' => $canPass,
+            'canTakeAnimalCard' => boolval(self::getGameStateValue(TOOK_ANIMAL_CARD)) === false && count($this->getPlayerAnimalCards($playerId)) < 4,
+            'canPlaceAnimal' => false,
         ];
     }
 }
