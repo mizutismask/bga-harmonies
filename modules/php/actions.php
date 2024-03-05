@@ -41,10 +41,27 @@ trait ActionTrait {
         $args = $this->argChooseAction();
 
         if (!$args['canTakeTokens']) {
-            throw new BgaUserException("You already took colored tokens");
+            throw new BgaUserException(self::_("You already took colored tokens"));
         }
 
         $this->setGlobalVariable(TOKENS_IN_HOLE, $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard', $holeNumber)));
+        $this->gamestate->nextState('continue');
+    }
+
+    function takeAnimalCard($cardId) {
+        self::checkAction('takeAnimalCard');
+
+        $args = $this->argChooseAction();
+
+        if (!$args['canTakeAnimalCard']) {
+            throw new BgaUserException(self::_("You can’t take an animal card, you already did it on this turn or don’t have any space left"));
+        }
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        if (!$card->location != "river") {
+            throw new BgaUserException(self::_("This card is not available in the river"));
+        }
+
+        $this->moveAnimalCardToPlayerBoard($cardId);
         $this->gamestate->nextState('continue');
     }
 }

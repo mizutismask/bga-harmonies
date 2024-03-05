@@ -81,4 +81,14 @@ class action_harmonies extends APP_GameAction {
 
         self::ajaxResponse();
     }
+
+    public function takeAnimalCard() {
+        self::setAjaxMode();
+        self::checkVersion();
+
+        $cardId = self::getArg( "cardId", AT_posint, true );
+        $this->game->takeAnimalCard($cardId);
+
+        self::ajaxResponse();
+    }
 }
