@@ -25,6 +25,7 @@ require_once('modules/php/states.php');
 require_once('modules/php/args.php');
 require_once('modules/php/actions.php');
 require_once('modules/php/animal-cards-deck.php');
+require_once('modules/php/animal-cube-deck.php');
 require_once('modules/php/colored-token-deck.php');
 require_once('modules/php/debug-util.php');
 require_once('modules/php/expansion.php');
@@ -36,6 +37,7 @@ class Harmonies extends Table {
     use ArgsTrait;
     use ColoredTokenDeckTrait;
     use AnimalCardDeckTrait;
+    use AnimalCubeDeckTrait;
     use DebugUtilTrait;
     use ExpansionTrait;
 
@@ -64,6 +66,9 @@ class Harmonies extends Table {
         $this->animalCards = $this->getNew("module.common.deck");
         $this->animalCards->init("animalCard");
         $this->animalCards->autoreshuffle = true;
+
+        $this->animalCubes = $this->getNew("module.common.deck");
+        $this->animalCubes->init("animalCube");
     }
 
     protected function getGameName() {
@@ -135,6 +140,7 @@ class Harmonies extends Table {
     function setupSharedItems() {
         $this->createTokens();
         $this->createAnimalCards();
+        $this->createAnimalCubes();
     }
 
     /*

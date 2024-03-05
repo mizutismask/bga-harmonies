@@ -11,8 +11,8 @@ class ColoredTokenInfo {
 
 /**
  * A ColoredToken is a physical token. It contains informations from matching ColoredTokenInfo, with technical informations like id and location.
- * Location : centralBoard or playerBoard 
- * Location arg : holeNumber (in centralBoard), playerId_cell_zindex (in playerBoard)
+ * Location : centralBoard or playerBoard (board)
+ * Location arg : holeNumber (in centralBoard), playerId_cell_zindex (in board)
  * Type : 1 for simple ColoredToken
  * Type arg : the ColoredToken color
  */

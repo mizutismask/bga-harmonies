@@ -57,7 +57,7 @@ trait ActionTrait {
             throw new BgaUserException(self::_("You can’t take an animal card, you already did it on this turn or don’t have any space left"));
         }
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
-        if (!$card->location != "river") {
+        if ($card->location != "river") {
             throw new BgaUserException(self::_("This card is not available in the river"));
         }
 

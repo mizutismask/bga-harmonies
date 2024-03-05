@@ -83,15 +83,18 @@ trait AnimalCardDeckTrait {
 
     public function moveAnimalCardToPlayerBoard(int $cardId) {
         $playerId = $this->getMostlyActivePlayerId();
-        $location = "playerBoard" . $playerId;
+        $location = "board" . $playerId;
         $spot = intval($this->animalCards->countCardInLocation($location));
         $this->animalCards->moveCard($cardId, $location, $spot);
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        $this->fillAnimalCard($card);
 
         $this->notifyAllPlayers('cardMoved', clienttranslate('${player_name} takes an animal card to his spot ${spot}'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
-            'card' => $this->getAnimalCardFromDb([$this->animalCards->getCard($cardId)]),
+            'card' => [$card],
             'to' => $spot,
+            'spot' => $spot,
         ]);
     }
 
