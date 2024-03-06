@@ -101,6 +101,23 @@ class Harmonies implements HarmoniesGame {
 		}
 		removeClass('animatedScore')
 
+		// Setup the board
+		for (let i = 0; i < 20; i++) {
+			for (let j = 0; j < 20; j++) {
+				const cellC = $('cell-container-' + i + '-' + j)
+				cellC.style.gridRow = 3 * i + 1 + ' / span 4'
+				cellC.style.gridColumn = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
+
+				/* let x = i,
+				y = j;
+			  dojo.connect($('cell-' + i + '-' + j), 'onclick', (evt) => {
+				evt.preventDefault();
+				evt.stopPropagation();
+				this.onClickCell(x, y);
+			  });*/
+			}
+		}
+
 		console.log('Ending game setup')
 	}
 

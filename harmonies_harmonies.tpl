@@ -31,4 +31,15 @@
 <div id="player-tables">
 </div>
 
+<div id="board">
+  <div id="grid-container">
+  <ul class="hex-grid-container">
+    <!-- BEGIN cell -->
+      <li class="hex-grid-item" id="cell-container-{I}-{J}">
+        <div class="hex-grid-content" id="cell-{I}-{J}"></div>
+      </li>
+    <!-- END cell -->
+  </ul>
+  </div>
+</div>
 {OVERALL_GAME_FOOTER}

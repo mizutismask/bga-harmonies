@@ -175,6 +175,7 @@ class Harmonies extends Table {
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
         $result['expansion'] = EXPANSION;
         $result['boardSide'] = $this->isBoardSideA() ? "sideA" : "sideB";
+        $result['boardSize'] = ["width" => $this->getBoardWidth(), "height" => $this->getBoardHeight()];
 
         if ($isEnd) {
             $maxScore = max(array_map(fn ($player) => intval($player['score']), $result['players']));
@@ -214,7 +215,12 @@ class Harmonies extends Table {
     //////////////////////////////////////////////////////////////////////////////
     //////////// Utility functions
     ////////////    
-
+    function getBoardWidth(): int {
+        return $this->isBoardSideA() ? 5 : 7;
+    }
+    function getBoardHeight(): int {
+        return $this->isBoardSideA() ? 5 : 4;
+    }
     /*
         In this space, you can put any utility methods useful for your game logic
     */
