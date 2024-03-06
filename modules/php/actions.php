@@ -64,4 +64,28 @@ trait ActionTrait {
         $this->moveAnimalCardToPlayerBoard($cardId);
         $this->gamestate->nextState('continue');
     }
+
+    function placeAnimalCube($fromCardId, $toHexId) {
+        self::checkAction('placeAnimal');
+
+        $args = $this->argChooseAction();
+
+        if (!$args['canPlaceAnimalCube']) {
+            throw new BgaUserException(self::_("You can’t place an animal cube"));
+        }
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($fromCardId));
+        if (!$this->startsWith($card->location, "board")) {
+            throw new BgaUserException(self::_("This card is not on your board"));
+        }
+        //todo check if the pattern is ok, height are ok, and animal cube location is free
+
+        $cube = $this->getLastCubeOnCard($fromCardId);
+        if($cube){
+            //todo le bouger
+        }
+        else{
+            $this->moveAnimalCardToFinishedCards();
+        }
+        $this->gamestate->nextState('continue');
+    }
 }

@@ -98,6 +98,19 @@ trait AnimalCardDeckTrait {
         ]);
     }
 
+    public function moveAnimalCardToFinishedCards(int $cardId) {
+        $playerId = $this->getMostlyActivePlayerId();
+        $this->animalCards->moveCard($cardId, "done" . $playerId);
+
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        $this->notifyAllPlayers('cardMoved', clienttranslate('${player_name} finishes an animal card'), [
+            'playerId' => $playerId,
+            'player_name' => $this->getPlayerName($playerId),
+            'card' => [$card],
+            'moveType' => "done",
+        ]);
+    }
+
     /**
      * place a number of animalCards cards to pick$playerId.
      */

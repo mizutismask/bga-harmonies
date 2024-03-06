@@ -27,4 +27,13 @@ trait AnimalCubeDeckTrait {
             ]);
         }
     }
+
+    public function getCubesOnCard($cardId) {
+        return array_keys($this->animalCubes->getCardsInLocation($cardId));
+    }
+
+    public function getLastCubeOnCard($cardId) {
+        $lastCube = array_keys($this->animalCubes->getCardOnTop($cardId));
+        return $lastCube ? array_pop($lastCube) : null;
+    }
 }
