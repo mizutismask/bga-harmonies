@@ -87,7 +87,7 @@ class Harmonies implements HarmoniesGame {
 			this.setupPlayer(this.gamedatas.players[p])
 		})
 
-		$('overall-content').classList.add(`player-count-${this.getPlayersCount()}`)
+		$('overall-content').classList.add(`player-count-${this.getPlayersCount()}`, gamedatas.boardSide)
 
 		this.setupSettingsIconInMainBar()
 		this.setupPreferences()

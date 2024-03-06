@@ -41,6 +41,8 @@ interface HarmoniesGamedatas {
 	winners: number[]
 	version: string
 	// Add here variables you set up in getAllDatas
+	boardSide: string
+	boardSize: { width: number, height:number }
 }
 
 interface HarmoniesGame extends Game {
