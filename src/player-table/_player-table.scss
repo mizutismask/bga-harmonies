@@ -206,14 +206,14 @@ div#board li.hex-grid-item.inactive .tile-container {
 
 .sideA {
 	.hex-grid-container {
-		grid-template-columns: repeat(5 * 2 + 1, 1fr);
-		grid-template-rows: repeat(5 * 3 + 1, 1fr);
+		grid-template-columns: repeat(5 * 3 + 1, 1fr);
+		grid-template-rows: repeat(5 * 2 + 1, 1fr);
 	}
 }
 .sideB {
 	.hex-grid-container {
-		grid-template-columns: repeat(4 * 2 + 1, 1fr);
-		grid-template-rows: repeat(7 * 3 + 1, 1fr);
+		grid-template-columns: repeat(7 * 3 + 1, 1fr);
+		grid-template-rows: repeat(4 * 2 + 1, 1fr);
 	}
 }
 
@@ -236,8 +236,8 @@ div#board li.hex-grid-item.inactive .tile-container {
 	height: 100%;
 	z-index: 2;
 	background-color: maroon; //transparent;
-	clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-	-webkit-clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+	clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);;
+	-webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
 }
 
 div#board li .hex-grid-content[data-location]::before {

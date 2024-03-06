@@ -105,8 +105,8 @@ class Harmonies implements HarmoniesGame {
 		for (let i = 0; i < gamedatas.boardSize.width; i++) {
 			for (let j = 0; j < gamedatas.boardSize.height; j++) {
 				const cellC = $('cell-container-' + i + '-' + j)
-				cellC.style.gridRow = 3 * i + 1 + ' / span 4'
-				cellC.style.gridColumn = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
+				cellC.style.gridRow = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
+				cellC.style.gridColumn = 3 * i + 1 + ' / span 4'
 
 				/* let x = i,
 				y = j;
