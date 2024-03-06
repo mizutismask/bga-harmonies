@@ -39,8 +39,8 @@ class view_harmonies_harmonies extends game_view {
     /*********** Place your code below:  ************/
     // Create the board
     $this->page->begin_block('harmonies_harmonies', 'cell');
-    for ($i = 0; $i < 20; $i++) {
-      for ($j = 0; $j < 20; $j++) {
+    for ($i = 0; $i < $this->game->getBoardWidth(); $i++) {
+      for ($j = 0; $j < $this->game->getBoardHeight(); $j++) {
         $this->page->insert_block('cell', [
           'I' => $i,
           'J' => $j,
