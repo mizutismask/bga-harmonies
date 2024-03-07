@@ -29,6 +29,7 @@ require_once('modules/php/animal-cube-deck.php');
 require_once('modules/php/colored-token-deck.php');
 require_once('modules/php/debug-util.php');
 require_once('modules/php/expansion.php');
+require_once('modules/php/score.php');
 
 class Harmonies extends Table {
     use UtilTrait;
@@ -40,6 +41,7 @@ class Harmonies extends Table {
     use AnimalCubeDeckTrait;
     use DebugUtilTrait;
     use ExpansionTrait;
+    use ScoreTrait;
 
     function __construct() {
         // Your global variables labels:

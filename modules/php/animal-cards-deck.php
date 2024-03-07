@@ -111,6 +111,12 @@ trait AnimalCardDeckTrait {
         ]);
     }
 
+    public function getAnimalCardsToScore($playerId){
+        $pending = $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("board" . $playerId));
+        $done = $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("done" . $playerId));
+        return array_merge($pending, $done);
+    }
+
     /**
      * place a number of animalCards cards to pick$playerId.
      */
