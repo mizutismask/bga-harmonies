@@ -30,6 +30,7 @@ require_once('modules/php/colored-token-deck.php');
 require_once('modules/php/debug-util.php');
 require_once('modules/php/expansion.php');
 require_once('modules/php/score.php');
+require_once('modules/php/honeycomb.php');
 
 class Harmonies extends Table {
     use UtilTrait;
