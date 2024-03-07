@@ -108,6 +108,8 @@ class Harmonies implements HarmoniesGame {
 				cellC.style.gridRow = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
 				cellC.style.gridColumn = 3 * i + 1 + ' / span 4'
 
+				//cellC.style.gridRow = 3 * i + 1 + ' / span 4'
+				//cellC.style.gridColumn = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
 				/* let x = i,
 				y = j;
 			  dojo.connect($('cell-' + i + '-' + j), 'onclick', (evt) => {
