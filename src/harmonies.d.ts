@@ -22,6 +22,8 @@ interface HarmoniesPlayer extends Player {
 	playerNo: number
 }
 
+type Coordinates = { col: number, row: number };
+
 interface HarmoniesGamedatas {
 	current_player_id: string
 	decision: { decision_type: string }
@@ -42,7 +44,8 @@ interface HarmoniesGamedatas {
 	version: string
 	// Add here variables you set up in getAllDatas
 	boardSide: string
-	boardSize: { width: number, height:number }
+	boardSize: { width: number; height: number }
+	hexes: Array<Coordinates>
 }
 
 interface HarmoniesGame extends Game {

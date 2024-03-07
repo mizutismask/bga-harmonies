@@ -43,6 +43,7 @@ class Harmonies extends Table {
     use DebugUtilTrait;
     use ExpansionTrait;
     use ScoreTrait;
+    use HoneycombTrait;
 
     function __construct() {
         // Your global variables labels:
@@ -179,6 +180,7 @@ class Harmonies extends Table {
         $result['expansion'] = EXPANSION;
         $result['boardSide'] = $this->isBoardSideA() ? "sideA" : "sideB";
         $result['boardSize'] = ["width" => $this->getBoardWidth(), "height" => $this->getBoardHeight()];
+        $result['hexes'] = $this->getHexesCoordinates();
 
         if ($isEnd) {
             $maxScore = max(array_map(fn ($player) => intval($player['score']), $result['players']));

@@ -39,15 +39,14 @@ class view_harmonies_harmonies extends game_view {
     /*********** Place your code below:  ************/
     // Create the board
     $this->page->begin_block('harmonies_harmonies', 'cell');
-    for ($i = 0; $i < $this->game->getBoardWidth(); $i++) {
-      for ($j = 0; $j < $this->game->getBoardHeight(); $j++) {
-        $this->page->insert_block('cell', [
-          'I' => $i,
-          'J' => $j,
-        ]);
-      }
+    foreach ($this->game->getHexesCoordinates() as $hex) {
+      $col = $hex["col"];
+      $row = $hex["row"];
+      $this->page->insert_block('cell', [
+        'I' => $col,
+        'J' => $row,
+      ]);
     }
-
     /*********** Do not change anything below this line  ************/
   }
 }

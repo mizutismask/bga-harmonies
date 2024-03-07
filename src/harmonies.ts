@@ -74,10 +74,10 @@ class Harmonies implements HarmoniesGame {
 		this.cardsManager = new CardsManager(this)
 		this.animationManager = new AnimationManager(this)
 
-		if (gamedatas.lastTurn) {
+		if (this.gamedatas.lastTurn) {
 			this.notif_lastTurn(false)
 		}
-		if (Number(gamedatas.gamestate.id) >= 90) {
+		if (Number(this.gamedatas.gamestate.id) >= 90) {
 			// score or end
 			this.onEnteringEndScore()
 		}
@@ -102,23 +102,21 @@ class Harmonies implements HarmoniesGame {
 		removeClass('animatedScore')
 
 		// Setup the board
-		for (let i = 0; i < gamedatas.boardSize.width; i++) {
-			for (let j = 0; j < gamedatas.boardSize.height; j++) {
-				const cellC = $('cell-container-' + i + '-' + j)
-				cellC.style.gridRow = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
-				cellC.style.gridColumn = 3 * i + 1 + ' / span 4'
+			this.gamedatas.hexes.forEach((hex)  => {
+			const cellC = $('cell-container-' + hex.col + '-' + hex.row)
+			cellC.style.gridRow = 2 * hex.row + (hex.col % 2 == 0 ? 1 : 2) + ' / span 2'
+			cellC.style.gridColumn = 3 * hex.col + 1 + ' / span 4'
 
-				//cellC.style.gridRow = 3 * i + 1 + ' / span 4'
-				//cellC.style.gridColumn = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
-				/* let x = i,
-				y = j;
-			  dojo.connect($('cell-' + i + '-' + j), 'onclick', (evt) => {
-				evt.preventDefault();
-				evt.stopPropagation();
-				this.onClickCell(x, y);
-			  });*/
-			}
-		}
+			//cellC.style.gridRow = 3 * i + 1 + ' / span 4'
+			//cellC.style.gridColumn = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
+			/* let x = i,
+			y = j;
+		  dojo.connect($('cell-' + i + '-' + j), 'onclick', (evt) => {
+			evt.preventDefault();
+			evt.stopPropagation();
+			this.onClickCell(x, y);
+		  });*/
+		})
 
 		console.log('Ending game setup')
 	}
