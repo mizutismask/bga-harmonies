@@ -26,14 +26,20 @@ trait StateTrait {
     function hasReachedEndOfGameRequirements($playerId): bool {
         $playersIds = $this->getPlayersIds();
 
-        $end = false; //todo
+        $end = $this->has2OrLessEmptyHexes($playerId);
         if ($end && intval(self::getGameStateValue(LAST_TURN) == 0)) {
             self::setGameStateValue(LAST_TURN, $this->getLastPlayer()); //we play until the last player to finish the round
             if (!$this->isLastPlayer($playerId)) {
-                self::notifyWithName('lastTurn', clienttranslate('${player_name} has no more destination cards, finishing round !'), []);
+                self::notifyWithName('lastTurn', clienttranslate('${player_name} has two or less empty spaces, finishing round !'), []);
             }
         }
         return $end;
+    }
+
+    function has2OrLessEmptyHexes($playerId): bool {
+        $hexes = count($this->getHexesCoordinates());
+        $hexesWithTokens = count(array_keys($this->getTokensForCompleteBoardByHex($playerId)));
+        return $hexes - $hexesWithTokens <= 2;
     }
 
     function stNextPlayer() {
@@ -102,7 +108,7 @@ trait StateTrait {
                         $score = 0;
                         break;
                 }
-                self::dump('*******************calculatedGoalPoints', compact("goal", "score","playerId"));
+                self::dump('*******************calculatedGoalPoints', compact("goal", "score", "playerId"));
                 self::incStat($score, $goal["stat"], $playerId);
                 $this->incPlayerScore($playerId, $score, clienttranslate('${player_name} scores ${delta} points with ${source}'), ["color" => $this->getColorName($goal->color), "source" => $goal["nameTr"], "scoreType" => $this->getScoreType($goal[["type"]], $playerId)]);
                 $roundScores[$playerId] += $score;
