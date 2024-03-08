@@ -88,6 +88,7 @@ trait AnimalCardDeckTrait {
         $this->animalCards->moveCard($cardId, $location, $spot);
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
         $this->fillAnimalCard($card);
+        self::incStat(1, "game_animal_cards_taken", $playerId);
 
         $this->notifyAllPlayers('cardMoved', clienttranslate('${player_name} takes an animal card to his spot ${spot}'), [
             'playerId' => $playerId,
@@ -103,6 +104,7 @@ trait AnimalCardDeckTrait {
         $this->animalCards->moveCard($cardId, "done" . $playerId);
 
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        self::incStat(1, "game_animal_cards_finished", $playerId);
         $this->notifyAllPlayers('cardMoved', clienttranslate('${player_name} finishes an animal card'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),

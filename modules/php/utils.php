@@ -223,6 +223,10 @@ trait UtilTrait {
         ] + $messageArgs);
     }
 
+    function getScoreType($name, $playerId){
+        return "${name}-${playerId}";
+    }
+
     function updatePlayer(int $playerId, String $field, int $newValue) {
         $this->DbQuery("UPDATE player SET $field = $newValue WHERE player_id = $playerId");
     }
