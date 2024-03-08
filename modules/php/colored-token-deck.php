@@ -71,7 +71,7 @@ trait ColoredTokenDeckTrait {
     }
 
     public function getTokensForCompleteBoardByHex($playerId) {
-        $sql = "SELECT * FROM coloredToken where card_location like `$playerId%` order by card_location_arg desc";
+        $sql = "SELECT * FROM coloredToken where card_location like '$playerId%' order by card_location_arg desc";
         $tokens = self::getCollectionFromDb($sql);
         $byCell = [];
         foreach (array_values($tokens) as $token) {
@@ -197,6 +197,15 @@ trait ColoredTokenDeckTrait {
     private function pickTokensForCentralBoard(int $count, int $holeNumber) {
         $cards = $this->getColoredTokensFromDb($this->coloredTokens->pickCardsForLocation($count, "deck", 'centralBoard', $holeNumber));
         return $cards;
+    }
+
+    public function getColoredTokensOnCentralBoard() {
+        $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard'));
+        $byHole = array_fill_keys([1, 2, 3, 4, 5], []);
+        foreach ($tokens as $tok) {
+            $byHole[$tok->location_arg][] = $tok;
+        }
+        return $byHole;
     }
 
     /**

@@ -114,9 +114,21 @@ trait AnimalCardDeckTrait {
     }
 
     public function getAnimalCardsToScore($playerId){
-        $pending = $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("board" . $playerId));
-        $done = $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("done" . $playerId));
+        $pending = $this->getAnimalCardsOnPlayerBoard($playerId);
+        $done = $this->getAnimalCardsDone($playerId);
         return array_merge($pending, $done);
+    }
+
+    public function getAnimalCardsOnPlayerBoard($playerId) {
+        return $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("board" . $playerId));
+    }
+
+    public function getAnimalCardsDone($playerId) {
+        return $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("done" . $playerId));
+    }
+
+    public function getAnimalCardsInRiver() {
+        return $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("river"));
     }
 
     /**

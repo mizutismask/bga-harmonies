@@ -174,6 +174,9 @@ class Harmonies extends Table {
 
         foreach ($result['players'] as $playerId => &$player) {
             $player['playerNo'] = intval($player['playerNo']);
+            $player['doneAnimalCards'] = $this->getAnimalCardsDone($playerId);
+            $player['boardAnimalCards'] = $this->getAnimalCardsOnPlayerBoard($playerId);
+            $player['tokensOnBoard'] = $this->getTokensForCompleteBoardByHex($playerId);
         }
 
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
@@ -181,6 +184,10 @@ class Harmonies extends Table {
         $result['boardSide'] = $this->isBoardSideA() ? "sideA" : "sideB";
         $result['boardSize'] = ["width" => $this->getBoardWidth(), "height" => $this->getBoardHeight()];
         $result['hexes'] = $this->getHexesCoordinates();
+        $result['river'] = $this->getAnimalCardsInRiver();
+        $result['tokensOnCentralBoard'] = $this->getColoredTokensOnCentralBoard();
+        $result['cubesOnAnimalCards'] = $this->getAnimalCubesOnCards();
+        $result['cubesOnPlayerBoards'] = $this->getAnimalCubesOnPlayerBoards();
 
         if ($isEnd) {
             $maxScore = max(array_map(fn ($player) => intval($player['score']), $result['players']));

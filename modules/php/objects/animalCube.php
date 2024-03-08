@@ -11,7 +11,7 @@ class AnimalCubeInfo {
 
 /**
  * A AnimalCube is a physical token. It contains informations from matching AnimalCubeInfo, with technical informations like id and location.
- * Location : deck or animalCard_cardId 
+ * Location : deck or card_cardId or hex_hexId
  * Location arg : scoreLocation (in animalCard_cardId)
  * Type : 1 
  * Type arg : not used
