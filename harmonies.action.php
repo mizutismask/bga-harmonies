@@ -102,4 +102,15 @@ class action_harmonies extends APP_GameAction {
 
         self::ajaxResponse();
     }
+
+    public function placeColoredToken() {
+        self::setAjaxMode();
+        self::checkVersion();
+
+        $tokenId = self::getArg("tokenId", AT_posint, true);
+        $toHexId = self::getArg("hexId", AT_alphanum, true);
+        $this->game->placeColoredToken($tokenId,$toHexId);
+
+        self::ajaxResponse();
+    }
 }

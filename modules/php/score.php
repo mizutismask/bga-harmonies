@@ -7,7 +7,7 @@ trait ScoreTrait {
         $total = 0;
         foreach ($board as $hex) {
             $tokens = $this->getTokensAt($hex);
-            $topToken = array_pop($tokens);
+            $topToken = array_shift($tokens);
             if ($topToken && $topToken->type_arg == GREEN) {
                 $total += self::$treePoints[count($tokens)];
             }
@@ -19,7 +19,7 @@ trait ScoreTrait {
         $total = 0;
         foreach ($board as $hex) {
             $tokens = $this->getTokensAt($hex);
-            $topToken = array_pop($tokens);
+            $topToken = array_shift($tokens);
             if ($topToken && $topToken->type_arg == RED) {
                 //todo check if surrounded by 3 different colors
                 $total += 5;

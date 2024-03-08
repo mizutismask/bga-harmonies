@@ -80,12 +80,28 @@ trait ActionTrait {
         //todo check if the pattern is ok, height are ok, and animal cube location is free
 
         $cube = $this->getLastCubeOnCard($fromCardId);
-        if($cube){
+        if ($cube) {
             //todo le bouger
-        }
-        else{
+        } else {
             $this->moveAnimalCardToFinishedCards();
         }
+        $this->gamestate->nextState('continue');
+    }
+
+    function placeColoredToken($tokenId, $toHexId) {
+        self::checkAction('placeToken');
+
+        $args = $this->argChooseAction();
+
+        if (!$args['canPlaceToken']) {
+            throw new BgaUserException(self::_("You can’t place a colored token"));
+        }
+        $tokenChosen = $this->getColoredTokensChosen();
+        if (!$this->array_some($tokenChosen, fn ($tok) => $tok->id == $tokenId)) {
+            throw new BgaUserException(self::_("You are not allowed to place this colored token"));
+        }
+        $this->moveColoredTokenToBoard($tokenId, $toHexId);
+
         $this->gamestate->nextState('continue');
     }
 }

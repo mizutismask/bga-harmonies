@@ -89,9 +89,40 @@ trait UtilTrait {
     }
 
     /**
+     * Transforms a ColoredToken json decoded object to ColoredToken class.
+     */
+    function getColoredTokenFromGlobal($dbObject) {
+        //self::dump('*******************getClaimedRouteFromGlobal', $dbObject);
+        if (
+            $dbObject === null
+        ) {
+            return null;
+        }
+        if (!$dbObject) {
+            throw new BgaSystemException("Colored token doesn't exists " . json_encode($dbObject));
+        }
+
+        $class = new ColoredToken([]);
+        foreach ($dbObject as $key => $value) $class->{$key} = $value;
+        return $class;
+    }
+
+    function getColoredTokensChosen() {
+        $arrayData = $this->getGlobalVariable(TOKENS_IN_HOLE, false);
+        $castedArray = [];
+        if ($arrayData) {
+            foreach ($arrayData as  $token) {
+                $casted = $this->getColoredTokenFromGlobal($token);
+                $castedArray[] = $casted;
+            }
+        }
+        return $castedArray;
+    }
+
+    /**
      * Transforms a Destination Db object to Destination class.
      */
-     function getColoredTokenFromDb($dbObject) {
+    function getColoredTokenFromDb($dbObject) {
         if (!$dbObject || !array_key_exists('id', $dbObject)) {
             throw new BgaSystemException("Colored token doesn't exists " . json_encode($dbObject));
         }
@@ -104,7 +135,7 @@ trait UtilTrait {
     /**
      * Transforms a Destination Db object to Destination class.
      */
-     function getAnimalCardFromDb($dbObject) {
+    function getAnimalCardFromDb($dbObject) {
         if (!$dbObject || !array_key_exists('id', $dbObject)) {
             throw new BgaSystemException("Animal card doesn't exists " . json_encode($dbObject));
         }
@@ -223,7 +254,7 @@ trait UtilTrait {
         ] + $messageArgs);
     }
 
-    function getScoreType($name, $playerId){
+    function getScoreType($name, $playerId) {
         return "${name}-${playerId}";
     }
 
