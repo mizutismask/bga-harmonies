@@ -29,6 +29,7 @@ require_once('modules/php/animal-cube-deck.php');
 require_once('modules/php/colored-token-deck.php');
 require_once('modules/php/debug-util.php');
 require_once('modules/php/expansion.php');
+require_once('modules/php/score.php');
 require_once('modules/php/honeycomb.php');
 
 class Harmonies extends Table {
@@ -41,6 +42,8 @@ class Harmonies extends Table {
     use AnimalCubeDeckTrait;
     use DebugUtilTrait;
     use ExpansionTrait;
+    use ScoreTrait;
+    use HoneycombTrait;
 
     function __construct() {
         // Your global variables labels:
@@ -171,11 +174,20 @@ class Harmonies extends Table {
 
         foreach ($result['players'] as $playerId => &$player) {
             $player['playerNo'] = intval($player['playerNo']);
+            $player['doneAnimalCards'] = $this->getAnimalCardsDone($playerId);
+            $player['boardAnimalCards'] = $this->getAnimalCardsOnPlayerBoard($playerId);
+            $player['tokensOnBoard'] = $this->getTokensForCompleteBoardByHex($playerId);
         }
 
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
         $result['expansion'] = EXPANSION;
         $result['boardSide'] = $this->isBoardSideA() ? "sideA" : "sideB";
+        $result['boardSize'] = ["width" => $this->getBoardWidth(), "height" => $this->getBoardHeight()];
+        $result['hexes'] = $this->getHexesCoordinates();
+        $result['river'] = $this->getAnimalCardsInRiver();
+        $result['tokensOnCentralBoard'] = $this->getColoredTokensOnCentralBoard();
+        $result['cubesOnAnimalCards'] = $this->getAnimalCubesOnCards();
+        $result['cubesOnPlayerBoards'] = $this->getAnimalCubesOnPlayerBoards();
 
         if ($isEnd) {
             $maxScore = max(array_map(fn ($player) => intval($player['score']), $result['players']));
@@ -215,7 +227,12 @@ class Harmonies extends Table {
     //////////////////////////////////////////////////////////////////////////////
     //////////// Utility functions
     ////////////    
-
+    function getBoardWidth(): int {
+        return $this->isBoardSideA() ? 5 : 7;
+    }
+    function getBoardHeight(): int {
+        return $this->isBoardSideA() ? 5 : 4;
+    }
     /*
         In this space, you can put any utility methods useful for your game logic
     */

@@ -26,14 +26,20 @@ trait StateTrait {
     function hasReachedEndOfGameRequirements($playerId): bool {
         $playersIds = $this->getPlayersIds();
 
-        $end = false; //todo
+        $end = $this->has2OrLessEmptyHexes($playerId);
         if ($end && intval(self::getGameStateValue(LAST_TURN) == 0)) {
             self::setGameStateValue(LAST_TURN, $this->getLastPlayer()); //we play until the last player to finish the round
             if (!$this->isLastPlayer($playerId)) {
-                self::notifyWithName('lastTurn', clienttranslate('${player_name} has no more destination cards, finishing round !'), []);
+                self::notifyWithName('lastTurn', clienttranslate('${player_name} has two or less empty spaces, finishing round !'), []);
             }
         }
         return $end;
+    }
+
+    function has2OrLessEmptyHexes($playerId): bool {
+        $hexes = count($this->getHexesCoordinates());
+        $hexesWithTokens = count(array_keys($this->getTokensForCompleteBoardByHex($playerId)));
+        return $hexes - $hexesWithTokens <= 2;
     }
 
     function stNextPlayer() {
@@ -76,64 +82,37 @@ trait StateTrait {
             $totalScore[$playerId] = intval($playerDb['score']);
         }
 
-        //end of game points
+        $roundScores = array_fill_keys(array_keys($players), 0);
+        foreach ($this->getScoresTypes() as $goal) {
+            foreach ($players as $playerId => $playerDb) {
+                self::dump('*******************calculatingPoints', compact("goal", "playerId"));
+                $board = $this->getGrid($playerId);
+                switch ($goal["type"]) {
+                    case TREES:
+                        $score = $this->calculateTreePoints($board);
+                        break;
+                    case MOUTAINS:
+                        $score = $this->calculateTreePoints($board); //todo
+                        break;
+                    case FIELDS:
+                        $score = $this->calculateTreePoints($board); //todo
+                        break;
+                    case BUILDINGS:
+                        $score = $this->calculateBuildingPoints($board); //todo
+                        break;
+                    case ANIMAL_CARDS:
+                        $score = $this->calculateAnimalCardsPoints($board);
+                        break;
 
-        // failed ANIMAL_CARDS 
-        /* $destinationsResults = [];
-        $completedDestinationsCount = [];
-        foreach ($players as $playerId => $playerDb) {
-            $completedDestinationsCount[$playerId] = 0;
-            $uncompletedDestinations = [];
-            $completedDestinations = [];
-
-            $ANIMAL_CARDS = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('hand', $playerId));
-
-            foreach ($ANIMAL_CARDS as &$destination) {
-                $completed = boolval(self::getUniqueValueFromDb("SELECT `completed` FROM `destination` WHERE `card_id` = $destination->id"));
-                if ($completed) {
-                    $completedDestinationsCount[$playerId]++;
-                    $completedDestinations[] = $destination;
-                    self::incStat(1, STAT_POINTS_WITH_PLAYER_COMPLETED_DESTINATIONS, $playerId);
-                } else {
-                    $totalScore[$playerId] += -1;
-                    self::incScore($playerId, -1);
-                    if ($this->isDestinationRevealed($destination->id)) {
-                        $totalScore[$playerId] += -1;
-                        self::incScore($playerId, -1);
-                        self::incStat(-1, STAT_POINTS_WITH_REVEALED_DESTINATIONS, $playerId);
-                    }
-                    self::incStat(1, STAT_POINTS_LOST_WITH_UNCOMPLETED_DESTINATIONS, $playerId);
-                    $uncompletedDestinations[] = $destination;
+                    default:
+                        $score = 0;
+                        break;
                 }
-            }
-
-            $destinationsResults[$playerId] = $uncompletedDestinations;
-        }
-*/
-        foreach ($players as $playerId => $playerDb) {
-            self::DbQuery("UPDATE player SET `player_score` = $totalScore[$playerId] where `player_id` = $playerId");
-            self::DbQuery("UPDATE player SET `player_score_aux` = `player_remaining_tickets` where `player_id` = $playerId");
-        }
-
-        $bestScore = max($totalScore);
-        $playersWithScore = [];
-        foreach ($players as $playerId => &$player) {
-            $player['playerNo'] = intval($player['playerNo']);
-            $player['ticketsCount'] = $this->getRemainingTicketsCount($playerId);
-            $player['score'] = $totalScore[$playerId];
-            $playersWithScore[$playerId] = $player;
-        }
-        self::notifyAllPlayers('bestScore', '', [
-            'bestScore' => $bestScore,
-            'players' => array_values($playersWithScore),
-        ]);
-
-        // highlight winner(s)
-        foreach ($totalScore as $playerId => $playerScore) {
-            if ($playerScore == $bestScore) {
-                self::notifyAllPlayers('highlightWinnerScore', '', [
-                    'playerId' => $playerId,
-                ]);
+                self::dump('*******************calculatedGoalPoints', compact("goal", "score", "playerId"));
+                self::incStat($score, $goal["stat"], $playerId);
+                $this->incPlayerScore($playerId, $score, clienttranslate('${player_name} scores ${delta} points with ${source}'), ["color" => $this->getColorName($goal->color), "source" => $goal["nameTr"], "scoreType" => $this->getScoreType($goal[["type"]], $playerId)]);
+                $roundScores[$playerId] += $score;
+                $totalScore[$playerId] += $score;
             }
         }
 

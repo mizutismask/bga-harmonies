@@ -88,6 +88,7 @@ trait AnimalCardDeckTrait {
         $this->animalCards->moveCard($cardId, $location, $spot);
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
         $this->fillAnimalCard($card);
+        self::incStat(1, "game_animal_cards_taken", $playerId);
 
         $this->notifyAllPlayers('cardMoved', clienttranslate('${player_name} takes an animal card to his spot ${spot}'), [
             'playerId' => $playerId,
@@ -96,6 +97,38 @@ trait AnimalCardDeckTrait {
             'to' => $spot,
             'spot' => $spot,
         ]);
+    }
+
+    public function moveAnimalCardToFinishedCards(int $cardId) {
+        $playerId = $this->getMostlyActivePlayerId();
+        $this->animalCards->moveCard($cardId, "done" . $playerId);
+
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        self::incStat(1, "game_animal_cards_finished", $playerId);
+        $this->notifyAllPlayers('cardMoved', clienttranslate('${player_name} finishes an animal card'), [
+            'playerId' => $playerId,
+            'player_name' => $this->getPlayerName($playerId),
+            'card' => [$card],
+            'moveType' => "done",
+        ]);
+    }
+
+    public function getAnimalCardsToScore($playerId){
+        $pending = $this->getAnimalCardsOnPlayerBoard($playerId);
+        $done = $this->getAnimalCardsDone($playerId);
+        return array_merge($pending, $done);
+    }
+
+    public function getAnimalCardsOnPlayerBoard($playerId) {
+        return $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("board" . $playerId));
+    }
+
+    public function getAnimalCardsDone($playerId) {
+        return $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("done" . $playerId));
+    }
+
+    public function getAnimalCardsInRiver() {
+        return $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("river"));
     }
 
     /**

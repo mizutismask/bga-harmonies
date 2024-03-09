@@ -16,11 +16,16 @@ interface Card {
 	type: number
 	type_arg: number
 }
-interface HarmoniesCard extends Card {}
+interface AnimalCard extends Card {
+	pointsLocation: Array<number>
+}
+
 
 interface HarmoniesPlayer extends Player {
 	playerNo: number
 }
+
+type Coordinates = { col: number, row: number };
 
 interface HarmoniesGamedatas {
 	current_player_id: string
@@ -41,6 +46,10 @@ interface HarmoniesGamedatas {
 	winners: number[]
 	version: string
 	// Add here variables you set up in getAllDatas
+	boardSide: string
+	boardSize: { width: number; height: number }
+	hexes: Array<Coordinates>
+	river:Array<AnimalCard>
 }
 
 interface HarmoniesGame extends Game {

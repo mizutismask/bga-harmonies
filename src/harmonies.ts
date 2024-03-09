@@ -29,6 +29,7 @@ class Harmonies implements HarmoniesGame {
 	private playerTables: { [playerId: number]: PlayerTable } = []
 	private playerNumber: number
 	public cardsManager: CardsManager
+	private river: RiverDeck
 	private originalTextChooseAction: string
 
 	public map: TtrMap
@@ -72,12 +73,13 @@ class Harmonies implements HarmoniesGame {
 		this.map = new TtrMap(this)
 
 		this.cardsManager = new CardsManager(this)
+		this.river = new RiverDeck(this, this.gamedatas.river)
 		this.animationManager = new AnimationManager(this)
 
-		if (gamedatas.lastTurn) {
+		if (this.gamedatas.lastTurn) {
 			this.notif_lastTurn(false)
 		}
-		if (Number(gamedatas.gamestate.id) >= 90) {
+		if (Number(this.gamedatas.gamestate.id) >= 90) {
 			// score or end
 			this.onEnteringEndScore()
 		}
@@ -87,7 +89,7 @@ class Harmonies implements HarmoniesGame {
 			this.setupPlayer(this.gamedatas.players[p])
 		})
 
-		$('overall-content').classList.add(`player-count-${this.getPlayersCount()}`)
+		$('overall-content').classList.add(`player-count-${this.getPlayersCount()}`, gamedatas.boardSide)
 
 		this.setupSettingsIconInMainBar()
 		this.setupPreferences()
@@ -100,6 +102,23 @@ class Harmonies implements HarmoniesGame {
 			this.gamedatas.winners.forEach((pId) => this.scoreBoard.highlightWinnerScore(pId))
 		}
 		removeClass('animatedScore')
+
+		// Setup the board
+		this.gamedatas.hexes.forEach((hex) => {
+			const cellC = $('cell-container-' + hex.col + '-' + hex.row)
+			cellC.style.gridRow = 2 * hex.row + (hex.col % 2 == 0 ? 1 : 2) + ' / span 2'
+			cellC.style.gridColumn = 3 * hex.col + 1 + ' / span 4'
+
+			//cellC.style.gridRow = 3 * i + 1 + ' / span 4'
+			//cellC.style.gridColumn = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
+			/* let x = i,
+			y = j;
+		  dojo.connect($('cell-' + i + '-' + j), 'onclick', (evt) => {
+			evt.preventDefault();
+			evt.stopPropagation();
+			this.onClickCell(x, y);
+		  });*/
+		})
 
 		console.log('Ending game setup')
 	}
@@ -783,7 +802,7 @@ class Harmonies implements HarmoniesGame {
 
 	notif_materialMove(notif: Notif<NotifMaterialMove>) {
 		console.log('notif_materialMove', notif)
-		const cards = notif.args.material as Array<HarmoniesCard>
+		const cards = notif.args.material as Array<AnimalCard>
 		cards.forEach((c) => console.log('c', c.id))
 	}
 

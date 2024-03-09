@@ -55,6 +55,73 @@ trait ColoredTokenDeckTrait {
         return $tokens;
     }
 
+    public function moveColoredTokenToBoard($tokenId, $hexId) {
+        $playerId = $this->getMostlyActivePlayerId();
+        $zindex = count($this->getTokensAt($hexId, $playerId) + 1);
+        $this->coloredTokens->moveCard($tokenId, $playerId . "_" . $hexId, $zindex);
+        $this->notifyAllPlayers('coloredTokenMove', "", [
+            'token' => $this->getColoredTokenFromDb($this->coloredTokens->getCard($tokenId)),
+        ]);
+    }
+
+    public function getTokensAt($hexId, $playerId) {
+        $location = $playerId . "_" . $hexId;
+        $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation($location, null, "location_arg desc"));
+        return $tokens;
+    }
+
+    public function getTokensForCompleteBoardByHex($playerId) {
+        $sql = "SELECT * FROM coloredToken where card_location like '$playerId%' order by card_location_arg desc";
+        $tokens = self::getCollectionFromDb($sql);
+        $byCell = [];
+        foreach (array_values($tokens) as $token) {
+            if (!isset($byCell[$token["card_location"]])) {
+                $byCell[$token["card_location"]] = [];
+            }
+            $byCell[$token["card_location"]][] = $token;
+        }
+        return $byCell;
+    }
+
+    public function getPossibleHexesForColoredToken($token, $playerId) {
+        $board = $this->getBoard($playerId);
+        $hexes = [];
+        foreach ($board as $hex) {
+            $existingTokens = $this->getTokensAt($hex, $playerId);
+            //todo check animal cube here
+            if (!$existingTokens || count($existingTokens) <= 3 && $this->isColorAllowedOnTopOfOtherColor($token->type_arg, $existingTokens[0]->type_arg)) {
+                $hexes[] = $hex;
+            }
+        }
+        return $hexes;
+    }
+
+    public function convertHexesCoordsToName($hexes) {
+        $hexes = [];
+        foreach ($hexes as $hex) {
+            $hexes[] = $this->convertHexCoordsToName($hex);
+        }
+        return $hexes;
+    }
+
+    public function convertHexCoordsToName($hex) {
+        return "cell-" . $hex["col"] . "-" . $hex["row"];
+    }
+
+    private function isColorAllowedOnTopOfOtherColor($topColor, $bottomColor) {
+        $allowed = true;
+        if ($bottomColor === BLUE || $bottomColor === YELLOW) {
+            $allowed = false;
+        } else if ($bottomColor === GRAY && $topColor !== $bottomColor) {
+            $allowed = false;
+        } else if ($topColor === BROWN && $bottomColor == GREEN) {
+            $allowed = false;
+        } else if ($topColor === RED && $bottomColor == GREEN) {
+            $allowed = false;
+        }
+        return $allowed;
+    }
+
     /* public function checkVisibleSharedCardsAreEnough() {
         $visibleCardsCount = intval($this->coloredTokens->countCardInLocation('shared'));
         if ($visibleCardsCount < NUMBER_OF_SHARED_DESTINATION_CARDS) {
@@ -130,6 +197,15 @@ trait ColoredTokenDeckTrait {
     private function pickTokensForCentralBoard(int $count, int $holeNumber) {
         $cards = $this->getColoredTokensFromDb($this->coloredTokens->pickCardsForLocation($count, "deck", 'centralBoard', $holeNumber));
         return $cards;
+    }
+
+    public function getColoredTokensOnCentralBoard() {
+        $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard'));
+        $byHole = array_fill_keys([1, 2, 3, 4, 5], []);
+        foreach ($tokens as $tok) {
+            $byHole[$tok->location_arg][] = $tok;
+        }
+        return $byHole;
     }
 
     /**

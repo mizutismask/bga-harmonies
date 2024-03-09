@@ -11,8 +11,8 @@ class ColoredTokenInfo {
 
 /**
  * A ColoredToken is a physical token. It contains informations from matching ColoredTokenInfo, with technical informations like id and location.
- * Location : centralBoard or playerBoard (board)
- * Location arg : holeNumber (in centralBoard), playerId_cell_zindex (in board)
+ * Location : deck, centralBoard or playerId_hexId (board)
+ * Location arg : holeNumber (in centralBoard), zindex (in board)
  * Type : 1 for simple ColoredToken
  * Type arg : the ColoredToken color
  */
@@ -22,6 +22,7 @@ class ColoredToken extends ColoredTokenInfo {
     public int $location_arg;
     public int $type;
     public int $type_arg;
+    public bool $done = false;
 
     public function __construct($dbCard) {
         $this->id = intval($dbCard['id']);

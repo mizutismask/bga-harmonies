@@ -1,21 +1,56 @@
 {
-    "table": {
-      "turns_number": {
-        "id": 10,
-        "name": "Number of turns",
-        "type": "int"
-      }
-    },
-    "player": {
-      "turns_number": {
-        "id": 10,
-        "name": "Number of turns",
-        "type": "int"
-      },
-      "game_toto": {
-        "id": 11,
-        "name": "toto",
-        "type": "int"
-      }
-    }
-  }
+	"table": {
+		"turns_number": {
+			"id": 10,
+			"name": "Number of turns",
+			"type": "int"
+		}
+	},
+	"player": {
+		"turns_number": {
+			"id": 10,
+			"name": "Number of turns",
+			"type": "int"
+		},
+		"game_score_trees": {
+			"id": 11,
+			"name": "Trees",
+			"type": "int"
+		},
+		"game_score_mountains": {
+			"id": 12,
+			"name": "Mountains",
+			"type": "int"
+		},
+		"game_score_fields": {
+			"id": 13,
+			"name": "Fields",
+			"type": "int"
+		},
+		"game_score_buildings": {
+			"id": 14,
+			"name": "Buildings",
+			"type": "int"
+		},
+		"game_score_water": {
+			"id": 15,
+			"name": "Water",
+			"type": "int"
+		},
+		"game_animal_cards_score": {
+			"id": 16,
+			"name": "Water",
+			"type": "int"
+		},
+		"game_animal_cards_taken": {
+			"id": 17,
+			"name": "Animal cards taken",
+			"type": "int"
+		},
+		"game_animal_cards_finished": {
+			"id": 18,
+			"name": "Animal cards finished",
+			"type": "int"
+		}
+	}
+}

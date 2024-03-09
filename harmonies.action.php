@@ -76,7 +76,7 @@ class action_harmonies extends APP_GameAction {
         self::setAjaxMode();
         self::checkVersion();
 
-        $hole = self::getArg( "hole", AT_posint, true );
+        $hole = self::getArg("hole", AT_posint, true);
         $this->game->takeTokens($hole);
 
         self::ajaxResponse();
@@ -86,8 +86,30 @@ class action_harmonies extends APP_GameAction {
         self::setAjaxMode();
         self::checkVersion();
 
-        $cardId = self::getArg( "cardId", AT_posint, true );
+        $cardId = self::getArg("cardId", AT_posint, true);
         $this->game->takeAnimalCard($cardId);
+
+        self::ajaxResponse();
+    }
+
+    public function placeAnimalCube() {
+        self::setAjaxMode();
+        self::checkVersion();
+
+        $fromCardId = self::getArg("cardId", AT_posint, true);
+        $toHexId = self::getArg("hexId", AT_alphanum, true);
+        $this->game->placeAnimalCube($fromCardId,$toHexId);
+
+        self::ajaxResponse();
+    }
+
+    public function placeColoredToken() {
+        self::setAjaxMode();
+        self::checkVersion();
+
+        $tokenId = self::getArg("tokenId", AT_posint, true);
+        $toHexId = self::getArg("hexId", AT_alphanum, true);
+        $this->game->placeColoredToken($tokenId,$toHexId);
 
         self::ajaxResponse();
     }

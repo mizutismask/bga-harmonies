@@ -64,4 +64,44 @@ trait ActionTrait {
         $this->moveAnimalCardToPlayerBoard($cardId);
         $this->gamestate->nextState('continue');
     }
+
+    function placeAnimalCube($fromCardId, $toHexId) {
+        self::checkAction('placeAnimal');
+
+        $args = $this->argChooseAction();
+
+        if (!$args['canPlaceAnimalCube']) {
+            throw new BgaUserException(self::_("You can’t place an animal cube"));
+        }
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($fromCardId));
+        if (!$this->startsWith($card->location, "board")) {
+            throw new BgaUserException(self::_("This card is not on your board"));
+        }
+        //todo check if the pattern is ok, height are ok, and animal cube location is free
+
+        $cube = $this->getLastCubeOnCard($fromCardId);
+        if ($cube) {
+            //todo le bouger
+        } else {
+            $this->moveAnimalCardToFinishedCards();
+        }
+        $this->gamestate->nextState('continue');
+    }
+
+    function placeColoredToken($tokenId, $toHexId) {
+        self::checkAction('placeToken');
+
+        $args = $this->argChooseAction();
+
+        if (!$args['canPlaceToken']) {
+            throw new BgaUserException(self::_("You can’t place a colored token"));
+        }
+        $tokenChosen = $this->getColoredTokensChosen();
+        if (!$this->array_some($tokenChosen, fn ($tok) => $tok->id == $tokenId)) {
+            throw new BgaUserException(self::_("You are not allowed to place this colored token"));
+        }
+        $this->moveColoredTokenToBoard($tokenId, $toHexId);
+
+        $this->gamestate->nextState('continue');
+    }
 }
