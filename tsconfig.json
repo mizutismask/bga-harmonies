@@ -44,5 +44,7 @@
         "src/player-table/player-table.ts",
         "src/settings.ts",
         "src/gamefeatureconfig.ts",
+        "src/animal-cards-deck/river-deck.ts",
+        "src/animal-cards-deck/player-board-deck.ts"
     ]
 }

@@ -17,6 +17,7 @@
 
 <div id="map-zoom-wrapper">
     <div id="resized">
+    
         <div id="main-line">
             <div id="map-and-borders">
                 <div id="map-zoom" class="disable-scrollbars">
@@ -27,7 +28,7 @@
         </div>
     </div>
 </div>
-
+<div id="river"></div>
 <div id="player-tables">
 </div>
 

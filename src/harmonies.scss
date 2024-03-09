@@ -7,6 +7,9 @@ $player-colors: (
     'purple': '982fff',
 );
 
+$CARD_WIDTH: 300px; //also change in stock-utils.ts
+$CARD_HEIGHT: 516px;
+
 @import "playerboards";
 @import 'game-steps/game-steps';
 @import 'bga-hacks/bga-hacks';
@@ -60,3 +63,9 @@ html {
 .card .card-sides .card-side.front .card-info {
     pointer-events: all;
 }
+
+.card-sides {
+    width: $CARD_WIDTH;
+    height: $CARD_HEIGHT;
+}
+
