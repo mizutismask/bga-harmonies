@@ -28,6 +28,7 @@
         </div>
     </div>
 </div>
+<div id="central-board" class="central-board"></div>
 <div id="river"></div>
 <div id="player-tables">
 </div>

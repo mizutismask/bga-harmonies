@@ -1,71 +1,131 @@
 //(classic BGA colors) :
 $player-colors: (
-    'red': 'ff0000',
-    'green': '008000',
-    'blue': '0000ff',
-    'yellow': 'ffa500',
-    'purple': '982fff',
+	'red': 'ff0000',
+	'green': '008000',
+	'blue': '0000ff',
+	'yellow': 'ffa500',
+	'purple': '982fff'
 );
 
 $CARD_WIDTH: 300px; //also change in stock-utils.ts
 $CARD_HEIGHT: 516px;
 
-@import "playerboards";
+@import 'playerboards';
 @import 'game-steps/game-steps';
 @import 'bga-hacks/bga-hacks';
 @import 'end-score/end-score';
 @import 'map/map';
 @import 'player-table/player-table';
-@import "settings";
-@import "../node_modules/bga-cards/bga-cards";
+@import 'settings';
+@import '../node_modules/bga-cards/bga-cards';
 
 html {
-    background: rgb(21, 104, 134);
-    background-repeat: no-repeat;
-    background-size: 100%;
+	background: rgb(21, 104, 134);
+	background-repeat: no-repeat;
+	background-size: 100%;
 }
 
-
 .stockitem {
-    border-radius: 6px;
-    background-size: 1000%;
-    &.disabled {
-        filter: contrast(0.6);
-        cursor: not-allowed;
-    }
+	border-radius: 6px;
+	background-size: 1000%;
+	&.disabled {
+		filter: contrast(0.6);
+		cursor: not-allowed;
+	}
 }
 
 .css-icon {
-    width: 25px;
-    height: 25px;
-    background-color: white;
-    border-radius: 15px;
-    text-align: center;
-    font-weight: bolder;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    color: rgb(21, 104, 134);
-    cursor: pointer;
-    pointer-events: auto;
+	width: 25px;
+	height: 25px;
+	background-color: white;
+	border-radius: 15px;
+	text-align: center;
+	font-weight: bolder;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	color: rgb(21, 104, 134);
+	cursor: pointer;
+	pointer-events: auto;
 
-    &.card-info {
-        width: 25px;
-        height: 25px;
-        position: relative;
-        top: 10px;
-        left: 10px;
-        color: white;
-        background-color: rgb(21, 104, 134);
-    }
+	&.card-info {
+		width: 25px;
+		height: 25px;
+		position: relative;
+		top: 10px;
+		left: 10px;
+		color: white;
+		background-color: rgb(21, 104, 134);
+	}
 }
 
 .card .card-sides .card-side.front .card-info {
-    pointer-events: all;
+	pointer-events: all;
 }
 
-.card-sides {
+/*.card-sides {
     width: $CARD_WIDTH;
     height: $CARD_HEIGHT;
-}
+}*/
 
+.central-board {
+	background: url('img/centralBoard.png') no-repeat;
+	width: 700px;
+	height: 694px;
+	position: relative;
+
+	.central-board-hole {
+		width: 25%;
+		height: 25%;
+		border-radius: 50%;
+		border: 2px solid white;
+
+		&.hole-1 {
+			position: absolute;
+			top: 9%;
+			left: 16%;
+		}
+		&.hole-2 {
+			position: absolute;
+			top: 9%;
+			right: 18%;
+		}
+		&.hole-3 {
+			position: absolute;
+			top: 49%;
+			left: 4%;
+		}
+		&.hole-4 {
+			position: absolute;
+			top: 49%;
+			right: 4%;
+		}
+		&.hole-5 {
+			position: absolute;
+			top: 72%;
+			left: 37%;
+		}
+
+		.hole-token {
+			border-radius: 50%;
+			border: 2px solid mediumaquamarine;
+            width: 40px;
+            height: 40px;
+			&.hole-token-1 {
+				position: absolute;
+				top: 9%;
+				left: 16%;
+			}
+			&.hole-token-2 {
+				position: absolute;
+				top: 9%;
+				right: 18%;
+			}
+			&.hole-token-3 {
+				position: absolute;
+				top: 49%;
+				left: 4%;
+			}
+		}
+	}
+}

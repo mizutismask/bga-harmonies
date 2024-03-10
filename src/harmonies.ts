@@ -76,6 +76,8 @@ class Harmonies implements HarmoniesGame {
 		this.river = new RiverDeck(this, this.gamedatas.river)
 		this.animationManager = new AnimationManager(this)
 
+		this.initCentralBoard();
+
 		if (this.gamedatas.lastTurn) {
 			this.notif_lastTurn(false)
 		}
@@ -121,6 +123,22 @@ class Harmonies implements HarmoniesGame {
 		})
 
 		console.log('Ending game setup')
+	}
+
+	private initCentralBoard() {
+		if (this.getPlayersCount() > 1) {
+			for (let i = 1; i <= 5; i++) {
+				dojo.place(
+					`<div class="central-board-hole hole-${i}">
+						<div id="hole-${i}-token-1" class="hole-token hole-token-1"></div>
+						<div id="hole-${i}-token-2" class="hole-token hole-token-2"></div>
+						<div id="hole-${i}-token-3" class="hole-token hole-token-3"></div>
+					</div>
+					`,
+					`central-board`
+				)
+			}
+		}
 	}
 
 	private setupTooltips() {

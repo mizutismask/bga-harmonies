@@ -8,8 +8,8 @@ class CardsManager extends CardManager<AnimalCard> {
 				div.classList.add('harmonies-card')
 				div.dataset.cardId = '' + card.id
 				div.dataset.cardType = '' + card.type
-				div.style.width = '300px'
-				div.style.height = '516px'
+				div.style.width = '150px'
+				div.style.height = '258px'
 			},
 			setupFrontDiv: (card: AnimalCard, div: HTMLElement) => {
 				this.setFrontBackground(div as HTMLDivElement, card.type_arg)

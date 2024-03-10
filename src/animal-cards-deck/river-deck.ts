@@ -5,7 +5,7 @@ class RiverDeck {
     /**
      * Init stock.
      */
-    constructor(private game: HarmoniesGame, private cards:Array<AnimalCard) {
+    constructor(private game: HarmoniesGame, private cards:Array<AnimalCard>) {
         let stock = new LineStock<AnimalCard>(
             this.game.cardsManager,
             $(`river`),
