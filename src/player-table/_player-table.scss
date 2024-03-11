@@ -10,14 +10,17 @@
 		background: hsla(0,0%,100%,.4);
 		outline: 1px solid hsla(0, 0%, 100%, .6);
 	}
+
+	.player-name {
+		justify-self: center;
+		margin-top: -9%;
+		z-index: 0;
+	}
 }
 
 .player-name {
 	color: #1f273b;
 	font-weight: bold;
-	justify-self: center;
-    margin-top: -9%;
-    z-index: 0;
 }
 
 .hex-grid-container .hex-settlement {
