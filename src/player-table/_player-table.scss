@@ -211,7 +211,17 @@ div#board li.hex-grid-item.inactive .tile-container {
 	margin: 0;
 }
 
+.hrm-player-board {
+	width: 800px;
+	height: 643px;
+	background-size: 100%;
+	position: relative;
+}
 .sideA {
+	.hrm-player-board {
+		background: url("img/boardSideA.png") no-repeat;
+	}
+	
 	.hex-grid-container {
 		//grid-template-columns: repeat(5 * 2 + 1, 1fr);
 		//grid-template-rows: repeat(5 * 3 + 1, 1fr);
@@ -220,6 +230,10 @@ div#board li.hex-grid-item.inactive .tile-container {
 	}
 }
 .sideB {
+	.hrm-player-board {
+		background: url("img/boardSideB.png") no-repeat;
+	}
+
 	.hex-grid-container {
 		//grid-template-columns: repeat(4 * 2 + 1, 1fr);
 		//grid-template-rows: repeat(7 * 3 + 1, 1fr);
@@ -234,10 +248,10 @@ div#board li.hex-grid-item.inactive .tile-container {
 	//padding-bottom: 115.7%;
 	z-index: 5;
 
-    height: 0;
-    width:0;
+	height: 0;
+	width: 0;
 	padding-bottom: 82.7%;
-    padding-left:90%
+	padding-left: 90%;
 }
 
 .hex-grid-item * {

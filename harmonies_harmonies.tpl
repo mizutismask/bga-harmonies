@@ -20,11 +20,4 @@
     <div id="river"></div>
 </div>
 <div id="player-tables"></div>
-
-<div id="board">
-  <div id="grid-container">
-    <ul id="hex-grid-container" class="hex-grid-container">
-    </ul>
-  </div>
-</div>
 {OVERALL_GAME_FOOTER}
