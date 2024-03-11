@@ -76,9 +76,9 @@ html {
 
 	.central-board-hole {
 		width: 25%;
-		height: 25%;
+		aspect-ratio: 1 / 1;
 		border-radius: 50%;
-		border: 2px solid white;
+		//border: 2px solid white;
 
 		&.hole-1 {
 			position: absolute;
@@ -89,79 +89,83 @@ html {
 			position: absolute;
 			top: 9%;
 			right: 18%;
+			rotate: 60deg;
 		}
 		&.hole-3 {
 			position: absolute;
-			top: 49%;
+			top: 44%;
 			left: 4%;
+			rotate: 240deg;
 		}
 		&.hole-4 {
 			position: absolute;
-			top: 49%;
+			top: 44%;
 			right: 4%;
+			rotate: 120deg;
 		}
 		&.hole-5 {
 			position: absolute;
-			top: 72%;
+			top: 65%;
 			left: 37%;
+			rotate: 180deg;
 		}
 
 		.hole-token {
 			border-radius: 50%;
-			border: 2px solid mediumaquamarine;
+			//border: 2px solid mediumaquamarine;
 			width: 40px;
 			height: 40px;
 			&.hole-token-1 {
 				position: absolute;
 				top: 9%;
-				left: 16%;
+				left: 61%;
 			}
 			&.hole-token-2 {
 				position: absolute;
-				top: 9%;
+				top: 5%;
 				right: 18%;
 			}
 			&.hole-token-3 {
 				position: absolute;
-				top: 49%;
-				left: 4%;
+				top: 44%;
+				left: -6%;
 			}
 		}
 	}
 }
 
-.blue,
-.brown,
-.green,
-.grey,
-.red,
-.yellow {
+.color-1,
+.color-2,
+.color-3,
+.color-4,
+.color-5,
+.color-6 {
 	max-width: 100%;
 	background-size: 100%;
-	background-image: url('coloredTokens.png');
+	background-image: url('img/coloredTokens.png');
 }
 
-.blue {
+.color-1 {//blue
 	background-position: 0 0%;
 	background-size: 100%;
 }
-.brown {
+.color-3 {//brown
 	background-position: 0 19.605263%;
 	background-size: 100%;
 }
-.green {
+.color-4 {//green
 	background-position: 0 39.161521%;
 	background-size: 100%;
 }
-.grey {
+.color-2 {//grey
 	background-position: 0 58.453947%;
 	background-size: 100%;
 }
-.red {
+.color-6 {//red
 	background-position: 0 79.190176%;
 	background-size: 100%;
 }
-.yellow {
+.color-5 {//yellow
 	background-position: 0 100%;
 	background-size: 100%;
 }

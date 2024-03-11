@@ -69,7 +69,7 @@ interface EnteringChooseActionArgs {
 	canPlaceToken: boolean
 	canTakeAnimalCard: boolean
 	canPlaceAnimalCube: boolean
-	tokensOnCentralBoard:{ [holeId: number]: Array<ColoredToken> }
+	tokensOnCentralBoard: any
 }
 
 interface NotifPointsArgs {

@@ -144,6 +144,21 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
+	private displayColoredTokens(args: EnteringChooseActionArgs) {
+		log('tokensByHole', args)
+		const tokensByHole = args.tokensOnCentralBoard
+		Object.keys(tokensByHole).forEach((hole) => {
+			tokensByHole[hole].forEach((token, i) => {
+				log('token', hole, i)
+				log('div', `hole-${hole}-token-${i + 1}`)
+
+				const div = $(`hole-${hole}-token-${i + 1}`)
+				div.classList.remove('color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6')
+				div.classList.add('color-' + token.type_arg)
+			})
+		})
+	}
+
 	private setupTooltips() {
 		//todo change counter names
 		this.setTooltipToClass('revealed-tokens-back-counter', _('counter1 tooltip'))
@@ -270,17 +285,11 @@ class Harmonies implements HarmoniesGame {
 		console.log('Entering state: ' + stateName, args)
 
 		switch (stateName) {
-			/* Example:
-        
-        case 'myGameState':
-        
-            // Show some HTML block at this game state
-            dojo.style( 'my_html_block_id', 'display', 'block' );
-            
-            break;
-        */
-
-			case 'dummmy':
+			case 'chooseAction':
+				if (args?.args) {
+					const dataArgs = args.args as EnteringChooseActionArgs
+					this.onEnteringChooseAction(dataArgs)
+				}
 				break
 		}
 
@@ -299,6 +308,10 @@ class Harmonies implements HarmoniesGame {
 		}
 
 		document.getElementById('score').style.display = 'flex'
+	}
+
+	private onEnteringChooseAction(args: EnteringChooseActionArgs) {
+		this.displayColoredTokens(args)
 	}
 
 	// onLeavingState: this method is called each time we are leaving a game state.
