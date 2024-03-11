@@ -102,13 +102,29 @@ class Harmonies implements HarmoniesGame {
 		removeClass('animatedScore')
 
 		// Setup the board
+		/*foreach ($this->game->getHexesCoordinates() as $hex) {
+			$col = $hex["col"];
+			$row = $hex["row"];
+			$this->page->insert_block('cell', [
+			  'I' => $col,
+			  'J' => $row,
+			]);
+		  }*/
 		this.gamedatas.hexes.forEach((hex) => {
-			const cellC = $('cell-container-' + hex.col + '-' + hex.row)
-			cellC.style.gridRow = 2 * hex.row + (hex.col % 2 == 0 ? 1 : 2) + ' / span 2'
-			cellC.style.gridColumn = 3 * hex.col + 1 + ' / span 4'
+			const cellName = 'cell-container-' + hex.col + '-' + hex.row
+			let html = `
+			<li class="hex-grid-item" id="${cellName}">
+				<div class="hex-grid-content" id="cell-${hex.col}-${hex.row}"></div>
+		  	</li>
+        `
+			dojo.place(html, 'hex-grid-container')
 
-			//cellC.style.gridRow = 3 * i + 1 + ' / span 4'
-			//cellC.style.gridColumn = 2 * j + (i % 2 == 0 ? 1 : 2) + ' / span 2'
+			const cellT = $(cellName)
+			cellT.style.gridRow = 2 * hex.row + (hex.col % 2 == 0 ? 1 : 2) + ' / span 2'
+			cellT.style.gridColumn = 3 * hex.col + 1 + ' / span 4'
+		})
+
+		this.gamedatas.hexes.forEach((hex) => {
 			/* let x = i,
 			y = j;
 		  dojo.connect($('cell-' + i + '-' + j), 'onclick', (evt) => {

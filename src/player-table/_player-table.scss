@@ -187,11 +187,11 @@ div#board li.hex-grid-item.inactive .tile-container {
 /**********************************
 *** Grid stuff generated from sass
 **********************************/
-#grid-container {
+.grid-container {
 	width: 100%;
 	position: relative;
 }
-#grid-container::before {
+.grid-container::before {
 	content: '';
 	padding-top: 86%;
 	display: block;

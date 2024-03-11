@@ -38,7 +38,7 @@ class view_harmonies_harmonies extends game_view {
 
     /*********** Place your code below:  ************/
     // Create the board
-    $this->page->begin_block('harmonies_harmonies', 'cell');
+   /* $this->page->begin_block('harmonies_harmonies', 'cell');
     foreach ($this->game->getHexesCoordinates() as $hex) {
       $col = $hex["col"];
       $row = $hex["row"];
@@ -46,7 +46,7 @@ class view_harmonies_harmonies extends game_view {
         'I' => $col,
         'J' => $row,
       ]);
-    }
+    }*/
     /*********** Do not change anything below this line  ************/
   }
 }
