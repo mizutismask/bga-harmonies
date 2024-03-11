@@ -126,14 +126,16 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
+	public takeCard(card:AnimalCard) {
+		if ((this as any).isCurrentPlayerActive()) {
+			this.takeAction('takeAnimalCard', { cardId: card.id })
+		}
+	}
+
 	private displayColoredTokens(args: EnteringChooseActionArgs) {
-		log('tokensByHole', args)
 		const tokensByHole = args.tokensOnCentralBoard
 		Object.keys(tokensByHole).forEach((hole) => {
 			tokensByHole[hole].forEach((token, i) => {
-				log('token', hole, i)
-				log('div', `hole-${hole}-token-${i + 1}`)
-
 				const div = $(`hole-${hole}-token-${i + 1}`)
 				div.classList.remove('color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6')
 				div.classList.add('color-' + token.type_arg)
@@ -159,7 +161,7 @@ class Harmonies implements HarmoniesGame {
 		if (this.isNotSpectator()) {
 			this.setupMiniPlayerBoard(player)
 		}
-		this.playerTables[player.id] = new PlayerTable(this, player, this.gamedatas.hexes)
+		this.playerTables[player.id] = new PlayerTable(this, player, this.gamedatas.hexes, this.gamedatas.players[player.id].boardAnimalCards)
 	}
 
 	private setupMiniPlayerBoard(player: HarmoniesPlayer) {
@@ -350,6 +352,8 @@ class Harmonies implements HarmoniesGame {
 		if (chooseActionArgs.canTakeTokens) {
 			//this.addColoredTokensButtons(chooseActionArgs.tokensOnCentralBoard)
 		}
+		this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
+		
 		/*this.addImageActionButton(
 			'useTicket_button',
 			this.createDiv('expTicket', 'expTicket-button'),

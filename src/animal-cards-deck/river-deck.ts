@@ -19,6 +19,7 @@ class RiverDeck {
         stock.setSelectionMode("single");
         this.riverStock = stock;
         this.setCards(cards)
+        stock.onCardClick = (card: AnimalCard) => this.game.takeCard(card);
     }
 
     /**
@@ -30,5 +31,9 @@ class RiverDeck {
 
     public removeCard(AnimalCard: AnimalCard) {
         this.riverStock.removeCard(AnimalCard);
+    }
+
+    public setSelectionMode(mode: CardSelectionMode) {
+        this.riverStock.setSelectionMode(mode);
     }
 }

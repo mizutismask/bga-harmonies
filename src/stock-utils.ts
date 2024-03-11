@@ -1,5 +1,5 @@
-const CARD_WIDTH = 300; //also change in scss
-const CARD_HEIGHT = 516;
+const CARD_WIDTH = 150 //also change in scss
+const CARD_HEIGHT = 258
 
 function getBackgroundInlineStyleForHarmoniesCard(destination: AnimalCard) {
 	let file
