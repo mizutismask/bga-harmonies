@@ -133,9 +133,13 @@ class Harmonies implements HarmoniesGame {
 					`,
 					`central-board`
 				)
-				dojo.connect($('hole-' + i), 'onclick', (evt) => {
-					this.takeAction('takeTokens', { hole: evt.target.dataset.hole })
-				})
+				if (this.isNotSpectator()) {
+					dojo.connect($('hole-' + i), 'onclick', (evt) => {
+						if ((this as any).isCurrentPlayerActive()) {
+							this.takeAction('takeTokens', { hole: evt.currentTarget.dataset.hole })
+						}
+					})
+				}
 			}
 		}
 	}
@@ -869,7 +873,7 @@ class Harmonies implements HarmoniesGame {
 		}
 		return (this as any).inherited(arguments)
 	}
-	
+
 	/**
 	 * Get current player.
 	 */
