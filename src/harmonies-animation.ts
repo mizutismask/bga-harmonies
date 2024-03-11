@@ -5,7 +5,7 @@ abstract class HarmoniesAnimation {
 	protected zoom: number;
 
 	constructor(protected game: HarmoniesGame) {
-		this.zoom = this.game.getZoom();
+		this.zoom = 1;
 	}
 
 	public abstract animate(): Promise<HarmoniesAnimation>;

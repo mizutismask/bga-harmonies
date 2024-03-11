@@ -10,6 +10,7 @@ class CardsManager extends CardManager<AnimalCard> {
 				div.dataset.cardType = '' + card.type
 				div.style.width = '150px'
 				div.style.height = '258px'
+				div.style.position = 'relative';
 			},
 			setupFrontDiv: (card: AnimalCard, div: HTMLElement) => {
 				this.setFrontBackground(div as HTMLDivElement, card.type_arg)

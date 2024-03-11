@@ -32,7 +32,6 @@ class Harmonies implements HarmoniesGame {
 	private river: RiverDeck
 	private originalTextChooseAction: string
 
-	public map: TtrMap
 	private scoreBoard: ScoreBoard
 	private ticketsCounters: Counter[] = []
 
@@ -70,8 +69,6 @@ class Harmonies implements HarmoniesGame {
 		this.gamedatas = gamedatas
 		log('gamedatas', gamedatas)
 
-		this.map = new TtrMap(this)
-
 		this.cardsManager = new CardsManager(this)
 		this.river = new RiverDeck(this, this.gamedatas.river)
 		this.animationManager = new AnimationManager(this)
@@ -96,7 +93,6 @@ class Harmonies implements HarmoniesGame {
 		this.setupSettingsIconInMainBar()
 		this.setupPreferences()
 		this.setupTooltips()
-		;(this as any).onScreenWidthChange = () => this.map.setAutoZoom()
 
 		this.scoreBoard = new ScoreBoard(this, Object.values(this.gamedatas.players))
 		this.gamedatas.scores?.forEach((s) => this.scoreBoard.updateScore(s.playerId, s.scoreType, s.score))
@@ -873,13 +869,7 @@ class Harmonies implements HarmoniesGame {
 		}
 		return (this as any).inherited(arguments)
 	}
-	/**
-	 * Get current zoom.
-	 */
-	public getZoom(): number {
-		return this.map.getZoom()
-	}
-
+	
 	/**
 	 * Get current player.
 	 */

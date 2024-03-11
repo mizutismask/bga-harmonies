@@ -14,7 +14,6 @@ $CARD_HEIGHT: 516px;
 @import 'game-steps/game-steps';
 @import 'bga-hacks/bga-hacks';
 @import 'end-score/end-score';
-@import 'map/map';
 @import 'player-table/player-table';
 @import 'settings';
 @import '../node_modules/bga-cards/bga-cards';
@@ -164,4 +163,9 @@ html {
 .yellow {
 	background-position: 0 100%;
 	background-size: 100%;
+}
+
+.shared-elements{
+    //position: relative;
+	
 }

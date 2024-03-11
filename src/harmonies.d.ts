@@ -56,7 +56,6 @@ interface HarmoniesGamedatas {
 interface HarmoniesGame extends Game {
 	cardsManager: CardsManager
 	animationManager: AnimationManager
-	getZoom(): number
 	getCurrentPlayer(): HarmoniesPlayer
 	getPlayerId(): number
 	getPlayerScore(playerId: number): number

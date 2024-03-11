@@ -34,7 +34,6 @@
         "node_modules/bga-cards/src/card-manager.ts",
         "src/stock.d.ts",
         "src/cards.ts",
-        "src/map/map.ts",
         "src/harmonies.ts",
         "src/define.ts",
         "src/harmonies-animation.ts",
