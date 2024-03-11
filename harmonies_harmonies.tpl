@@ -19,7 +19,7 @@
     <div id="central-board" class="central-board"></div>
     <div id="river"></div>
 </div>
-<div id="player-tables">
+<div id="player-tables"></div>
 
 <div id="board">
   <div id="grid-container">
