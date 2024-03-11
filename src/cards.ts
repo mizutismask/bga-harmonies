@@ -10,7 +10,7 @@ class CardsManager extends CardManager<AnimalCard> {
 				div.dataset.cardType = '' + card.type
 				div.style.width = '150px'
 				div.style.height = '258px'
-				div.style.position = 'relative';
+				div.style.position = 'relative'
 			},
 			setupFrontDiv: (card: AnimalCard, div: HTMLElement) => {
 				this.setFrontBackground(div as HTMLDivElement, card.type_arg)
@@ -24,6 +24,18 @@ class CardsManager extends CardManager<AnimalCard> {
 				div.appendChild(info)
 				const cardTypeId = card.type * 100 + card.type_arg
 				;(this.game as any).addTooltipHtml(info.id, this.getTooltip(card, cardTypeId))
+
+				//adds score locations
+				const container: HTMLDivElement = document.createElement('div')
+				container.classList.add("points-location-wrapper")
+				div.appendChild(container)
+				
+				card.pointLocations.forEach((pointLoc, i) => {
+					const loc: HTMLDivElement = document.createElement('div')
+					loc.id = `${super.getId(card)}-score-${i}`
+					loc.classList.add('points-location')
+					container.appendChild(loc)
+				})
 			},
 			setupBackDiv: (card: AnimalCard, div: HTMLElement) => {
 				div.style.backgroundImage = `url('${g_gamethemeurl}img/harmonies-card-background.jpg')`

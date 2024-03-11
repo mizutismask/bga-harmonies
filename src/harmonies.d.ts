@@ -17,7 +17,7 @@ interface Card {
 	type_arg: number
 }
 interface AnimalCard extends Card {
-	pointsLocation: Array<number>
+	pointLocations: Array<number>
 }
 
 interface ColoredToken extends Card {}

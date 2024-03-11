@@ -73,6 +73,20 @@ html {
     height: $CARD_HEIGHT;
 }*/
 
+.points-location-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 19px;
+	width: 19px;
+	position: absolute;
+    top: 6px;
+    right: 4px;
+}
+.points-location {
+	aspect-ratio: 1/1;
+	border: 2px solid red;
+}
+
 .central-board {
 	background: url('img/centralBoard.png') no-repeat;
 	width: 300px;
@@ -151,27 +165,33 @@ html {
 	background-image: url('img/coloredTokens.png');
 }
 
-.color-1 {//blue
+.color-1 {
+	//blue
 	background-position: 0 0%;
 	background-size: 100%;
 }
-.color-3 {//brown
+.color-3 {
+	//brown
 	background-position: 0 19.605263%;
 	background-size: 100%;
 }
-.color-4 {//green
+.color-4 {
+	//green
 	background-position: 0 39.161521%;
 	background-size: 100%;
 }
-.color-2 {//grey
+.color-2 {
+	//grey
 	background-position: 0 58.453947%;
 	background-size: 100%;
 }
-.color-6 {//red
+.color-6 {
+	//red
 	background-position: 0 79.190176%;
 	background-size: 100%;
 }
-.color-5 {//yellow
+.color-5 {
+	//yellow
 	background-position: 0 100%;
 	background-size: 100%;
 }
