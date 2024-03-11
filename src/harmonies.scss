@@ -69,9 +69,10 @@ html {
 
 .central-board {
 	background: url('img/centralBoard.png') no-repeat;
-	width: 700px;
-	height: 694px;
+	width: 300px;
+	height: 298px;
 	position: relative;
+	background-size: 100%;
 
 	.central-board-hole {
 		width: 25%;
@@ -165,7 +166,6 @@ html {
 	background-size: 100%;
 }
 
-.shared-elements{
-    //position: relative;
-	
+.shared-elements {
+	display: flex;
 }
