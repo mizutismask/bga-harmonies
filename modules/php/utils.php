@@ -92,7 +92,7 @@ trait UtilTrait {
      * Transforms a ColoredToken json decoded object to ColoredToken class.
      */
     function getColoredTokenFromGlobal($dbObject) {
-        //self::dump('*******************getClaimedRouteFromGlobal', $dbObject);
+        self::dump('*******************getColoredTokenFromGlobal', $dbObject);
         if (
             $dbObject === null
         ) {
@@ -111,6 +111,7 @@ trait UtilTrait {
         $arrayData = $this->getGlobalVariable(TOKENS_IN_HOLE, false);
         $castedArray = [];
         if ($arrayData) {
+            self::dump('******************arrayData*', $arrayData);
             foreach ($arrayData as  $token) {
                 $casted = $this->getColoredTokenFromGlobal($token);
                 $castedArray[] = $casted;

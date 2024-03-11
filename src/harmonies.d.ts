@@ -20,12 +20,13 @@ interface AnimalCard extends Card {
 	pointsLocation: Array<number>
 }
 
+interface ColoredToken extends Card {}
 
 interface HarmoniesPlayer extends Player {
 	playerNo: number
 }
 
-type Coordinates = { col: number, row: number };
+type Coordinates = { col: number; row: number }
 
 interface HarmoniesGamedatas {
 	current_player_id: string
@@ -49,7 +50,7 @@ interface HarmoniesGamedatas {
 	boardSide: string
 	boardSize: { width: number; height: number }
 	hexes: Array<Coordinates>
-	river:Array<AnimalCard>
+	river: Array<AnimalCard>
 }
 
 interface HarmoniesGame extends Game {
@@ -65,6 +66,11 @@ interface HarmoniesGame extends Game {
 
 interface EnteringChooseActionArgs {
 	canPass: boolean
+	canTakeTokens: boolean
+	canPlaceToken: boolean
+	canTakeAnimalCard: boolean
+	canPlaceAnimalCube: boolean
+	tokensOnCentralBoard:{ [holeId: number]: Array<ColoredToken> }
 }
 
 interface NotifPointsArgs {

@@ -13,3 +13,6 @@ See: http://en.doc.boardgamearena.com/Game_art:_img_directory for more details.
 mogrify -path ./cropped -shave 30x30 -resize 300 -quality 100 \*.jpg
 montage `ls -v .` -tile 10 -geometry 300x516+0+0 animalCards.jpg
 
+mogrify -path ./resized -resize 650 \*.png
+montage `ls -v .` -tile 6 -geometry 784x756+0+0 coloredTokens.png
+

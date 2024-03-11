@@ -76,7 +76,7 @@ class Harmonies implements HarmoniesGame {
 		this.river = new RiverDeck(this, this.gamedatas.river)
 		this.animationManager = new AnimationManager(this)
 
-		this.initCentralBoard();
+		this.initCentralBoard()
 
 		if (this.gamedatas.lastTurn) {
 			this.notif_lastTurn(false)
@@ -129,7 +129,7 @@ class Harmonies implements HarmoniesGame {
 		if (this.getPlayersCount() > 1) {
 			for (let i = 1; i <= 5; i++) {
 				dojo.place(
-					`<div class="central-board-hole hole-${i}">
+					`<div id="hole-${i}" class="central-board-hole hole-${i}" data-hole="${i}">
 						<div id="hole-${i}-token-1" class="hole-token hole-token-1"></div>
 						<div id="hole-${i}-token-2" class="hole-token hole-token-2"></div>
 						<div id="hole-${i}-token-3" class="hole-token hole-token-3"></div>
@@ -137,6 +137,9 @@ class Harmonies implements HarmoniesGame {
 					`,
 					`central-board`
 				)
+				dojo.connect($('hole-' + i), 'onclick', (evt) => {
+					this.takeAction('takeTokens', { hole: evt.target.dataset.hole })
+				})
 			}
 		}
 	}
@@ -327,24 +330,62 @@ class Harmonies implements HarmoniesGame {
 		console.log('onUpdateActionButtons: ' + stateName)
 
 		if ((this as any).isCurrentPlayerActive()) {
-			switch (
-				stateName
-				/*               
-                Example:
-
-                case 'myGameState':
-                
-                // Add 3 action buttons in the action status bar:
-                
-                (this as any).addActionButton( 'button_1_id', _('Button 1 label'), 'onMyMethodToCall1' ); 
-                (this as any).addActionButton( 'button_2_id', _('Button 2 label'), 'onMyMethodToCall2' ); 
-                (this as any).addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' ); 
-                break;
-*/
-			) {
+			switch (stateName) {
+				case 'chooseAction':
+					this.setActionBarChooseAction(false)
+					break
 			}
 		}
 	}
+
+	/**
+	 * Sets the action bar (title and buttons) for Choose action.
+	 */
+	private setActionBarChooseAction(fromCancel: boolean) {
+		document.getElementById(`generalactions`).innerHTML = ''
+		/* if (fromCancel) {
+            this.setChooseActionGamestateDescription();
+        }
+        if (this.actionTimerId) {
+            window.clearInterval(this.actionTimerId);
+        }*/
+
+		const chooseActionArgs = this.gamedatas.gamestate.args as EnteringChooseActionArgs
+
+		if (chooseActionArgs.canTakeTokens) {
+			//this.addColoredTokensButtons(chooseActionArgs.tokensOnCentralBoard)
+		}
+		/*this.addImageActionButton(
+			'useTicket_button',
+			this.createDiv('expTicket', 'expTicket-button'),
+			'blue',
+			_('Use a ticket to place another arrow, remove the last one of any expedition or exchange a card'),
+			() => {
+				this.useTicket()
+			}
+		)
+		$('expTicket-button').parentElement.style.padding = '0'
+
+		dojo.toggleClass('useTicket_button', 'disabled', !chooseActionArgs.canUseTicket)*/
+		if (chooseActionArgs.canPass) {
+			;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())
+		}
+	}
+
+	/*private addColoredTokensButtons(tokensByHole: { [holeId: number]: Array<ColoredToken> }) {
+		Object.keys(tokensByHole).forEach((hole) => {
+			let label = dojo.string.substitute(_('Take those tokens'), {})
+
+			;(this as any).addImageActionButton(
+				'takeTokens_button_' + hole,
+				this.createDiv('token1' + hole, ),
+				'toto',
+				label,
+				() => {},
+				'take-tokens-button'
+			)
+		})
+	}*/
 
 	///////////////////////////////////////////////////
 	//// Utility methods
@@ -683,38 +724,6 @@ class Harmonies implements HarmoniesGame {
 		}
 
 		document.getElementById('pagemaintitletext').innerHTML = newText ?? this.originalTextChooseAction
-	}
-
-	/**
-	 * Sets the action bar (title and buttons) for Choose action.
-	 */
-	private setActionBarChooseAction(fromCancel: boolean) {
-		document.getElementById(`generalactions`).innerHTML = ''
-		if (fromCancel) {
-			this.setChooseActionGamestateDescription()
-		}
-		if (this.actionTimerId) {
-			window.clearInterval(this.actionTimerId)
-		}
-
-		const chooseActionArgs = this.gamedatas.gamestate.args as EnteringChooseActionArgs
-
-		/*this.addImageActionButton(
-            'useTicket_button',
-            this.createDiv('expTicket', 'expTicket-button'),
-            'blue',
-            _('Use a ticket to place another arrow, remove the last one of any expedition or exchange a card'),
-            () => {
-                this.useTicket();
-            }
-        );
-        $('expTicket-button').parentElement.style.padding = '0';
-
-        dojo.toggleClass('useTicket_button', 'disabled', !chooseActionArgs.canUseTicket);*/
-
-		if (chooseActionArgs.canPass) {
-			;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())
-		}
 	}
 
 	///////////////////////////////////////////////////

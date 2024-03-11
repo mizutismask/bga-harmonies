@@ -30,15 +30,16 @@ trait ArgsTrait {
     function argChooseAction() {
         $playerId = intval(self::getActivePlayerId());
 
-        $takenTokens = $this->getGlobalVariable(TOKENS_IN_HOLE);
-        $canTakeTokens = $takenTokens === null;
+        $takenTokens = $this->getColoredTokensChosen();
+        $canTakeTokens = count($takenTokens) === 0;
         $canPass = !$canTakeTokens;
         return [
             'canTakeTokens' => $canTakeTokens,
-            'canPlaceToken' => !$canTakeTokens && $this->array_some($takenTokens, fn ($tok) => !isset($tok["done"]) || $tok["done"] == false),
+            'canPlaceToken' => !$canTakeTokens && $this->array_some($takenTokens, fn ($tok) => $tok->done == false),
             'canTakeAnimalCard' => boolval(self::getGameStateValue(TOOK_ANIMAL_CARD)) === false && intval($this->animalCards->countCardInLocation("board" . $playerId)) < 4,
             'canPlaceAnimalCube' => false,
             'canPass' => $canPass,
+            'tokensOnCentralBoard' => $this->getColoredTokensOnCentralBoard(),
         ];
     }
 }

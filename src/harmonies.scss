@@ -109,8 +109,8 @@ html {
 		.hole-token {
 			border-radius: 50%;
 			border: 2px solid mediumaquamarine;
-            width: 40px;
-            height: 40px;
+			width: 40px;
+			height: 40px;
 			&.hole-token-1 {
 				position: absolute;
 				top: 9%;
@@ -128,4 +128,40 @@ html {
 			}
 		}
 	}
+}
+
+.blue,
+.brown,
+.green,
+.grey,
+.red,
+.yellow {
+	max-width: 100%;
+	background-size: 100%;
+	background-image: url('coloredTokens.png');
+}
+
+.blue {
+	background-position: 0 0%;
+	background-size: 100%;
+}
+.brown {
+	background-position: 0 19.605263%;
+	background-size: 100%;
+}
+.green {
+	background-position: 0 39.161521%;
+	background-size: 100%;
+}
+.grey {
+	background-position: 0 58.453947%;
+	background-size: 100%;
+}
+.red {
+	background-position: 0 79.190176%;
+	background-size: 100%;
+}
+.yellow {
+	background-position: 0 100%;
+	background-size: 100%;
 }
