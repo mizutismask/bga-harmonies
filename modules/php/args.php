@@ -33,13 +33,15 @@ trait ArgsTrait {
         $takenTokens = $this->getColoredTokensChosen();
         $canTakeTokens = count($takenTokens) === 0;
         $canPass = !$canTakeTokens;
+        $canPlaceToken =  !$canTakeTokens && $this->array_some($takenTokens, fn ($tok) => $tok->done == false);
         return [
             'canTakeTokens' => $canTakeTokens,
-            'canPlaceToken' => !$canTakeTokens && $this->array_some($takenTokens, fn ($tok) => $tok->done == false),
+            'canPlaceToken' =>$canPlaceToken,
             'canTakeAnimalCard' => boolval(self::getGameStateValue(TOOK_ANIMAL_CARD)) === false && intval($this->animalCards->countCardInLocation("board" . $playerId)) < 4,
             'canPlaceAnimalCube' => false,
             'canPass' => $canPass,
-            'tokensOnCentralBoard' => $this->getColoredTokensOnCentralBoard(),
+            'tokensOnCentralBoard' => $canTakeTokens? $this->getColoredTokensOnCentralBoard():[],
+            'tokensToPlace' => $canPlaceToken? $this->getColoredTokensChosen():[],
         ];
     }
 }

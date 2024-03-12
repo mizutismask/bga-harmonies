@@ -352,6 +352,9 @@ class Harmonies implements HarmoniesGame {
 		if (chooseActionArgs.canTakeTokens) {
 			//this.addColoredTokensButtons(chooseActionArgs.tokensOnCentralBoard)
 		}
+		if (chooseActionArgs.canPlaceToken) {
+			this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace)
+		}
 		this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
 		
 		/*this.addImageActionButton(
@@ -385,6 +388,22 @@ class Harmonies implements HarmoniesGame {
 			)
 		})
 	}*/
+
+	private addPlaceTokenButtons(tokens: Array<ColoredToken>) {
+		tokens.forEach((token) => {
+			let label = dojo.string.substitute(_('Place this token on your board'), {})
+			const buttonId = 'placeToken_button_' + token.id;
+			;(this as any).addImageActionButton(
+				buttonId,
+				this.createDiv(`color-${token.type_arg} token-button`,`placeToken-${token.id}`),
+				'blue',
+				label,
+				() => {},
+				'place-token-button'
+			)
+			$(buttonId).dataset.tokenId = token.id
+		})
+	}
 
 	///////////////////////////////////////////////////
 	//// Utility methods
