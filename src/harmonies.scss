@@ -92,6 +92,12 @@ html {
 	height: 27px;
 }
 
+.colored-token {
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+}
+
 .central-board {
 	background: url('img/centralBoard.png') no-repeat;
 	width: 300px;
@@ -136,10 +142,6 @@ html {
 		}
 
 		.hole-token {
-			border-radius: 50%;
-			//border: 2px solid mediumaquamarine;
-			width: 40px;
-			height: 40px;
 			&.hole-token-1 {
 				position: absolute;
 				top: 9%;

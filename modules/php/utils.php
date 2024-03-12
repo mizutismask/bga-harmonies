@@ -120,6 +120,16 @@ trait UtilTrait {
         return $castedArray;
     }
 
+    function updateChosenToken(string $placedTokenId, bool $done) {
+        $gvar = $this->getGlobalVariable(TOKENS_IN_HOLE, true);
+        foreach ($gvar as &$token) {
+            if($token["id"]==$placedTokenId){
+                $token["done"]=$done;
+            }
+        }
+        $this->setGlobalVariable(TOKENS_IN_HOLE, $gvar);
+    }
+
     /**
      * Transforms a Destination Db object to Destination class.
      */

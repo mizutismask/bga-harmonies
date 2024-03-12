@@ -100,6 +100,12 @@ trait ActionTrait {
         if (!$this->array_some($tokenChosen, fn ($tok) => $tok->id == $tokenId)) {
             throw new BgaUserException(self::_("You are not allowed to place this colored token"));
         }
+        $possibleHexes = $this->getPossibleHexesForColoredToken($tokenId, $this->getMostlyActivePlayerId());
+        //self::dump('*******************possibleHexes', $possibleHexes);
+        if (!in_array($toHexId, $possibleHexes)) {
+            throw new BgaUserException(self::_("You are not allowed to place this color here, check the player help"));
+        }
+
         $this->moveColoredTokenToBoard($tokenId, $toHexId);
 
         $this->gamestate->nextState('continue');

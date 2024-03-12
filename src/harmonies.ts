@@ -41,6 +41,7 @@ class Harmonies implements HarmoniesGame {
 	private isTouch = window.matchMedia('(hover: none)').matches
 	private TOOLTIP_DELAY = document.body.classList.contains('touch-device') ? 1500 : undefined
 	private settings = [new Setting('customSounds', 'pref', 1)]
+	public clientActionData: ClientActionData
 
 	constructor() {
 		console.log('harmonies constructor')
@@ -108,9 +109,9 @@ class Harmonies implements HarmoniesGame {
 			for (let i = 1; i <= 5; i++) {
 				dojo.place(
 					`<div id="hole-${i}" class="central-board-hole hole-${i}" data-hole="${i}">
-						<div id="hole-${i}-token-1" class="hole-token hole-token-1"></div>
-						<div id="hole-${i}-token-2" class="hole-token hole-token-2"></div>
-						<div id="hole-${i}-token-3" class="hole-token hole-token-3"></div>
+						<div id="hole-${i}-token-1" class="colored-token hole-token hole-token-1"></div>
+						<div id="hole-${i}-token-2" class="colored-token hole-token hole-token-2"></div>
+						<div id="hole-${i}-token-3" class="colored-token hole-token hole-token-3"></div>
 					</div>
 					`,
 					`central-board`
@@ -126,12 +127,23 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
-	public takeCard(card:AnimalCard) {
+	public takeCard(card: AnimalCard) {
 		if ((this as any).isCurrentPlayerActive()) {
 			this.takeAction('takeAnimalCard', { cardId: card.id })
 		}
 	}
 
+	public placeToken(hexId: string) {
+		log('click on ', hexId)
+		if ((this as any).isCurrentPlayerActive() && this.clientActionData.tokenToPlace) {
+			this.takeAction('placeColoredToken', { 'tokenId': this.clientActionData.tokenToPlace.id, 'hexId': hexId })
+		}
+	}
+
+	/**
+	 * Sets colors on already existant tokens in hole
+	 * @param args
+	 */
 	private displayColoredTokens(args: EnteringChooseActionArgs) {
 		const tokensByHole = args.tokensOnCentralBoard
 		Object.keys(tokensByHole).forEach((hole) => {
@@ -161,7 +173,13 @@ class Harmonies implements HarmoniesGame {
 		if (this.isNotSpectator()) {
 			this.setupMiniPlayerBoard(player)
 		}
-		this.playerTables[player.id] = new PlayerTable(this, player, this.gamedatas.hexes, this.gamedatas.players[player.id].boardAnimalCards)
+		this.playerTables[player.id] = new PlayerTable(
+			this,
+			player,
+			this.gamedatas.hexes,
+			this.gamedatas.players[player.id].boardAnimalCards,
+			this.gamedatas.players[player.id].tokensOnBoard,
+		)
 	}
 
 	private setupMiniPlayerBoard(player: HarmoniesPlayer) {
@@ -295,6 +313,7 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	private onEnteringChooseAction(args: EnteringChooseActionArgs) {
+		this.resetClientActionData()
 		this.displayColoredTokens(args)
 	}
 
@@ -356,7 +375,7 @@ class Harmonies implements HarmoniesGame {
 			this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace)
 		}
 		this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
-		
+
 		/*this.addImageActionButton(
 			'useTicket_button',
 			this.createDiv('expTicket', 'expTicket-button'),
@@ -392,13 +411,16 @@ class Harmonies implements HarmoniesGame {
 	private addPlaceTokenButtons(tokens: Array<ColoredToken>) {
 		tokens.forEach((token) => {
 			let label = dojo.string.substitute(_('Place this token on your board'), {})
-			const buttonId = 'placeToken_button_' + token.id;
+			const buttonId = 'placeToken_button_' + token.id
 			;(this as any).addImageActionButton(
 				buttonId,
-				this.createDiv(`color-${token.type_arg} token-button`,`placeToken-${token.id}`),
+				this.createDiv(`color-${token.type_arg} token-button`, `placeToken-${token.id}`),
 				'blue',
 				label,
-				() => {},
+				() => {
+					this.resetClientActionData()
+					this.clientActionData.tokenToPlace = token
+				},
 				'place-token-button'
 			)
 			$(buttonId).dataset.tokenId = token.id
@@ -407,6 +429,11 @@ class Harmonies implements HarmoniesGame {
 
 	///////////////////////////////////////////////////
 	//// Utility methods
+	public resetClientActionData() {
+		this.clientActionData = {
+			tokenToPlace: undefined
+		}
+	}
 
 	public addArrowsToActivePlayer(state: Gamestate) {
 		const notUsefulStates = ['todo']

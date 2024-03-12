@@ -41,7 +41,7 @@ trait ArgsTrait {
             'canPlaceAnimalCube' => false,
             'canPass' => $canPass,
             'tokensOnCentralBoard' => $canTakeTokens? $this->getColoredTokensOnCentralBoard():[],
-            'tokensToPlace' => $canPlaceToken? $this->getColoredTokensChosen():[],
+            'tokensToPlace' => $canPlaceToken? array_values(array_filter($this->getColoredTokensChosen(), fn($token)=>$token->done==false)):[],
         ];
     }
 }

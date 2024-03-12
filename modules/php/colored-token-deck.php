@@ -57,66 +57,68 @@ trait ColoredTokenDeckTrait {
 
     public function moveColoredTokenToBoard($tokenId, $hexId) {
         $playerId = $this->getMostlyActivePlayerId();
-        $zindex = count($this->getTokensAt($hexId, $playerId) + 1);
-        $this->coloredTokens->moveCard($tokenId, $playerId . "_" . $hexId, $zindex);
+        $zindex = count($this->getTokensAt($hexId, $playerId)) + 1;
+        $this->coloredTokens->moveCard($tokenId, $hexId, $zindex);
+        $this->updateChosenToken($tokenId, true);
         $this->notifyAllPlayers('coloredTokenMove', "", [
             'token' => $this->getColoredTokenFromDb($this->coloredTokens->getCard($tokenId)),
         ]);
     }
 
     public function getTokensAt($hexId, $playerId) {
-        $location = $playerId . "_" . $hexId;
+        $location = $hexId;
         $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation($location, null, "location_arg desc"));
         return $tokens;
     }
 
     public function getTokensForCompleteBoardByHex($playerId) {
-        $sql = "SELECT * FROM coloredToken where card_location like '$playerId%' order by card_location_arg desc";
-        $tokens = self::getCollectionFromDb($sql);
+        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM coloredToken where card_location like '$playerId%' order by card_location_arg desc";
+        $tokens = $this->getColoredTokensFromDb(self::getCollectionFromDb($sql));
         $byCell = [];
         foreach (array_values($tokens) as $token) {
-            if (!isset($byCell[$token["card_location"]])) {
-                $byCell[$token["card_location"]] = [];
+            if (!isset($byCell[$token->location])) {
+                $byCell[$token->location] = [];
             }
-            $byCell[$token["card_location"]][] = $token;
+            $byCell[$token->location][] = $token;
         }
         return $byCell;
     }
 
-    public function getPossibleHexesForColoredToken($token, $playerId) {
+    public function getPossibleHexesForColoredToken(string $tokenId, $playerId) {
         $board = $this->getBoard($playerId);
         $hexes = [];
+        $token = $this->getColoredTokenFromDb($this->coloredTokens->getCard($tokenId));
         foreach ($board as $hex) {
-            $existingTokens = $this->getTokensAt($hex, $playerId);
+            //$existingTokens = $this->getTokensAt($hex, $playerId);
+            $existingTokens = $hex["tokens"];
+            //self::dump('*******************hex', $hex);
             //todo check animal cube here
             if (!$existingTokens || count($existingTokens) <= 3 && $this->isColorAllowedOnTopOfOtherColor($token->type_arg, $existingTokens[0]->type_arg)) {
                 $hexes[] = $hex;
             }
         }
-        return $hexes;
+        return $this->convertHexesCoordsToName($hexes, $playerId);
     }
 
-    public function convertHexesCoordsToName($hexes) {
-        $hexes = [];
+    public function convertHexesCoordsToName($hexes, $playerId) {
+        $hexesNames = [];
         foreach ($hexes as $hex) {
-            $hexes[] = $this->convertHexCoordsToName($hex);
+            $hexesNames[] = $this->convertHexCoordsToName($hex, $playerId);
         }
-        return $hexes;
+        return $hexesNames;
     }
 
-    public function convertHexCoordsToName($hex) {
-        return "cell-" . $hex["col"] . "-" . $hex["row"];
+    public function convertHexCoordsToName($hex, $playerId) {
+        return  $playerId . "_cell_" . $hex["col"] . "_" . $hex["row"];
     }
 
     private function isColorAllowedOnTopOfOtherColor($topColor, $bottomColor) {
         $allowed = true;
-        if ($bottomColor === BLUE || $bottomColor === YELLOW) {
+        if ($bottomColor === BLUE || $bottomColor === YELLOW || $bottomColor === GREEN) {
             $allowed = false;
         } else if ($bottomColor === GRAY && $topColor !== $bottomColor) {
             $allowed = false;
-        } else if ($topColor === BROWN && $bottomColor == GREEN) {
-            $allowed = false;
-        } else if ($topColor === RED && $bottomColor == GREEN) {
+        } else if ($bottomColor === RED && $topColor !== $bottomColor) {
             $allowed = false;
         }
         return $allowed;

@@ -17,12 +17,16 @@ trait HoneycombTrait {
         return $hexes;
     }
 
-    public function getBoard($playerId){
+    public function getBoard($playerId) {
         $coords = $this->getHexesCoordinates();
         $existingTokens = $this->getTokensForCompleteBoardByHex($playerId);
         foreach ($coords as &$hex) {
-            $hex["tokens"]=$existingTokens[$this->convertHexCoordsToName($hex)];
+            $cellName = $this->convertHexCoordsToName($hex, $playerId);
+            if (isset($existingTokens[$cellName]))
+                $hex["tokens"] = $existingTokens[$cellName];
+            else $hex["tokens"] = [];
         }
+        //self::dump('************** *****getBoard', $coords);
         return $coords;
     }
 }

@@ -25,6 +25,7 @@ interface ColoredToken extends Card {}
 interface HarmoniesPlayer extends Player {
 	playerNo: number
 	boardAnimalCards:Array<AnimalCard>
+	tokensOnBoard: { [hexId: string]: Array<ColoredToken> }
 }
 
 type Coordinates = { col: number; row: number }
@@ -63,6 +64,7 @@ interface HarmoniesGame extends Game {
 	setTooltip(id: string, html: string): void
 	setTooltipToClass(className: string, html: string): void
     takeCard(card: AnimalCard): void
+	placeToken(hexId:string): void
 }
 
 interface EnteringChooseActionArgs {
@@ -104,4 +106,8 @@ interface NotifMaterialMove {
 	fromArg: number
 	toArg: number
 	material: Array<any | string> //elements (cards for exemple), or tokenIds
+}
+
+interface ClientActionData {
+	tokenToPlace: ColoredToken
 }

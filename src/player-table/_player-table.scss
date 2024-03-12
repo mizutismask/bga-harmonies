@@ -287,7 +287,19 @@ div#board li.hex-grid-item.inactive .tile-container {
 
 	//clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 	//-webkit-clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+	//to display tokens in the center
+	display: grid;
+    justify-content: center;
+    align-items: center;
+
+	.colored-token{
+		&:not(:first-child){
+			margin-top: -126px;
+		}
+	}
 }
+
 
 div#board li .hex-grid-content[data-location]::before {
 	content: '';
