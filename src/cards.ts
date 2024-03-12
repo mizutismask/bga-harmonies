@@ -3,7 +3,7 @@ class CardsManager extends CardManager<AnimalCard> {
 	constructor(public game: HarmoniesGame) {
 		super(game, {
 			animationManager: game.animationManager,
-			getId: (card) => `harmonies-card-${card.id}`,
+			getId: (card) => `card_${card.id}`,
 			setupDiv: (card: AnimalCard, div: HTMLElement) => {
 				div.classList.add('harmonies-card')
 				div.dataset.cardId = '' + card.id

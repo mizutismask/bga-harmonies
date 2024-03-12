@@ -21,6 +21,7 @@ interface AnimalCard extends Card {
 }
 
 interface ColoredToken extends Card {}
+interface AnimalCube extends Card {}
 
 interface HarmoniesPlayer extends Player {
 	playerNo: number
@@ -53,6 +54,7 @@ interface HarmoniesGamedatas {
 	boardSize: { width: number; height: number }
 	hexes: Array<Coordinates>
 	river: Array<AnimalCard>
+	cubesOnAnimalCards: Array<AnimalCube>
 }
 
 interface HarmoniesGame extends Game {

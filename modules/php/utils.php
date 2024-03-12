@@ -144,7 +144,7 @@ trait UtilTrait {
     }
 
     /**
-     * Transforms a Destination Db object to Destination class.
+     * Transforms a AnimalCard Db object to AnimalCard class.
      */
     function getAnimalCardFromDb($dbObject) {
         if (!$dbObject || !array_key_exists('id', $dbObject)) {
@@ -153,6 +153,16 @@ trait UtilTrait {
 
         //self::dump('************type_arg*******', $dbObject["type_arg"]);
         //self::dump('*******************', $this->coloredTokens[$dbObject["type"]][$dbObject["type_arg"]]);
+        return new AnimalCard($dbObject, $this->ANIMAL_CARDS);
+    }
+
+    /**
+     * Transforms an AnimalCube db object to AnimalCube class.
+     */
+    function getAnimalCubeFromDb($dbObject) {
+        if (!$dbObject || !array_key_exists('id', $dbObject)) {
+            throw new BgaSystemException("Animal cube doesn't exists " . json_encode($dbObject));
+        }
         return new AnimalCard($dbObject, $this->ANIMAL_CARDS);
     }
 
@@ -168,6 +178,13 @@ trait UtilTrait {
      */
     function getAnimalCardsFromDb(array $dbObjects) {
         return array_map(fn ($dbObject) => $this->getAnimalCardFromDb($dbObject), array_values($dbObjects));
+    }
+
+    /**
+     * Transforms a AnimalCard Db object array to AnimalCard class array.
+     */
+    function getAnimalCubesFromDb(array $dbObjects) {
+        return array_map(fn ($dbObject) => $this->getAnimalCubeFromDb($dbObject), array_values($dbObjects));
     }
 
     /**

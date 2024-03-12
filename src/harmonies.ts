@@ -91,6 +91,8 @@ class Harmonies implements HarmoniesGame {
 
 		$('overall-content').classList.add(`player-count-${this.getPlayersCount()}`, gamedatas.boardSide)
 
+		this.displayCubesOnAnimalCards(this.gamedatas.cubesOnAnimalCards)
+
 		this.setupSettingsIconInMainBar()
 		this.setupPreferences()
 		this.setupTooltips()
@@ -125,6 +127,12 @@ class Harmonies implements HarmoniesGame {
 				}
 			}
 		}
+	}
+
+	private displayCubesOnAnimalCards(cubes: Array<AnimalCube>) {
+		cubes.forEach((c) => {
+			dojo.addClass(`${c.location}-score-${c.location_arg}`, "animal-cube cube")
+		})
 	}
 
 	public takeCard(card: AnimalCard) {
@@ -178,7 +186,7 @@ class Harmonies implements HarmoniesGame {
 			player,
 			this.gamedatas.hexes,
 			this.gamedatas.players[player.id].boardAnimalCards,
-			this.gamedatas.players[player.id].tokensOnBoard,
+			this.gamedatas.players[player.id].tokensOnBoard
 		)
 	}
 

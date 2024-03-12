@@ -38,14 +38,14 @@ trait AnimalCubeDeckTrait {
     }
 
     public function getAnimalCubesOnCards() {
-        $sql = 'SELECT * FROM animalCube where card_location like "card_%"';
-        $tokens = self::getCollectionFromDb($sql);
+        $sql = 'SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM animalCube where card_location like "card_%"';
+        $tokens = $this->getAnimalCubesFromDb(self::getCollectionFromDb($sql));
         return $tokens;
     }
 
     public function getAnimalCubesOnPlayerBoards() {
-        $sql = "SELECT * FROM animalCube where card_location like 'hex_%'";
-        $tokens = self::getCollectionFromDb($sql);
+        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM animalCube where card_location like 'hex_%'";
+        $tokens =  $this->getAnimalCubesFromDb(self::getCollectionFromDb($sql));
         return $tokens;
     }
 }

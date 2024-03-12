@@ -76,18 +76,18 @@ html {
 .points-location-wrapper {
 	display: flex;
 	flex-direction: column;
-	gap: 19px;
-	width: 19px;
+	gap: 21px;
+	width: 17px;
 	position: absolute;
-    top: 6px;
-    right: 4px;
+	top: 6px;
+	right: 5px;
 }
 .points-location {
-	aspect-ratio: 1/1;
-	border: 2px solid red;
+	aspect-ratio: 1/1.12;
+	//border: 2px solid red;
 }
 
-.token-button{
+.token-button {
 	width: 30px;
 	height: 27px;
 }
@@ -201,6 +201,22 @@ html {
 	//yellow
 	background-position: 0 100%;
 	background-size: 100%;
+}
+
+.cubespirit,
+.cube {
+	max-width: 100%;
+	background-size: 100%;
+	background-image: url('img/cubes.png');
+}
+
+.cubespirit {
+	background-position: 0 0%;
+	background-size: 100%;
+}
+.cube {
+	background-position: 0 100%;
+	background-size: 102.121212%;
 }
 
 .shared-elements {
