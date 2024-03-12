@@ -127,11 +127,12 @@ class Harmonies implements HarmoniesGame {
 				}
 			}
 		}
+		this.displayColoredTokens(this.gamedatas.tokensOnCentralBoard)
 	}
 
 	private displayCubesOnAnimalCards(cubes: Array<AnimalCube>) {
 		cubes.forEach((c) => {
-			dojo.addClass(`${c.location}-score-${c.location_arg}`, "animal-cube cube")
+			dojo.addClass(`${c.location}-score-${c.location_arg}`, 'animal-cube cube')
 		})
 	}
 
@@ -152,12 +153,15 @@ class Harmonies implements HarmoniesGame {
 	 * Sets colors on already existant tokens in hole
 	 * @param args
 	 */
-	private displayColoredTokens(args: EnteringChooseActionArgs) {
-		const tokensByHole = args.tokensOnCentralBoard
+	private displayColoredTokens(tokensByHole: { [hole: number]: Array<ColoredToken> }) {
+		;[1, 2, 3, 4, 5].forEach((num) => this.emptyHole(num))
+		console.log('keys', Object.keys(tokensByHole))
 		Object.keys(tokensByHole).forEach((hole) => {
 			tokensByHole[hole].forEach((token, i) => {
+				console.log('div', `hole-${hole}-token-${i + 1}`)
+
 				const div = $(`hole-${hole}-token-${i + 1}`)
-				div.classList.remove('color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6')
+				//div.classList.remove('color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6')
 				div.classList.add('color-' + token.type_arg)
 			})
 		})
@@ -322,7 +326,6 @@ class Harmonies implements HarmoniesGame {
 
 	private onEnteringChooseAction(args: EnteringChooseActionArgs) {
 		this.resetClientActionData()
-		this.displayColoredTokens(args)
 	}
 
 	// onLeavingState: this method is called each time we are leaving a game state.
@@ -383,6 +386,10 @@ class Harmonies implements HarmoniesGame {
 			this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace)
 		}
 		this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
+
+		if (!chooseActionArgs.canPlaceToken && !chooseActionArgs.canTakeTokens) {
+			//this.setGamestateDescription('OptionalActions')
+		}
 
 		/*this.addImageActionButton(
 			'useTicket_button',
@@ -843,6 +850,7 @@ class Harmonies implements HarmoniesGame {
 			['score', ANIMATION_MS],
 			['highlightWinnerScore', ANIMATION_MS],
 			['materialMove', ANIMATION_MS],
+			['holeEmptied', ANIMATION_MS],
 			['lastTurn', 1]
 		]
 
@@ -886,6 +894,21 @@ class Harmonies implements HarmoniesGame {
 		cards.forEach((c) => console.log('c', c.id))
 	}
 
+	notif_holeEmptied(notif: Notif<NotifHoleEmptied>) {
+		console.log('query', `#hole-${notif.args.hole} div`)
+		this.emptyHole(notif.args.hole)
+	}
+
+	private emptyHole(holeNumber: number) {
+		dojo.query(`#hole-${holeNumber} div`).removeClass([
+			'color-1',
+			'color-2',
+			'color-3',
+			'color-4',
+			'color-5',
+			'color-6'
+		])
+	}
 	/**
 	 * Highlight winner for end score.
 	 */

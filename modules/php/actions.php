@@ -44,7 +44,15 @@ trait ActionTrait {
             throw new BgaUserException(self::_("You already took colored tokens"));
         }
 
-        $this->setGlobalVariable(TOKENS_IN_HOLE, $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard', $holeNumber)));
+        $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard', $holeNumber));
+        self::setGameStateValue(EMPTIED_HOLE, $holeNumber);
+        $this->setGlobalVariable(TOKENS_IN_HOLE, $tokens);
+
+        $this->notifyAllPlayers('holeEmptied',  clienttranslate('${player_name} takes tokens'), [
+            'player_name' => $this->getPlayerName($this->getMostlyActivePlayerId()),
+            'hole' => $holeNumber,
+        ]);
+
         $this->gamestate->nextState('continue');
     }
 

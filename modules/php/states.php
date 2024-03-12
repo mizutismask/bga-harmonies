@@ -54,6 +54,7 @@ trait StateTrait {
         } else {
             //finishing round or playing normally
             $this->activateNextPlayerCustom();
+            $this->refillCentralBoard();
             $this->gamestate->nextState('nextPlayer');
         }
     }

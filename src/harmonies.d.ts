@@ -55,6 +55,7 @@ interface HarmoniesGamedatas {
 	hexes: Array<Coordinates>
 	river: Array<AnimalCard>
 	cubesOnAnimalCards: Array<AnimalCube>
+	tokensOnCentralBoard: { [hole: number]: Array<ColoredToken> }
 }
 
 interface HarmoniesGame extends Game {
@@ -108,6 +109,10 @@ interface NotifMaterialMove {
 	fromArg: number
 	toArg: number
 	material: Array<any | string> //elements (cards for exemple), or tokenIds
+}
+
+interface NotifHoleEmptied {
+	hole: number
 }
 
 interface ClientActionData {

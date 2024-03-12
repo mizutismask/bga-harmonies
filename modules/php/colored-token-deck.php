@@ -42,17 +42,19 @@ trait ColoredTokenDeckTrait {
      * Pick tokens to refill central board.
      */
     public function refillCentralBoard() {
-        $tokenCount = 3;
-        $hole = self::getGameStateValue(EMPTIED_HOLE);
-        $tokens = $this->pickTokensForCentralBoard($tokenCount, $hole);
-        if (count($tokens) != $tokenCount) {
-            //end of game
-        } else {
-            $this->notifyAllPlayers('coloredTokenMove', "", [
-                'tokens' => [$hole => $this->getColoredTokensFromDb($this->coloredTokens->getCards($tokens))],
-            ]);
+        $hole = intval(self::getGameStateValue(EMPTIED_HOLE));
+        if ($hole) {
+            $tokenCount = 3;
+            $tokens = $this->pickTokensForCentralBoard($tokenCount, $hole);
+            if (count($tokens) != $tokenCount) {
+                //end of game
+            } else {
+                $this->notifyAllPlayers('coloredTokenMove', "", [
+                    'tokens' => [$tokens],
+                ]);
+            }
         }
-        return $tokens;
+       // return $tokens;
     }
 
     public function moveColoredTokenToBoard($tokenId, $hexId) {
