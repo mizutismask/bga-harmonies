@@ -9,12 +9,15 @@ define("GS_PLAYER_TURN_NUMBER", 'playerturn_nbr');
  * Custom framework constants
  */
 const MATERIAL_TYPE_CARD = "CARD";
+const MATERIAL_TYPE_CUBE = "CUBE";
 const MATERIAL_TYPE_TOKEN = "TOKEN";
 const MATERIAL_TYPE_FIRST_PLAYER_TOKEN = "FIRST_PLAYER_TOKEN";
 
 const MATERIAL_LOCATION_HAND = "HAND";
 const MATERIAL_LOCATION_DECK = "DECK";
 const MATERIAL_LOCATION_STOCK = "STOCK";
+const MATERIAL_LOCATION_RIVER = "RIVER";
+const MATERIAL_LOCATION_CARD = "CARD";
 
 /* 
  * Game constants 

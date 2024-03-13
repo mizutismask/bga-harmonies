@@ -26,6 +26,10 @@ class PlayerBoardDeck {
 		this.boardDeck.addCards(cards, { fromElement: $('upperrightmenu'), originalSide: 'front' })
 	}
 
+	public addCard(card: AnimalCard) {
+		this.boardDeck.addCard(card)// { fromElement: $('upperrightmenu'), originalSide: 'front' }
+	}
+
 	public removeCard(AnimalCard: AnimalCard) {
 		this.boardDeck.removeCard(AnimalCard)
 	}

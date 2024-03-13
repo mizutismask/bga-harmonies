@@ -25,7 +25,7 @@ interface AnimalCube extends Card {}
 
 interface HarmoniesPlayer extends Player {
 	playerNo: number
-	boardAnimalCards:Array<AnimalCard>
+	boardAnimalCards: Array<AnimalCard>
 	tokensOnBoard: { [hexId: string]: Array<ColoredToken> }
 }
 
@@ -66,8 +66,8 @@ interface HarmoniesGame extends Game {
 	getPlayerScore(playerId: number): number
 	setTooltip(id: string, html: string): void
 	setTooltipToClass(className: string, html: string): void
-    takeCard(card: AnimalCard): void
-	placeToken(hexId:string): void
+	takeCard(card: AnimalCard): void
+	placeToken(hexId: string): void
 }
 
 interface EnteringChooseActionArgs {
@@ -103,11 +103,11 @@ interface NotifScorePointArgs {
 }
 
 interface NotifMaterialMove {
-	type: 'CARD' | 'TOKEN' | 'FIRST_PLAYER_TOKEN'
-	from: 'HAND' | 'DECK' | 'STOCK'
-	to: 'HAND' | 'DECK' | 'STOCK'
+	type: 'CARD' | 'TOKEN' | 'FIRST_PLAYER_TOKEN' | 'CUBE'
+	from: 'HAND' | 'DECK' | 'STOCK' | 'RIVER'
+	to: 'HAND' | 'DECK' | 'STOCK' | 'CARD'
 	fromArg: number
-	toArg: number
+	toArg: number | string
 	material: Array<any | string> //elements (cards for exemple), or tokenIds
 }
 

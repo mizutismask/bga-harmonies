@@ -19,13 +19,17 @@ trait AnimalCubeDeckTrait {
      * Pick tokens to fill an animal card.
      */
     public function fillAnimalCard(AnimalCard $card) {
+        $cubes = [];
         for ($i = 0; $i < count($card->pointLocations); $i++) {
-            $this->animalCubes->pickCardForLocation("deck", "card_" . $card->id, $i);
-            $this->notifyAllPlayers('animalCubeMove', "", [
-                'cardId' => $card->id,
-                'spot' => $i,
-            ]);
+            $cubes[] = $this->animalCubes->pickCardForLocation("deck", "card_" . $card->id, $i);
         }
+        $this->notifyAllPlayers('materialMove', "", [
+            'type' => MATERIAL_TYPE_CUBE,
+            'from' => MATERIAL_LOCATION_DECK,
+            'to' => MATERIAL_LOCATION_CARD,
+            'toArg' => $card->id,
+            'material' => $this->getAnimalCubesFromDb($cubes),
+        ]);
     }
 
     public function getCubesOnCard($cardId) {

@@ -87,16 +87,19 @@ trait AnimalCardDeckTrait {
         $spot = intval($this->animalCards->countCardInLocation($location));
         $this->animalCards->moveCard($cardId, $location, $spot);
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
-        $this->fillAnimalCard($card);
         self::incStat(1, "game_animal_cards_taken", $playerId);
-
-        $this->notifyAllPlayers('cardMoved', clienttranslate('${player_name} takes an animal card to his spot ${spot}'), [
+        
+        $this->notifyAllPlayers('materialMove', clienttranslate('${player_name} takes an animal card to his spot ${spot}'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
-            'card' => [$card],
-            'to' => $spot,
+            'type' =>MATERIAL_TYPE_CARD,
+            'from' =>MATERIAL_LOCATION_RIVER,
+            'to' => MATERIAL_LOCATION_HAND,
+            'toArg' => $playerId,
+            'material' => [$card],
             'spot' => $spot,
         ]);
+        $this->fillAnimalCard($card);
     }
 
     public function moveAnimalCardToFinishedCards(int $cardId) {

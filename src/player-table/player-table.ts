@@ -65,6 +65,10 @@ class PlayerTable {
 		this.handStock = new PlayerBoardDeck(this.game, player, cards)
 	}
 
+	public addCard(card: AnimalCard) {
+		this.handStock.addCard(card)
+	}
+
 	/**
 	 * Creates a new div inside an hex
 	 * @param args

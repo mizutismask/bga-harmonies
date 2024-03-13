@@ -890,6 +890,38 @@ class Harmonies implements HarmoniesGame {
 
 	notif_materialMove(notif: Notif<NotifMaterialMove>) {
 		console.log('notif_materialMove', notif)
+		switch (notif.args.type) {
+			case 'CARD':
+				switch (notif.args.from) {
+					case 'RIVER':
+						//from river to player hand
+						this.playerTables[notif.args.toArg].addCard(notif.args.material.pop())
+						break
+
+					default:
+						console.error('Material move not handled', notif)
+						break
+				}
+				break
+			case 'CUBE':
+				switch (notif.args.from) {
+					case 'DECK':
+						if (notif.args.to === 'CARD') {
+							//cube from stock to card
+							const cubes = notif.args.material as Array<AnimalCube>
+							this.displayCubesOnAnimalCards(cubes)
+						}
+						break
+ 
+					default:
+						console.error('Material move not handled', notif)
+						break
+				}
+				break
+			default:
+				console.error('Material move not handled', notif)
+				break
+		}
 		const cards = notif.args.material as Array<AnimalCard>
 		cards.forEach((c) => console.log('c', c.id))
 	}
@@ -926,7 +958,7 @@ class Harmonies implements HarmoniesGame {
 				}
 
 				// make cities names in bold
-				;['from', 'to', 'cities_names'].forEach((field) => {
+				;['cities_names'].forEach((field) => {
 					if (args[field] !== null && args[field] !== undefined && args[field][0] != '<') {
 						args[field] = `<span style="color:#2cd51e"><strong>${_(args[field])}</strong></span>`
 					}
