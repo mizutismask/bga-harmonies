@@ -54,7 +54,7 @@ trait ColoredTokenDeckTrait {
                 ]);
             }
         }
-       // return $tokens;
+        // return $tokens;
     }
 
     public function moveColoredTokenToBoard($tokenId, $hexId) {
@@ -114,11 +114,11 @@ trait ColoredTokenDeckTrait {
         return  $playerId . "_cell_" . $hex["col"] . "_" . $hex["row"];
     }
 
-    private function isColorAllowedOnTopOfOtherColor($topColor, $bottomColor) {
+    public function isColorAllowedOnTopOfOtherColor($topColor, $bottomColor) {
         $allowed = true;
         if ($bottomColor === BLUE || $bottomColor === YELLOW || $bottomColor === GREEN) {
             $allowed = false;
-        } else if ($bottomColor === GRAY && $topColor !== $bottomColor) {
+        } else if ($bottomColor === GRAY && $topColor !== GRAY && $topColor !== RED) {
             $allowed = false;
         } else if ($bottomColor === RED && $topColor !== $bottomColor) {
             $allowed = false;
