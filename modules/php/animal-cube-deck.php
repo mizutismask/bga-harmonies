@@ -32,6 +32,19 @@ trait AnimalCubeDeckTrait {
         ]);
     }
 
+    public function moveCubeToHex($cubeId, $hexId){
+
+        $this->animalCubes->moveCard($cubeId, $hexId, 4);
+
+        $this->notifyAllPlayers('materialMove', "", [
+            'type' => MATERIAL_TYPE_CUBE,
+            'from' => MATERIAL_LOCATION_CARD,
+            'to' => MATERIAL_LOCATION_HEX,
+            'toArg' => $hexId,
+            'material' => $this->getAnimalCubeFromDb($this->animalCubes->getCard($cubeId)),
+        ]);
+    }
+
     public function getCubesOnCard($cardId) {
         return array_keys($this->animalCubes->getCardsInLocation("card_" . $cardId));
     }

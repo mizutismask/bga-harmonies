@@ -89,7 +89,7 @@ trait ActionTrait {
 
         $cube = $this->getLastCubeOnCard($fromCardId);
         if ($cube) {
-            //todo le bouger
+            $this->moveCubeToHex($cube, $toHexId);
         } else {
             $this->moveAnimalCardToFinishedCards();
         }
