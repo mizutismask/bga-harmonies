@@ -27,10 +27,17 @@ class PlayerBoardDeck {
 	}
 
 	public addCard(card: AnimalCard) {
-		this.boardDeck.addCard(card)// { fromElement: $('upperrightmenu'), originalSide: 'front' }
+		this.boardDeck.addCard(card) // { fromElement: $('upperrightmenu'), originalSide: 'front' }
 	}
 
 	public removeCard(AnimalCard: AnimalCard) {
 		this.boardDeck.removeCard(AnimalCard)
+	}
+
+	public setSelectionMode(mode: CardSelectionMode) {
+		this.boardDeck.setSelectionMode(mode)
+	}
+	public getSelection() {
+		return this.boardDeck.getSelection()
 	}
 }

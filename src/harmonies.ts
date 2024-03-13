@@ -127,7 +127,7 @@ class Harmonies implements HarmoniesGame {
 				}
 			}
 		}
-		this.displayColoredTokens(this.gamedatas.tokensOnCentralBoard)
+		this.displayColoredTokensOnCentralBoard(this.gamedatas.tokensOnCentralBoard)
 	}
 
 	private displayCubesOnAnimalCards(cubes: Array<AnimalCube>) {
@@ -136,16 +136,40 @@ class Harmonies implements HarmoniesGame {
 		})
 	}
 
+	private moveCubeFromAnimalCardToHex(cube: AnimalCube, cardId: string, playerId: number) {
+		this.removeCubeFromCard(cardId)
+		this.playerTables[playerId].createCubeOnBoard(cube)
+	}
+
+	private removeCubeFromCard(cardId: string) {
+		//log(`#card_${cardId} .points-location-wrapper div:last-of-type`)
+		dojo.query(`#${cardId} .points-location-wrapper div:last-of-type`).removeClass("animal-cube cube")
+	}
+
 	public takeCard(card: AnimalCard) {
 		if ((this as any).isCurrentPlayerActive()) {
 			this.takeAction('takeAnimalCard', { cardId: card.id })
 		}
 	}
 
-	public placeToken(hexId: string) {
+	public onHexClick(hexId: string) {
 		log('click on ', hexId)
-		if ((this as any).isCurrentPlayerActive() && this.clientActionData.tokenToPlace) {
-			this.takeAction('placeColoredToken', { 'tokenId': this.clientActionData.tokenToPlace.id, 'hexId': hexId })
+		if ((this as any).isCurrentPlayerActive()) {
+			switch (this.gamedatas.gamestate.name) {
+				case "chooseAction":
+					if (this.clientActionData.tokenToPlace) {
+						this.takeAction('placeColoredToken', { 'tokenId': this.clientActionData.tokenToPlace.id, 'hexId': hexId })
+					}
+					break;
+				case "client_place_animal_cube":
+					const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop();
+					if (card) {
+						this.takeAction('placeAnimalCube', { 'cardId': card.id, 'hexId': hexId })
+					}
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -153,13 +177,12 @@ class Harmonies implements HarmoniesGame {
 	 * Sets colors on already existant tokens in hole
 	 * @param args
 	 */
-	private displayColoredTokens(tokensByHole: { [hole: number]: Array<ColoredToken> }) {
+	private displayColoredTokensOnCentralBoard(tokensByHole: { [hole: number]: Array<ColoredToken> }) {
 		;[1, 2, 3, 4, 5].forEach((num) => this.emptyHole(num))
-		console.log('keys', Object.keys(tokensByHole))
+		
 		Object.keys(tokensByHole).forEach((hole) => {
 			tokensByHole[hole].forEach((token, i) => {
-				console.log('div', `hole-${hole}-token-${i + 1}`)
-
+				//log('div', `hole-${hole}-token-${i + 1}`)
 				const div = $(`hole-${hole}-token-${i + 1}`)
 				//div.classList.remove('color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6')
 				div.classList.add('color-' + token.type_arg)
@@ -190,7 +213,8 @@ class Harmonies implements HarmoniesGame {
 			player,
 			this.gamedatas.hexes,
 			this.gamedatas.players[player.id].boardAnimalCards,
-			this.gamedatas.players[player.id].tokensOnBoard
+			this.gamedatas.players[player.id].tokensOnBoard,
+			this.gamedatas.players[player.id].animalCubesOnBoard
 		)
 	}
 
@@ -361,8 +385,23 @@ class Harmonies implements HarmoniesGame {
 				case 'chooseAction':
 					this.setActionBarChooseAction(false)
 					break
+				case 'client_place_animal_cube':
+					;(this as any).addActionButton(
+						'button_cancel',
+						_('Cancel'),
+						'customRestoreServerGameState',
+						null,
+						false,
+						'red'
+					)
+					break
 			}
 		}
+	}
+
+	public customRestoreServerGameState() {
+		;(this as any).restoreServerGameState()
+		//this.deselectAll(); to do
 	}
 
 	/**
@@ -391,21 +430,29 @@ class Harmonies implements HarmoniesGame {
 			//this.setGamestateDescription('OptionalActions')
 		}
 
-		/*this.addImageActionButton(
-			'useTicket_button',
-			this.createDiv('expTicket', 'expTicket-button'),
+		this.addImageActionButton(
+			'placeAnimalCube_button',
+			this.createDiv('hrm-button animal-cube cube', 'place-animal-cube-button'),
 			'blue',
-			_('Use a ticket to place another arrow, remove the last one of any expedition or exchange a card'),
+			_('Place a cube from one of your card to the corresponding pattern on your board'),
 			() => {
-				this.useTicket()
+				this.setClientStatePlaceAnimalCube(chooseActionArgs)
 			}
 		)
-		$('expTicket-button').parentElement.style.padding = '0'
+		̣//dojo.toggleClass('placeAnimalCube_button', 'disabled', !chooseActionArgs.canPlaceAnimalCube)
 
-		dojo.toggleClass('useTicket_button', 'disabled', !chooseActionArgs.canUseTicket)*/
 		if (chooseActionArgs.canPass) {
 			;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())
 		}
+	}
+
+	private setClientStatePlaceAnimalCube(args:EnteringChooseActionArgs) {
+		;(this as any).setClientState('client_place_animal_cube', {
+			descriptionmyturn: _(
+				'Select one card and then the corresponding pattern on your board where you want to place the cube'
+			)
+		})
+		this.playerTables[this.getPlayerId()].setSelectionMode('single')
 	}
 
 	/*private addColoredTokensButtons(tokensByHole: { [holeId: number]: Array<ColoredToken> }) {
@@ -936,14 +983,17 @@ class Harmonies implements HarmoniesGame {
 
 	private notif_cubeMove(cubes: AnimalCube[], notif: Notif<NotifMaterialMove>) {
 		const cube = cubes.at(0)
-		switch (notif.args.from) {
-			case 'DECK':
-				if (notif.args.to === 'CARD') {
+		switch (notif.args.to) {
+			case 'CARD':
+				if (notif.args.from === 'DECK') {
 					//cube from stock to card
 					this.displayCubesOnAnimalCards(cubes)
 				}
 				break
-
+			case 'HEX':
+				//cube from card to hex
+				this.moveCubeFromAnimalCardToHex(cube, notif.args.fromArg as string, notif.args.toArg)
+				break
 			default:
 				console.error('Cube move origin not handled', notif)
 				break

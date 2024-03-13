@@ -203,11 +203,27 @@ html {
 	background-size: 100%;
 }
 
+.hrm-button {
+	&.animal-cube{
+		width: 17px;
+		height: 19px;
+	}
+}
+
+.harmonies-card{
+	.cube {
+	width: unset;
+	height: unset;
+	}
+}
 .cubespirit,
 .cube {
 	max-width: 100%;
 	background-size: 100%;
 	background-image: url('img/cubes.png');
+	width: 22px;
+	height: 25px;
+	z-index: 4;
 }
 
 .cubespirit {

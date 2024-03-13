@@ -32,16 +32,17 @@ trait AnimalCubeDeckTrait {
         ]);
     }
 
-    public function moveCubeToHex($cubeId, $hexId){
+    public function moveCubeToHex($cubeId, $hexId, $fromCardId) {
 
         $this->animalCubes->moveCard($cubeId, $hexId, 4);
 
         $this->notifyAllPlayers('materialMove', "", [
             'type' => MATERIAL_TYPE_CUBE,
             'from' => MATERIAL_LOCATION_CARD,
+            'fromArg' => $fromCardId,
             'to' => MATERIAL_LOCATION_HEX,
-            'toArg' => $hexId,
-            'material' => $this->getAnimalCubeFromDb($this->animalCubes->getCard($cubeId)),
+            'toArg' => $this->getMostlyActivePlayerId(),
+            'material' => [$this->getAnimalCubeFromDb($this->animalCubes->getCard($cubeId))],
         ]);
     }
 
@@ -50,7 +51,8 @@ trait AnimalCubeDeckTrait {
     }
 
     public function getLastCubeOnCard($cardId) {
-        $lastCube = array_keys($this->animalCubes->getCardOnTop("card_" . $cardId));
+        $lastCube = $this->animalCubes->getCardOnTop("card_" . $cardId);
+        self::dump('******************lastCube*', $lastCube);
         return $lastCube ? array_pop($lastCube) : null;
     }
 
@@ -60,9 +62,16 @@ trait AnimalCubeDeckTrait {
         return $tokens;
     }
 
-    public function getAnimalCubesOnPlayerBoards() {
-        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM animalCube where card_location like 'hex_%'";
-        $tokens =  $this->getAnimalCubesFromDb(self::getCollectionFromDb($sql));
-        return $tokens;
+    public function getAnimalCubesOnPlayerBoards($playerId) {
+        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM animalCube where card_location like '$playerId%'";
+        $tokens = $this->getAnimalCubesFromDb(self::getCollectionFromDb($sql));
+        $byCell = [];
+        foreach (array_values($tokens) as $token) {
+            if (!isset($byCell[$token->location])) {
+                $byCell[$token->location] = [];
+            }
+            $byCell[$token->location][] = $token;
+        }
+        return $byCell;
     }
 }

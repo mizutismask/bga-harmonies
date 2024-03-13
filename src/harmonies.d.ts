@@ -27,6 +27,7 @@ interface HarmoniesPlayer extends Player {
 	playerNo: number
 	boardAnimalCards: Array<AnimalCard>
 	tokensOnBoard: { [hexId: string]: Array<ColoredToken> }
+	animalCubesOnBoard: { [hexId: string]: Array<AnimalCube> }
 }
 
 type Coordinates = { col: number; row: number }
@@ -67,7 +68,7 @@ interface HarmoniesGame extends Game {
 	setTooltip(id: string, html: string): void
 	setTooltipToClass(className: string, html: string): void
 	takeCard(card: AnimalCard): void
-	placeToken(hexId: string): void
+	onHexClick(hexId: string): void
 }
 
 interface EnteringChooseActionArgs {
@@ -106,7 +107,7 @@ interface NotifMaterialMove {
 	type: 'CARD' | 'TOKEN' | 'FIRST_PLAYER_TOKEN' | 'CUBE'
 	from: 'HAND' | 'DECK' | 'STOCK' | 'RIVER'
 	to: 'HAND' | 'DECK' | 'STOCK' | 'CARD' | 'HEX'
-	fromArg: number
+	fromArg: number | string
 	toArg: number | string
 	material: Array<any | string> //elements (cards for exemple), or tokenIds
 }

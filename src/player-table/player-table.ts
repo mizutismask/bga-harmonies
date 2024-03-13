@@ -9,7 +9,8 @@ class PlayerTable {
 		player: HarmoniesPlayer,
 		hexes: Array<Coordinates>,
 		cards: Array<AnimalCard>,
-		tokensOnBoard: { [hexId: string]: Array<ColoredToken> }
+		tokensOnBoard: { [hexId: string]: Array<ColoredToken> },
+		animalCubesOnBoard: { [hexId: string]: Array<AnimalCube> }
 	) {
 		const isMyTable = player.id === game.getPlayerId().toString()
 		const ownClass = isMyTable ? 'own' : ''
@@ -45,7 +46,7 @@ class PlayerTable {
 		if (isMyTable) {
 			dojo.connect($(`grid-container-${player.id}`), 'click', (evt) => {
 				if (evt.target.id.startsWith(`${player.id}_cell_`)) {
-					this.game.placeToken(evt.target.id)
+					this.game.onHexClick(evt.target.id)
 				} else {
 					evt.preventDefault()
 					evt.stopPropagation()
@@ -55,6 +56,13 @@ class PlayerTable {
 		Object.keys(tokensOnBoard).forEach((cell) => {
 			tokensOnBoard[cell].forEach((token) => this.createTokenOnBoard(token))
 		})
+
+		if (animalCubesOnBoard) {
+			//log('animalCubesOnBoard', animalCubesOnBoard)
+			Object.keys(animalCubesOnBoard).forEach((cell) => {
+				animalCubesOnBoard[cell].forEach((cube) => this.createCubeOnBoard(cube))
+			})
+		}
 
 		const handHtml = `
 			<div id="hand-${player.id}" class="hrm-player-hand"></div>
@@ -80,5 +88,21 @@ class PlayerTable {
 			<div class="colored-token color-${token.type_arg}"></div>
         `
 		dojo.place(html, token.location)
+	}
+
+	public createCubeOnBoard(cube: AnimalCube) {
+		log('createCubeOnBoard', cube)
+		let html = `
+			<div class="animal-cube cube"></div>
+        `
+		dojo.place(html, cube.location, 'first')
+	}
+
+	public setSelectionMode(mode: CardSelectionMode) {
+		this.handStock.setSelectionMode(mode)
+	}
+
+	public getAnimalCardSelection() {
+		return this.handStock.getSelection()
 	}
 }
