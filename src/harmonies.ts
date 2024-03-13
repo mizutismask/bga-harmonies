@@ -892,10 +892,12 @@ class Harmonies implements HarmoniesGame {
 		console.log('notif_materialMove', notif)
 		switch (notif.args.type) {
 			case 'CARD':
+				const cards = notif.args.material as Array<AnimalCard>
+				const card = cards.pop()
 				switch (notif.args.from) {
 					case 'RIVER':
 						//from river to player hand
-						this.playerTables[notif.args.toArg].addCard(notif.args.material.pop())
+						this.playerTables[notif.args.toArg].addCard(card)
 						break
 
 					default:
@@ -904,15 +906,39 @@ class Harmonies implements HarmoniesGame {
 				}
 				break
 			case 'CUBE':
+				const cubes = notif.args.material as Array<AnimalCube>
+				const cube = cubes.pop()
 				switch (notif.args.from) {
 					case 'DECK':
 						if (notif.args.to === 'CARD') {
 							//cube from stock to card
-							const cubes = notif.args.material as Array<AnimalCube>
 							this.displayCubesOnAnimalCards(cubes)
 						}
 						break
- 
+
+					default:
+						console.error('Material move not handled', notif)
+						break
+				}
+				break
+			case 'TOKEN':
+				const tokens = notif.args.material as Array<ColoredToken>
+				const token = tokens.pop()
+				
+				switch (notif.args.from) {
+					case 'DECK':
+						switch (notif.args.to) {
+							case 'HEX':
+								//from deck to player hex
+								this.playerTables[notif.args.toArg].createTokenOnBoard(token)
+								break
+		
+							default:
+								console.error('Material move not handled', notif)
+								break
+						}
+						break
+
 					default:
 						console.error('Material move not handled', notif)
 						break

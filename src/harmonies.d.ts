@@ -105,7 +105,7 @@ interface NotifScorePointArgs {
 interface NotifMaterialMove {
 	type: 'CARD' | 'TOKEN' | 'FIRST_PLAYER_TOKEN' | 'CUBE'
 	from: 'HAND' | 'DECK' | 'STOCK' | 'RIVER'
-	to: 'HAND' | 'DECK' | 'STOCK' | 'CARD'
+	to: 'HAND' | 'DECK' | 'STOCK' | 'CARD' | 'HEX'
 	fromArg: number
 	toArg: number | string
 	material: Array<any | string> //elements (cards for exemple), or tokenIds

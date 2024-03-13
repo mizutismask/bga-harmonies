@@ -9,7 +9,7 @@ class PlayerTable {
 		player: HarmoniesPlayer,
 		hexes: Array<Coordinates>,
 		cards: Array<AnimalCard>,
-		tokensOnBoard:{ [hexId: string]: Array<ColoredToken> }
+		tokensOnBoard: { [hexId: string]: Array<ColoredToken> }
 	) {
 		const isMyTable = player.id === game.getPlayerId().toString()
 		const ownClass = isMyTable ? 'own' : ''
@@ -52,7 +52,9 @@ class PlayerTable {
 				}
 			})
 		}
-		Object.keys(tokensOnBoard).forEach(cell=>{tokensOnBoard[cell].forEach(token=> this.createTokenOnBoard(token))})
+		Object.keys(tokensOnBoard).forEach((cell) => {
+			tokensOnBoard[cell].forEach((token) => this.createTokenOnBoard(token))
+		})
 
 		const handHtml = `
 			<div id="hand-${player.id}" class="hrm-player-hand"></div>
@@ -73,7 +75,7 @@ class PlayerTable {
 	 * Creates a new div inside an hex
 	 * @param args
 	 */
-	private createTokenOnBoard(token: ColoredToken) {
+	public createTokenOnBoard(token: ColoredToken) {
 		let html = `
 			<div class="colored-token color-${token.type_arg}"></div>
         `

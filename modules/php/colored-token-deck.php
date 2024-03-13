@@ -62,8 +62,13 @@ trait ColoredTokenDeckTrait {
         $zindex = count($this->getTokensAt($hexId, $playerId)) + 1;
         $this->coloredTokens->moveCard($tokenId, $hexId, $zindex);
         $this->updateChosenToken($tokenId, true);
-        $this->notifyAllPlayers('coloredTokenMove', "", [
-            'token' => $this->getColoredTokenFromDb($this->coloredTokens->getCard($tokenId)),
+       
+        $this->notifyAllPlayers('materialMove', "", [
+            'type' => MATERIAL_TYPE_TOKEN,
+            'from' => MATERIAL_LOCATION_DECK,
+            'to' => MATERIAL_LOCATION_HEX,
+            'toArg' => $playerId,
+            'material' => [$this->getColoredTokenFromDb($this->coloredTokens->getCard($tokenId))],
         ]);
     }
 
