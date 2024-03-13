@@ -893,63 +893,75 @@ class Harmonies implements HarmoniesGame {
 		switch (notif.args.type) {
 			case 'CARD':
 				const cards = notif.args.material as Array<AnimalCard>
-				const card = cards.pop()
-				switch (notif.args.from) {
-					case 'RIVER':
-						//from river to player hand
-						this.playerTables[notif.args.toArg].addCard(card)
-						break
-
-					default:
-						console.error('Material move not handled', notif)
-						break
-				}
+				this.notif_cardMove(cards, notif)
 				break
 			case 'CUBE':
 				const cubes = notif.args.material as Array<AnimalCube>
-				const cube = cubes.pop()
-				switch (notif.args.from) {
-					case 'DECK':
-						if (notif.args.to === 'CARD') {
-							//cube from stock to card
-							this.displayCubesOnAnimalCards(cubes)
-						}
-						break
-
-					default:
-						console.error('Material move not handled', notif)
-						break
-				}
+				this.notif_cubeMove(cubes, notif)
 				break
 			case 'TOKEN':
 				const tokens = notif.args.material as Array<ColoredToken>
-				const token = tokens.pop()
-				
-				switch (notif.args.from) {
-					case 'DECK':
-						switch (notif.args.to) {
-							case 'HEX':
-								//from deck to player hex
-								this.playerTables[notif.args.toArg].createTokenOnBoard(token)
-								break
-		
-							default:
-								console.error('Material move not handled', notif)
-								break
-						}
-						break
-
-					default:
-						console.error('Material move not handled', notif)
-						break
-				}
+				this.notif_tokenMove(tokens, notif)
 				break
 			default:
-				console.error('Material move not handled', notif)
+				console.error('Material type move not handled', notif)
 				break
 		}
 		const cards = notif.args.material as Array<AnimalCard>
 		cards.forEach((c) => console.log('c', c.id))
+	}
+
+	private notif_tokenMove(tokens: ColoredToken[], notif: Notif<NotifMaterialMove>) {
+		const token = tokens.at(0)
+
+		switch (notif.args.from) {
+			case 'DECK':
+				switch (notif.args.to) {
+					case 'HEX':
+						//from deck to player hex
+						this.playerTables[notif.args.toArg].createTokenOnBoard(token)
+						break
+
+					default:
+						console.error('Token move from deck destination not handled', notif)
+						break
+				}
+				break
+
+			default:
+				console.error('Token move origin not handled', notif)
+				break
+		}
+	}
+
+	private notif_cubeMove(cubes: AnimalCube[], notif: Notif<NotifMaterialMove>) {
+		const cube = cubes.at(0)
+		switch (notif.args.from) {
+			case 'DECK':
+				if (notif.args.to === 'CARD') {
+					//cube from stock to card
+					this.displayCubesOnAnimalCards(cubes)
+				}
+				break
+
+			default:
+				console.error('Cube move origin not handled', notif)
+				break
+		}
+	}
+
+	private notif_cardMove(cards: AnimalCard[], notif: Notif<NotifMaterialMove>) {
+		const card = cards.at(0)
+		switch (notif.args.from) {
+			case 'RIVER':
+				//from river to player hand
+				this.playerTables[notif.args.toArg].addCard(card)
+				break
+
+			default:
+				console.error('Card move origin not handled', notif)
+				break
+		}
 	}
 
 	notif_holeEmptied(notif: Notif<NotifHoleEmptied>) {
