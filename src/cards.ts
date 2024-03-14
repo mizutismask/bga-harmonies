@@ -17,25 +17,33 @@ class CardsManager extends CardManager<AnimalCard> {
 				//this.setDivAsCard(div as HTMLDivElement, card.type);
 				div.id = `${super.getId(card)}-front`
 
-				const info: HTMLDivElement = document.createElement('div')
-				info.id = `${super.getId(card)}-front-info`
-				info.innerText = '?'
-				info.classList.add('css-icon', 'card-info')
-				div.appendChild(info)
-				const cardTypeId = card.type * 100 + card.type_arg
-				;(this.game as any).addTooltipHtml(info.id, this.getTooltip(card, cardTypeId))
+				//add help
+				const helpId = `${super.getId(card)}-front-info`
+				if (!$(helpId)) {
+					const info: HTMLDivElement = document.createElement('div')
+					info.id = helpId
+					info.innerText = '?'
+					info.classList.add('css-icon', 'card-info')
+					div.appendChild(info)
+					const cardTypeId = card.type * 100 + card.type_arg
+					;(this.game as any).addTooltipHtml(info.id, this.getTooltip(card, cardTypeId))
+				}
 
 				//adds score locations
-				const container: HTMLDivElement = document.createElement('div')
-				container.classList.add("points-location-wrapper")
-				div.appendChild(container)
-				
-				card.pointLocations.forEach((pointLoc, i) => {
-					const loc: HTMLDivElement = document.createElement('div')
-					loc.id = `${super.getId(card)}-score-${i}`
-					loc.classList.add('points-location')
-					container.appendChild(loc)
-				})
+				const scoreId = `${super.getId(card)}-front-score`
+				if (!$(scoreId)) {
+					const container: HTMLDivElement = document.createElement('div')
+					container.id = scoreId
+					container.classList.add('points-location-wrapper')
+					div.appendChild(container)
+
+					card.pointLocations.forEach((pointLoc, i) => {
+						const loc: HTMLDivElement = document.createElement('div')
+						loc.id = `${super.getId(card)}-score-${i}`
+						loc.classList.add('points-location')
+						container.appendChild(loc)
+					})
+				}
 			},
 			setupBackDiv: (card: AnimalCard, div: HTMLElement) => {
 				div.style.backgroundImage = `url('${g_gamethemeurl}img/harmonies-card-background.jpg')`
