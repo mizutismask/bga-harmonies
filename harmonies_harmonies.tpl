@@ -4,14 +4,7 @@
 <audio id="audiosrc_o_sound1" src="{GAMETHEMEURL}img/sound1.ogg" preload="none"></audio>
 
 <div id="score">
-    <div id="table-wrapper">
-        <table>
-            <thead>
-                <tr id="scoretr"></tr>
-            </thead>
-            <tbody id="score-table-body">
-            </tbody>
-        </table>
+    <div id="score-wrapper">
     </div>
 </div>
 

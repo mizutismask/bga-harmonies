@@ -1,86 +1,96 @@
+@font-face {
+	font-family: 'Kalam';
+	font-style: normal;
+	font-weight: 400;
+	src: url(https://fonts.gstatic.com/s/kalam/v16/YA9dr0Wd4kDdMthROCc.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+		U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 #score {
-    display: none;
-    justify-content: center;
+	display: none;//todo remettre
+	justify-content: center;
+	margin-bottom:1em;
 
-    #table-wrapper {
-        padding: 40px;
-        //background: url('img/score-background.png');//todo find something
-        background-size: 100% 100%;
+	#score-wrapper {
+		background-image: url('img/score.jpg');
+		background-size: 100%;
+		aspect-ratio: 1;
+		height: 500px;
+		display: flex;
+		font-family: "Kalam";
+		margin: 0 auto;
 
-        table {
+		.score-player-container {
+			position: relative;
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			width: 25%;
+			padding: 7px;
+			justify-items: center;
+			.player-name {
+				grid-column: 1 / span 2;
+			}
+			.totals-container {
+				grid-column: 1 / span 2;
+			}
+		}
 
-            tbody {
-                tr {
-                    border-top: 1px solid #459dbe;
-                }
-            }
+		.player-name {
+			color: #054259;
+			font-weight: bold;
+			text-shadow: 0px 0px 1px white, 0px 0px 2px white, 0px 0px 3px white;
+			word-break: break-all;
+			text-overflow: ellipsis;
+			//width: 130px;
+			height: 19px;
+			overflow: hidden;
+		}
 
-            td, th {
-                &:not(:first-child) {
-                    border-left: 1px solid #459dbe;
-                }
-            }
+		.total {
+			font-weight: bold;
+		}
+		.highlight {
+			color: gold;
+		}
 
-            tr {
-                height: 40px;
+		//.land-container div, cards-container div, , totals-container div{}
 
-                th {
-                    text-align: center;
-                    color: white;
-                    text-shadow: 0px 0px 1px #054259, 0px 0px 2px #054259, 0px 0px 3px #054259;
-                    padding: 8px;
-                }
+		.land-container {
+			display: flex;
+			flex-direction: column;
+			grid-row-gap: 41px;
+			align-self: flex-end;
+		}
 
-                td {
-                    width: 100px;
-                    text-align: center;
+		.cards-container {
+			display: flex;
+			flex-direction: column;
+			align-self: flex-end;
+			align-items: center;
+			grid-row-gap: 9px;
+		}
+		.totals-container {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			align-items: flex-end;
+			justify-items: center;
+			width: 100%;
+			div:nth-child(3) {
+				grid-column: 1 / span 2;
+			}
+		}
+	}
 
-                    &:not(:first-child) {
-                        font-size: 150%;
-                        color: white;
-                        text-shadow: 0px 0px 1px #054259, 0px 0px 2px #054259, 0px 0px 3px #054259;
-                    }
-
-                    &.player-name {
-                        color: #054259;
-                        width: 181px;
-                        font-weight: bold;
-                        text-shadow: 0px 0px 1px white, 0px 0px 2px white, 0px 0px 3px white;
-                        word-break: break-all;
-                        text-overflow: ellipsis;
-                        font-size: 120%;
-                    }
-
-                    &.total {
-                        font-weight: bold;
-                    }
-                    &.highlight {
-						color: gold;
-					}
-                    
-                }
-            }
-        }
-    }
-    
-    .score-number {
+	.score-number {
 		transition: color 0.5s ease-in-out;
+		width: 28px;
+		aspect-ratio: 1;
+		//border: 2px solid orange;
 
 		&.animatedScore {
 			color: red !important;
 			/*animation:  grow-then-shrink-animation 3s ;*/
 		}
-	}
-}
-
-@keyframes bonus-card-animation {
-	0% {
-		transform: scale(0.15);
-	}
-	50% {
-		transform: scale(1);
-	}
-	100% {
-		transform: scale(0.15);
 	}
 }
