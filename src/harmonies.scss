@@ -10,12 +10,6 @@ $player-colors: (
 $CARD_WIDTH: 150px; //also change in stock-utils.ts
 $CARD_HEIGHT: 258px;
 
-/*
-todo change for help card
-$CARD_WIDTH: 300px; //also change in stock-utils.ts
-$CARD_HEIGHT: 516px;
-*/
-
 @import 'playerboards';
 @import 'game-steps/game-steps';
 @import 'bga-hacks/bga-hacks';

@@ -71,8 +71,8 @@
 }
 
 .help-card {
-    width: $CARD_WIDTH;
-    height: $CARD_HEIGHT;
+    width: 300px;
+    height: 516px;
 
     &.recto {
         background: url('img/help1.jpg') no-repeat;
