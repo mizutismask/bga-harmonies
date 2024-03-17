@@ -44,6 +44,10 @@ trait StateTrait {
 
     function stNextPlayer() {
         $playerId = self::getActivePlayerId();
+        if (!$playerId) {
+            $this->activateNextPlayerCustom();
+            return;
+        }
 
         //$this->setGameStateValue(TICKETS_USED, 0);
         $lastTurn = intval(self::getGameStateValue(LAST_TURN));
@@ -53,8 +57,8 @@ trait StateTrait {
             $this->gamestate->nextState('endScore');
         } else {
             //finishing round or playing normally
-            $this->activateNextPlayerCustom();
             $this->refillCentralBoard();
+            $this->activateNextPlayerCustom();
             $this->gamestate->nextState('nextPlayer');
         }
     }
@@ -87,7 +91,7 @@ trait StateTrait {
         foreach ($this->getScoresTypes() as $goal) {
             foreach ($players as $playerId => $playerDb) {
                 self::dump('*******************calculatingPoints', compact("goal", "playerId"));
-                $board = $this->getGrid($playerId);
+                $board = $this->getBoard($playerId);
                 switch ($goal["type"]) {
                     case TREES:
                         $score = $this->calculateTreePoints($board);
@@ -99,7 +103,7 @@ trait StateTrait {
                         $score = $this->calculateTreePoints($board); //todo
                         break;
                     case BUILDINGS:
-                        $score = $this->calculateBuildingPoints($board); //todo
+                        $score = $this->calculateBuildingPoints($board);
                         break;
                     case ANIMAL_CARDS:
                         $score = $this->calculateAnimalCardsPoints($board);

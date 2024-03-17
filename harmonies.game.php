@@ -131,8 +131,7 @@ class Harmonies extends Table {
         // TODO: setup the initial game situation here
         $this->setupTable();
 
-        // Activate first player (which is in general a good idea :) )
-        $this->activateNextPlayerCustom();
+        // does not activate player since it’s done within stNextPlayer
 
         /************ End of the game initialization *****/
     }
