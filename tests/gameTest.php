@@ -1,8 +1,8 @@
 <?php
 define("APP_GAMEMODULE_PATH", "../misc/"); // include path to stubs, which defines "table.game.php" and other classes
-require_once('../harmonies.game.php');
+require_once('./gameBaseTest.php');
 
-class GameTest extends Harmonies { // this is your game class defined in ggg.game.php
+class GameTest extends GameTestBase { // this is your game class defined in ggg.game.php
     function __construct() {
         // parent::__construct();
         include '../material.inc.php'; // this is how this normally included, from constructor
@@ -47,16 +47,6 @@ class GameTest extends Harmonies { // this is your game class defined in ggg.gam
 
     function testAll() {
         $this->testYourTestNameColorsAllowed();
-    }
-
-    function displayResult($testName, $equal, $result) {
-        echo ($testName);
-        if ($equal) {
-            echo " : SUCCESS\n";
-        } else {
-            echo " : FAIL\n";
-            echo "Found: $result\n";
-        }
     }
 }
 

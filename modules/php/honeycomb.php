@@ -29,4 +29,37 @@ trait HoneycombTrait {
         //self::dump('************** *****getBoard', $coords);
         return $coords;
     }
+
+    public function getNeighbours($hex) {
+        $x = (int) $hex['col'];
+        $y = (int) $hex['row'];
+        $hexes = [];
+        $hexes[] = ['col' => $x, 'row' => $y - 1];
+        $hexes[] = ['col' => $x - 1, 'row' => $y + ($x % 2 == 0 ? -1 : 0)];
+        $hexes[] = ['col' => $x - 1, 'row' => $y + ($x % 2 == 0 ? 0 : 1)];
+        $hexes[] = ['col' => $x, 'row' => $y + 1];
+        $hexes[] = ['col' => $x + 1, 'row' => $y + ($x % 2 == 0 ? 0 : 1)];
+        $hexes[] = ['col' => $x + 1, 'row' => $y + ($x % 2 == 0 ? -1 : 0)];
+
+        $hexes = array_filter($hexes, fn ($hex) => $this->isValidHex($hex));
+        $hexes = array_values($hexes);
+        return $hexes;
+    }
+
+    function isValidHex($hex) {
+        $existingHexes = $this->getHexesCoordinates();
+        return $this->array_some($existingHexes, fn ($eh) => $eh["col"] == $hex["col"] && $eh["row"] == $hex["row"]);
+    }
+
+    function containsHex($hexes, $hexCol, $hexRow) {
+        return $this->array_some($hexes, fn ($eh) => $this->hexesEquals($eh, $hexCol, $hexRow));
+    }
+
+    function getHex($board, $hexCol, $hexRow) {
+        return array_filter($board, fn ($eh) => $this->hexesEquals($eh, $hexCol, $hexRow));
+    }
+
+    function hexesEquals($hex,  $hexCol, $hexRow) {
+        return $hex["col"] == $hexCol && $hex["row"] == $hexRow;
+    }
 }

@@ -18,14 +18,40 @@ trait ScoreTrait {
     public function calculateBuildingPoints($board) {
         $total = 0;
         foreach ($board as $hex) {
-            $tokens = $this->getTokensAt($hex);
-            $topToken = array_shift($tokens);
-            if ($topToken && $topToken->type_arg == RED) {
-                //todo check if surrounded by 3 different colors
-                $total += 5;
+            $tokens = $hex["tokens"];
+            if ($this->isBuilding($tokens)) {
+                if ($this->isHexSurroundedBy3DifferentColors($board, $hex))
+                    $total += 5;
             }
         }
         return $total;
+    }
+
+    public function isHexSurroundedBy3DifferentColors($board, $hex) {
+        $goal = 3;
+        $neighbours = $this->getNeighbours($hex);
+        $colors = [];
+        $i = 0;
+        while (count($colors) < $goal && $i < count($neighbours)) {
+            $neighb = $neighbours[$i];
+            //$top = $this->getTopTokenAt($neighb);
+            $top = $this->getTopTokenAtHexFromBoard($board, $neighb);
+            if ($top) {
+                $colors[] = $top->type_arg;
+            }
+            $i++;
+        }
+        return count($colors) == $goal;
+    }
+
+    private function getTopTokenAtHexFromBoard($board, $coords) {
+        $hex = array_values(array_filter($board, fn ($h) => $this->hexesEquals($h, $coords["col"], $coords["row"])))[0];
+        return $hex["tokens"] ? $hex["tokens"][0] : null;
+    }
+
+    private function isBuilding($tokensInHex) {
+        $topToken = $tokensInHex ? $tokensInHex[0] : null;
+        return $topToken && $topToken->type_arg == RED && count($tokensInHex) == 2;
     }
 
     public function calculateAnimalCardsPoints() {

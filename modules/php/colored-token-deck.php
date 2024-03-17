@@ -78,6 +78,12 @@ trait ColoredTokenDeckTrait {
         return $tokens;
     }
 
+    public function getTopTokenAt($hexId) {
+        $location = $hexId;
+        $token = $this->getColoredTokenFromDb($this->coloredTokens->getCardOnTop($location));
+        return $token;
+    }
+
     public function getTokensForCompleteBoardByHex($playerId) {
         $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM coloredToken where card_location like '$playerId%' order by card_location_arg desc";
         $tokens = $this->getColoredTokensFromDb(self::getCollectionFromDb($sql));
