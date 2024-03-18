@@ -46,6 +46,7 @@ trait StateTrait {
         $playerId = self::getActivePlayerId();
         if (!$playerId) {
             $this->activateNextPlayerCustom();
+            $this->gamestate->nextState('nextPlayer');
             return;
         }
 
