@@ -22,9 +22,13 @@ trait HoneycombTrait {
         $existingTokens = $this->getTokensForCompleteBoardByHex($playerId);
         foreach ($coords as &$hex) {
             $cellName = $this->convertHexCoordsToName($hex, $playerId);
-            if (isset($existingTokens[$cellName]))
+            if (isset($existingTokens[$cellName])) {
                 $hex["tokens"] = $existingTokens[$cellName];
-            else $hex["tokens"] = [];
+                $hex["topToken"] = isset($existingTokens[$cellName][0]) ? $existingTokens[$cellName][0] : null;
+            } else {
+                $hex["tokens"] = [];
+                $hex["topToken"] = null;
+            }
         }
         //self::dump('************** *****getBoard', $coords);
         return $coords;
@@ -55,8 +59,9 @@ trait HoneycombTrait {
         return $this->array_some($hexes, fn ($eh) => $this->hexesEquals($eh, $hexCol, $hexRow));
     }
 
-    function getHex($board, $hexCol, $hexRow) {
-        return array_filter($board, fn ($eh) => $this->hexesEquals($eh, $hexCol, $hexRow));
+    function getHexIndexInBoard($board, $hexCol, $hexRow) {
+        $hex = array_filter($board, fn ($eh) => $this->hexesEquals($eh, $hexCol, $hexRow));
+        return array_keys($hex)[0];
     }
 
     function hexesEquals($hex,  $hexCol, $hexRow) {

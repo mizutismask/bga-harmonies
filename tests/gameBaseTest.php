@@ -10,6 +10,8 @@ abstract class GameTestBase extends Harmonies { // this is your game class defin
 
     abstract function testAll();
 
+    private static $coloredTokenSequence = 0;
+
     /**
      * To redefine if players count is not 3
      */
@@ -32,18 +34,21 @@ abstract class GameTestBase extends Harmonies { // this is your game class defin
         $coords = $this->getHexesCoordinates();
         foreach ($coords as &$hex) {
             $hex["tokens"] = [];
+            $hex["topToken"] = null;
         }
         return $coords;
     }
 
     function generateToken($color) {
-        return new ColoredToken(['type_arg' => $color]);
+        self::$coloredTokenSequence++;
+        return new ColoredToken(['type_arg' => $color, 'id' => self::$coloredTokenSequence]);
     }
 
     function setTokensIn(&$grid, $col, $row, $colors) {
-        $hexIndex = array_keys($this->getHex($grid, $col, $row))[0];
+        $hexIndex = $this->getHexIndexInBoard($grid, $col, $row);
         $tokens = array_map(fn ($col) => $this->generateToken($col), $colors);
         $grid[$hexIndex]["tokens"] = $tokens;
+        $grid[$hexIndex]["topToken"] = $tokens[count($tokens) - 1];
     }
 
     function convertNumbersToGrid(string $textGrid) {

@@ -101,7 +101,7 @@ trait StateTrait {
                         $score = $this->calculateTreePoints($board); //todo
                         break;
                     case FIELDS:
-                        $score = $this->calculateTreePoints($board); //todo
+                        $score = $this->calculateFieldsPoints($board);
                         break;
                     case BUILDINGS:
                         $score = $this->calculateBuildingPoints($board);
