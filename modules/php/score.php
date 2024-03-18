@@ -64,6 +64,7 @@ trait ScoreTrait {
                 $exploredZones[] = $exploredZone;
             }
         }
+       // self::dump('*******************getZonesOfColor', $exploredZones);
         return $exploredZones;
     }
 
@@ -90,6 +91,12 @@ trait ScoreTrait {
     }
 
     public function calculateMountainsPoints($board) {
+        return array_sum(array_map(fn ($zone) => count($zone) > 1 ? $this->countPointsFromMoutainZone($zone) : 0, $this->getZonesOfColor($board, GRAY)));
+    }
+
+    private function countPointsFromMoutainZone($zone) {
+        $mountainsPoints = [1, 3, 7];
+        return array_sum(array_map(fn ($hex) => $mountainsPoints[count($hex["tokens"]) - 1], $zone));
     }
 
     private function getTopTokenAtHexFromBoard($board, $coords) {
