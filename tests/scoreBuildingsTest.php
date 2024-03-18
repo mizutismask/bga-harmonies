@@ -27,9 +27,49 @@ class ScoreBuildingsTest extends GameTestBase { // this is your game class defin
     }
 
     // class tests
-    function testIsHexSurroundedBy3DifferentColors() {
+    function testIsHexSurroundedBy3DifferentColors3() {
 
-        $result = $this->isHexSurroundedBy3DifferentColors($this->getBoard(1), ["col" => 3, "row" => 1]);
+        $grid = $this->initBoard();
+        $this->setTokensIn($grid, 3, 1, [GRAY, RED]);
+
+        $this->setTokensIn($grid, 2, 1, [BROWN, RED]);
+        $this->setTokensIn($grid, 4, 1, [BLUE]);
+        $this->setTokensIn($grid, 3, 2, [YELLOW]);
+
+        $result = $this->isHexSurroundedBy3DifferentColors($grid, ["col" => 3, "row" => 1]);
+
+        $equal = $result == true;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
+    function testIsHexSurroundedBy3DifferentColorsOnly2() {
+
+        $grid = $this->initBoard();
+        $this->setTokensIn($grid, 3, 1, [GRAY, RED]);
+
+        $this->setTokensIn($grid, 2, 1, [BROWN, RED]);
+        $this->setTokensIn($grid, 4, 1, [BLUE]);
+        $this->setTokensIn($grid, 3, 2, [BLUE]);
+
+        $result = $this->isHexSurroundedBy3DifferentColors($grid, ["col" => 3, "row" => 1]);
+
+        $equal = $result == false;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
+    function testIsHexSurroundedBy3DifferentColors4() {
+
+        $grid = $this->initBoard();
+        $this->setTokensIn($grid, 3, 1, [GRAY, RED]);
+
+        $this->setTokensIn($grid, 2, 1, [BROWN, RED]);
+        $this->setTokensIn($grid, 3, 0, [BLUE]);
+        $this->setTokensIn($grid, 4, 1, [YELLOW]);
+        $this->setTokensIn($grid, 4, 2, [GREEN]);
+
+        $result = $this->isHexSurroundedBy3DifferentColors($grid, ["col" => 3, "row" => 1]);
 
         $equal = $result == true;
 
@@ -37,7 +77,9 @@ class ScoreBuildingsTest extends GameTestBase { // this is your game class defin
     }
 
     function testAll() {
-        $this->testIsHexSurroundedBy3DifferentColors();
+        $this->testIsHexSurroundedBy3DifferentColors3();
+        $this->testIsHexSurroundedBy3DifferentColors4();
+        $this->testIsHexSurroundedBy3DifferentColorsOnly2();
     }
 }
 

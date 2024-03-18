@@ -34,14 +34,13 @@ trait ScoreTrait {
         $i = 0;
         while (count($colors) < $goal && $i < count($neighbours)) {
             $neighb = $neighbours[$i];
-            //$top = $this->getTopTokenAt($neighb);
             $top = $this->getTopTokenAtHexFromBoard($board, $neighb);
             if ($top) {
                 $colors[] = $top->type_arg;
             }
             $i++;
         }
-        return count($colors) == $goal;
+        return count(array_unique($colors)) == $goal;
     }
 
     private function getTopTokenAtHexFromBoard($board, $coords) {
