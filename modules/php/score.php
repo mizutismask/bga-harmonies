@@ -43,58 +43,50 @@ trait ScoreTrait {
         return count(array_unique($colors)) == $goal;
     }
 
-    public function calculateFieldsPoints($board, $color = 'YELLOW') {
-        $points = 0;
+    public function calculateFieldsPoints($board) {
+        return array_sum(array_map(fn($zone) => count($zone) > 1 ? 5 : 0, $this->getZonesOfColor($board, YELLOW)));
+    }
+
+    public function getZonesOfColor($board, $color) {
         $visited = []; // Array to keep track of visited tokens
-        $exploredZone = []; // Array to store hexes of the explored zone
-    
+        $exploredZones = []; // Array to store hexes of the explored zones
+
         foreach ($board as $hex) {
             // Consider only the top token of the hex
             $topToken = $hex['topToken'];
-    
+
             if ($topToken && $topToken->type_arg === $color && !isset($visited[$topToken->id])) {
                 // If the top token matches the specified color and is not visited yet, explore its zone
-                $yellowHexesExplored = $this->exploreZone($board, $hex, $visited, $exploredZone, $color);
-    
-                // After exploring the zone, if it consists of several tokens of the specified color, increment points by 5
-                if ($yellowHexesExplored > 1) {
-                    $points += 5;
-                }
+                $exploredZone = []; // Array to store hexes of the explored zone
+                $this->exploreZone($board, $hex, $visited, $exploredZone, $color);
+
+                // Add the explored zone to the list of explored zones
+                $exploredZones[] = $exploredZone;
             }
         }
-        self::dump('*******************$exploredZone', $exploredZone);
-        return ['points' => $points, 'exploredZone' => $exploredZone];
+        return $exploredZones;
     }
-    
+
     // Function to recursively explore the zone of neighboring tokens of specified color
     private function exploreZone($board, $hex, &$visited, &$exploredZone, $color) {
-        // Initialize the count of tokens explored in this zone
-        $tokensExplored = 0;
-    
         // Mark the current hex as visited
         $visited[$hex['topToken']->id] = true;
         $exploredZone[] = $hex; // Add the current hex to the explored zone
-    
+
         // Get neighbors of the current hex
         $neighbors = $this->getNeighbours($hex);
-    
+
         foreach ($neighbors as $neighbor) {
             // Consider only the top token of the neighbor hex
             $neighborHex = $board[$this->getHexIndexInBoard($board, $neighbor["col"], $neighbor["row"])];
             //self::dump('*******************$neighborHex', $neighborHex);
             $neighborTopToken = $neighborHex['topToken'];
-    
+
             if ($neighborTopToken && $neighborTopToken->type_arg === $color && !isset($visited[$neighborTopToken->id])) {
                 // If the neighboring token matches the specified color and is not visited yet, explore its zone recursively
-                $tokensExplored += $this->exploreZone($board, $neighborHex, $visited, $exploredZone, $color);
+                $this->exploreZone($board, $neighborHex, $visited, $exploredZone, $color);
             }
         }
-    
-        // Increment the count of tokens explored in this zone by 1
-        $tokensExplored++;
-    
-        // Return the count of tokens explored in this zone
-        return $tokensExplored;
     }
 
     public function calculateMountainsPoints($board) {
