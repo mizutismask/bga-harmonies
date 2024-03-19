@@ -5,9 +5,24 @@
  */
 class AnimalCardInfo {
     public array $pointLocations;
+    public array $pattern; //array of PatternHex
 
-    public function __construct(array $pointLocations) {
+    public function __construct(array $pointLocations, array $pattern) {
         $this->pointLocations = $pointLocations;
+    }
+}
+
+class PatternHex {
+    public array $colors; //from bottom to top
+    public int $shiftCol; //relative the first hex in the pattern, named 0,0
+    public int $shiftRow;
+    public bool $allowCube;
+
+    public function __construct(array $colors, $shiftCol, $shiftRow, $allowCube) {
+        $this->colors = $colors;
+        $this->shiftCol = $shiftCol;
+        $this->shiftRow = $shiftRow;
+        $this->allowCube = $allowCube;
     }
 }
 
