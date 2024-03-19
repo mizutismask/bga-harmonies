@@ -29,10 +29,52 @@ class ScoreWaterSideATest extends GameTestBase { // this is your game class defi
         $this->displayResult(__FUNCTION__, $equal, $result);
     }
 
+    function testScoreWaterWithAdditionalTokens() {
 
+        $grid = $this->initBoard();
+        $this->setTokensIn($grid, 1, 2, [BLUE]);
+        $this->setTokensIn($grid, 1, 1, [BLUE]);
+        $this->setTokensIn($grid, 1, 0, [BLUE]);
+        $this->setTokensIn($grid, 2, 1, [BLUE]);
+        $this->setTokensIn($grid, 3, 1, [BLUE]);
+        $this->setTokensIn($grid, 3, 2, [BLUE]);
+        $this->setTokensIn($grid, 4, 3, [BLUE]);
+
+        $this->setTokensIn($grid, 4, 4, [BLUE]);
+        $this->setTokensIn($grid, 1, 3, [BLUE]);
+
+        $result = $this->calculateWaterPoints($grid);
+
+        $equal = $result == 23;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
+    function testScoreWaterWithUnclearPath() {
+
+        $grid = $this->initBoard();
+        $this->setTokensIn($grid, 1, 2, [BLUE]);
+        $this->setTokensIn($grid, 1, 1, [BLUE]);
+        $this->setTokensIn($grid, 1, 0, [BLUE]);
+        $this->setTokensIn($grid, 2, 1, [BLUE]);
+        $this->setTokensIn($grid, 3, 1, [BLUE]);
+        $this->setTokensIn($grid, 3, 2, [BLUE]);
+        $this->setTokensIn($grid, 4, 3, [BLUE]);
+
+        $this->setTokensIn($grid, 2, 2, [BLUE]);
+        $this->setTokensIn($grid, 4, 1, [BLUE]);
+
+        $result = $this->calculateWaterPoints($grid);
+
+        $equal = $result == 11;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
 
     function testAll() {
         $this->testScoreWaterFromRules();
+        $this->testScoreWaterWithAdditionalTokens();
+        $this->testScoreWaterWithUnclearPath();
     }
 }
 
