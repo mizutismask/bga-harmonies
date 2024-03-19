@@ -3,6 +3,7 @@
 require_once(__DIR__ . '/objects/animalCard.php');
 trait ScoreTrait {
     static $treePoints = [1, 3, 7];
+    static $riverPoints = [0, 2, 5, 8, 11, 15];
     public function calculateTreePoints($board) {
         $total = 0;
         foreach ($board as $hex) {
@@ -64,7 +65,7 @@ trait ScoreTrait {
                 $exploredZones[] = $exploredZone;
             }
         }
-        self::dump('*******************getZonesOfColor', $exploredZones);
+        //self::dump('*******************getZonesOfColor', $exploredZones);
         return $exploredZones;
     }
 
@@ -100,9 +101,94 @@ trait ScoreTrait {
 
     public function calculateWaterPoints($board) {
         if ($this->isBoardSideA()) {
+            $blueZones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == BLUE);
+            $maxDistance = 0;
+            foreach ($blueZones as $zone) {
+                //self::dump('*******************calculateWaterPoints for zone', $this->isBoardSideA());
+                $path = $this->findLongestPathInBlueZone($zone);
+                $distance = $path[2];
+                if ($distance > $maxDistance) {
+                    $maxDistance = $distance;
+                }
+                echo "longest" . $path[0]["col"] . "_" . $path[0]["row"]  . " to " . $path[1]["col"] . "_" . $path[1]["row"] . " = " . $path[2];
+            }
+            $score = self::$riverPoints[min(6, $distance) - 1];
+            for ($i = 6; $i < $distance; $i++) {
+                $score += 4;
+            }
+            return $score;
         } else {
             return count($this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken == null || $coloredToken->type_arg !== BLUE)) * 5;
         }
+    }
+
+    public function findLongestPathInBlueZone($blueZone) {
+        $maxDistance = 0;
+        $longestPath = [];
+
+        // Parcourez chaque hexagone dans la zone bleue
+        foreach ($blueZone as $hex1) {
+            foreach ($blueZone as $hex2) {
+                // Calculez la distance entre chaque paire d'hexagones
+                $distance = $this->calculateDistanceBetweenHexagons($hex1, $hex2, $blueZone);
+                if ($distance > $maxDistance) {
+                    // Mettez à jour la plus grande distance et le chemin correspondant
+                    $maxDistance = $distance;
+                    $longestPath = [$hex1, $hex2, $maxDistance];
+                }
+            }
+        }
+
+        return $longestPath;
+    }
+
+    private function calculateDistanceBetweenHexagons($hex1, $hex2, $blueZone) {
+        // Initialize the distance
+        $distance = 0;
+
+        // Perform a pathfinding algorithm to find the distance between the hexagones within the blue zone
+        $path = $this->findShortestPathInBlueZone($hex1, $hex2, $blueZone);
+
+        // If a valid path is found, calculate the distance
+        if (!empty($path)) {
+            $distance = count($path);
+        }
+
+        return $distance;
+    }
+
+    public function findShortestPathInBlueZone($start, $end, $blueZone) {
+        $visited = [];
+        $queue = new SplQueue();
+        $previous = [];
+
+        $queue->enqueue($start);
+        $visited[$this->getTempHexId($start)] = true;
+
+        while (!$queue->isEmpty()) {
+            $current = $queue->dequeue();
+
+            if ($current === $end) {
+                break;
+            }
+
+            foreach ($this->getNeighbours($current) as $neighbor) {
+                if ($this->isHexInZone($neighbor, $blueZone) && !isset($visited[$this->getTempHexId($neighbor)])) {
+                    $queue->enqueue($neighbor);
+                    $visited[$this->getTempHexId($neighbor)] = true;
+                    $previous[$this->getTempHexId($neighbor)] = $current;
+                }
+            }
+        }
+
+        $path = [];
+        $current = $end;
+        while ($current !== null) {
+            array_unshift($path, $current);
+            $current = $previous[$this->getTempHexId($current)] ?? null;
+        }
+
+        return $path;
     }
 
     private function countPointsFromMoutainZone($zone) {

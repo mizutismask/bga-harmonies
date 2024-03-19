@@ -67,4 +67,9 @@ trait HoneycombTrait {
     function hexesEquals($hex,  $hexCol, $hexRow) {
         return $hex["col"] == $hexCol && $hex["row"] == $hexRow;
     }
+
+    function isHexInZone(array $hex, array $hexesZone) {
+        $found = array_filter($hexesZone, fn ($eh) => $this->hexesEquals($eh, $hex["col"], $hex["row"]));
+        return count($found) > 0;
+    }
 }
