@@ -44,10 +44,10 @@ trait ScoreTrait {
     }
 
     public function calculateFieldsPoints($board) {
-        return array_sum(array_map(fn($zone) => count($zone) > 1 ? 5 : 0, $this->getZonesOfColor($board, YELLOW)));
+        return array_sum(array_map(fn ($zone) => count($zone) > 1 ? 5 : 0, $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken != null && $coloredToken->type_arg === YELLOW)));
     }
 
-    public function getZonesOfColor($board, $color) {
+    public function getZonesOfColor($board, $zonePredicate) {
         $visited = []; // Array to keep track of visited tokens
         $exploredZones = []; // Array to store hexes of the explored zones
 
@@ -55,23 +55,27 @@ trait ScoreTrait {
             // Consider only the top token of the hex
             $topToken = $hex['topToken'];
 
-            if ($topToken && $topToken->type_arg === $color && !isset($visited[$topToken->id])) {
+            if ($zonePredicate($topToken) && !isset($visited[$this->getTempHexId($hex)])) {
                 // If the top token matches the specified color and is not visited yet, explore its zone
                 $exploredZone = []; // Array to store hexes of the explored zone
-                $this->exploreZone($board, $hex, $visited, $exploredZone, $color);
+                $this->exploreZone($board, $hex, $visited, $exploredZone, $zonePredicate);
 
                 // Add the explored zone to the list of explored zones
                 $exploredZones[] = $exploredZone;
             }
         }
-       // self::dump('*******************getZonesOfColor', $exploredZones);
+        self::dump('*******************getZonesOfColor', $exploredZones);
         return $exploredZones;
     }
 
+    private function getTempHexId(array $hex): string {
+        return $hex['col'] . "_" . $hex['row'];
+    }
+
     // Function to recursively explore the zone of neighboring tokens of specified color
-    private function exploreZone($board, $hex, &$visited, &$exploredZone, $color) {
+    private function exploreZone($board, $hex, &$visited, &$exploredZone, $zonePredicate) {
         // Mark the current hex as visited
-        $visited[$hex['topToken']->id] = true;
+        $visited[$this->getTempHexId($hex)] = true;
         $exploredZone[] = $hex; // Add the current hex to the explored zone
 
         // Get neighbors of the current hex
@@ -83,15 +87,22 @@ trait ScoreTrait {
             //self::dump('*******************$neighborHex', $neighborHex);
             $neighborTopToken = $neighborHex['topToken'];
 
-            if ($neighborTopToken && $neighborTopToken->type_arg === $color && !isset($visited[$neighborTopToken->id])) {
+            if ($zonePredicate($neighborTopToken) && !isset($visited[$this->getTempHexId($neighborHex)])) {
                 // If the neighboring token matches the specified color and is not visited yet, explore its zone recursively
-                $this->exploreZone($board, $neighborHex, $visited, $exploredZone, $color);
+                $this->exploreZone($board, $neighborHex, $visited, $exploredZone, $zonePredicate);
             }
         }
     }
 
     public function calculateMountainsPoints($board) {
-        return array_sum(array_map(fn ($zone) => count($zone) > 1 ? $this->countPointsFromMoutainZone($zone) : 0, $this->getZonesOfColor($board, GRAY)));
+        return array_sum(array_map(fn ($zone) => count($zone) > 1 ? $this->countPointsFromMoutainZone($zone) : 0, $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken != null && $coloredToken->type_arg === GRAY)));
+    }
+
+    public function calculateWaterPoints($board) {
+        if ($this->isBoardSideA()) {
+        } else {
+            return count($this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken == null || $coloredToken->type_arg !== BLUE)) * 5;
+        }
     }
 
     private function countPointsFromMoutainZone($zone) {

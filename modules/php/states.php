@@ -106,6 +106,9 @@ trait StateTrait {
                     case BUILDINGS:
                         $score = $this->calculateBuildingPoints($board);
                         break;
+                    case WATER:
+                        $score = $this->calculateWaterPoints($board);
+                        break;
                     case ANIMAL_CARDS:
                         $score = $this->calculateAnimalCardsPoints($board);
                         break;
