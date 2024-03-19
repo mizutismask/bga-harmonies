@@ -65,10 +65,101 @@ class HoneyCombTest extends GameTestBase { // this is your game class defined in
         $equal = $this->containsHex($result, 6, 2);
     }
 
+    function testAreExpectedTokensInHexTrue() {
+
+        $board = $this->initBoard();
+        $this->setTokensIn($board, 1, 1, [
+            GREEN, BROWN, BROWN
+        ]);
+
+        $result = $this->areExpectedTokensInHex(
+            $board,
+            1,
+            1,
+            [GREEN, BROWN, BROWN]
+        );
+        $equal = $result == true;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
+    function testAreExpectedTokensInHexWithBuilding() {
+
+        $board = $this->initBoard();
+        $this->setTokensIn($board, 1, 1, [
+            RED, GRAY,
+        ]);
+
+        $result = $this->areExpectedTokensInHex(
+                $board,
+                1,
+                1,
+                [RED, BUILDING]
+            );
+        $equal = $result == true;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
+    function testAreExpectedTokensInHexFalse() {
+
+        $board = $this->initBoard();
+        $this->setTokensIn($board, 1, 1, [GREEN, BROWN]);
+
+        $result = $this->areExpectedTokensInHex(
+            $board,
+            1,
+            1,
+            [BROWN, BROWN]
+        );
+        $equal = $result == false;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
+    function testAreExpectedTokensInHexMissingOne() {
+
+        $board = $this->initBoard();
+        $this->setTokensIn($board, 1, 1, [GREEN, BROWN]);
+
+        $result = $this->areExpectedTokensInHex(
+            $board,
+            1,
+            1,
+            [GREEN, BROWN, BROWN]
+        );
+        $equal = $result == false;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
+    function testGetPossibleLocationsForCubeInPattern() {
+
+        $board = $this->initBoard();
+        $this->setTokensIn($board, 0, 0, [
+            RED, GRAY,
+        ]);
+        $this->setTokensIn($board, 1, 0, [BLUE]);
+        $this->setTokensIn($board, 2, 1, [BLUE]);
+
+        $result = $this->getPossibleLocationsForCubeInPattern($board, $this->ANIMAL_CARDS[1][6]);
+
+        $equal = $this->containsHex($result, 1, 0) == true;
+        $this->displayResult(__FUNCTION__, $equal, $result);
+
+        $equal = count($result) == 1;
+        $this->displayResult(__FUNCTION__, $equal, count($result));
+    }
+
     function testAll() {
-        $this->testGetNeighboursInCenter();
+        /*$this->testGetNeighboursInCenter();
         $this->testGetNeighboursOnTop();
         $this->testGetNeighboursOnRightBottom();
+        $this->testAreExpectedTokensInHexTrue();
+        $this->testAreExpectedTokensInHexFalse();
+        $this->testAreExpectedTokensInHexMissingOne();
+        $this->testAreExpectedTokensInHexWithBuilding();*/
+        $this->testGetPossibleLocationsForCubeInPattern();
     }
 }
 

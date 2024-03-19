@@ -79,13 +79,16 @@ trait ActionTrait {
         $args = $this->argChooseAction();
 
         if (!$args['canPlaceAnimalCube']) {
-           // throw new BgaUserException(self::_("You can’t place an animal cube"));
+           throw new BgaUserException(self::_("You can’t place an animal cube"));
         }
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($fromCardId));
         if (!$this->startsWith($card->location, "board")) {
             throw new BgaUserException(self::_("This card is not on your board"));
         }
-        //todo check if the pattern is ok, height are ok, and animal cube location is free
+        //todo animal cube location is free
+        if(!isset($args["placeAnimalCubeArgs"][$fromCardId]) || !in_array($toHexId, $args["placeAnimalCubeArgs"][$fromCardId])){
+            throw new BgaUserException(self::_("You have to respect the pattern of the card"));
+        }
 
         $cube = $this->getLastCubeOnCard($fromCardId);
         self::dump('*******************getLastCubeOnCard', $cube);

@@ -72,4 +72,45 @@ trait HoneycombTrait {
         $found = array_filter($hexesZone, fn ($eh) => $this->hexesEquals($eh, $hex["col"], $hex["row"]));
         return count($found) > 0;
     }
+
+    function getPossibleLocationsForCubeInPattern($board, AnimalCardInfo $card, $convertNames = false, $playerId="") {
+        $possible = [];
+        foreach ($board as $hex) {
+            $allHexesValid = false;
+            foreach ($card->pattern as $hexPattern) {
+                //self::dump('******************$hexPattern*', $hexPattern);
+                $expected = $this->areExpectedTokensInHex($board, $hex["col"] + $hexPattern->shiftCol, $hex["row"] + $hexPattern->shiftRow, $hexPattern->colors);
+                //self::dump('******************$expected*', $expected);
+                $allHexesValid = $allHexesValid || $expected;
+                if (!$allHexesValid) {
+                    break;
+                }
+            }
+            if ($allHexesValid) {
+                $cubeLocation = array_values(array_filter($card->pattern, fn ($hexPattern) => $hexPattern->allowCube === true))[0];
+                $cubeHex = ["col" => $hex["col"] + $cubeLocation->shiftCol, "row" => $hex["row"] + $cubeLocation->shiftRow];
+                $possible[] = $convertNames ? $this->convertHexCoordsToName($cubeHex, $playerId) : $cubeHex;
+            }
+        }
+        return $possible;
+    }
+
+    function areExpectedTokensInHex($board, int $col, int $row, $expectedColors) {
+        $valid = false;
+        if ($this->containsHex($board, $col, $row)) {
+            $hex = $board[$this->getHexIndexInBoard($board, $col, $row)];
+            $hexTokens = $hex["tokens"];
+            //if ($hexTokens)
+                //self::dump('******************$hexTokens*', $hexTokens);
+            if (count($hexTokens) === count($expectedColors)) {
+                $valid = true;
+                //check if colors are at the expected level
+                for ($i = 0; $i < count($expectedColors); $i++) {
+                    $valid = $valid && ($hexTokens[$i]->type_arg === $expectedColors[$i]
+                        || ($expectedColors[$i] === BUILDING && in_array($hexTokens[$i]->type_arg, [RED, BROWN, GRAY])));
+                }
+            }
+        }
+        return $valid;
+    }
 }

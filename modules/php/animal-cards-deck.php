@@ -64,7 +64,7 @@ trait AnimalCardDeckTrait {
      * Get destination cards in player hand.
      */
     public function getPlayerAnimalCards(int $playerId) {
-        $cards = $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("hand", $playerId));
+        $cards = $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("board" . $playerId));
         return $cards;
     }
 

@@ -9,11 +9,12 @@ class AnimalCardInfo {
 
     public function __construct(array $pointLocations, array $pattern) {
         $this->pointLocations = $pointLocations;
+        $this->pattern = $pattern;
     }
 }
 
 class PatternHex {
-    public array $colors; //from bottom to top
+    public array $colors; //from top to bottom
     public int $shiftCol; //relative the first hex in the pattern, named 0,0
     public int $shiftRow;
     public bool $allowCube;
@@ -48,5 +49,6 @@ class AnimalCard extends AnimalCardInfo {
         $this->type_arg = intval($dbCard['type_arg']);
         $animalCardInfo = $ANIMAL_CARDS[$this->type][$this->type_arg];
         $this->pointLocations = $animalCardInfo->pointLocations;
+        $this->pattern = $animalCardInfo->pattern;
     }
 }

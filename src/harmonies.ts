@@ -439,7 +439,7 @@ class Harmonies implements HarmoniesGame {
 				this.setClientStatePlaceAnimalCube(chooseActionArgs)
 			}
 		)
-		̣//dojo.toggleClass('placeAnimalCube_button', 'disabled', !chooseActionArgs.canPlaceAnimalCube)
+		dojo.toggleClass('placeAnimalCube_button', 'disabled', !chooseActionArgs.canPlaceAnimalCube)
 
 		if (chooseActionArgs.canPass) {
 			;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())

@@ -34,14 +34,33 @@ trait ArgsTrait {
         $canTakeTokens = count($takenTokens) === 0;
         $canPass = !$canTakeTokens;
         $canPlaceToken =  !$canTakeTokens && $this->array_some($takenTokens, fn ($tok) => $tok->done == false);
+        $animalCubeArgs = $this->argPlaceAnimalCube()["hexByCardId"];
         return [
             'canTakeTokens' => $canTakeTokens,
-            'canPlaceToken' =>$canPlaceToken,
+            'canPlaceToken' => $canPlaceToken,
             'canTakeAnimalCard' => boolval(self::getGameStateValue(TOOK_ANIMAL_CARD)) === false && intval($this->animalCards->countCardInLocation("board" . $playerId)) < 4,
-            'canPlaceAnimalCube' => false,
+            'canPlaceAnimalCube' => !empty($animalCubeArgs),
             'canPass' => $canPass,
-            'tokensOnCentralBoard' => $canTakeTokens? $this->getColoredTokensOnCentralBoard():[],
-            'tokensToPlace' => $canPlaceToken? array_values(array_filter($this->getColoredTokensChosen(), fn($token)=>$token->done==false)):[],
+            'tokensOnCentralBoard' => $canTakeTokens ? $this->getColoredTokensOnCentralBoard() : [],
+            'tokensToPlace' => $canPlaceToken ? array_values(array_filter($this->getColoredTokensChosen(), fn ($token) => $token->done == false)) : [],
+            'placeAnimalCubeArgs' => $animalCubeArgs,
+        ];
+    }
+
+    function argPlaceAnimalCube() {
+        $playerId = intval(self::getActivePlayerId());
+        $cards = $this->getPlayerAnimalCards($playerId);
+        $board = $this->getBoard($playerId);
+        $possible = [];
+
+        foreach ($cards as $card) {
+            $locations = $this->getPossibleLocationsForCubeInPattern($board, $card, true, $playerId);
+            if ($locations) {
+                $possible[$card->id] = $locations;
+            }
+        }
+        return [
+            'hexByCardId' => $possible,
         ];
     }
 }
