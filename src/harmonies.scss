@@ -245,16 +245,19 @@ html {
 }
 
 .hrm-button {
-	&.animal-cube{
+	&.animal-cube {
 		width: 17px;
 		height: 19px;
 	}
 }
 
-.harmonies-card{
+.harmonies-card {
+	.card-side {
+		border-radius: 3%;
+	}
 	.cube {
-	width: unset;
-	height: unset;
+		width: unset;
+		height: unset;
 	}
 }
 .cubespirit,
