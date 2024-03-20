@@ -91,11 +91,11 @@ class HoneyCombTest extends GameTestBase { // this is your game class defined in
         ]);
 
         $result = $this->areExpectedTokensInHex(
-                $board,
-                1,
-                1,
-                [RED, BUILDING]
-            );
+            $board,
+            1,
+            1,
+            [RED, BUILDING]
+        );
         $equal = $result == true;
 
         $this->displayResult(__FUNCTION__, $equal, $result);
@@ -151,15 +151,44 @@ class HoneyCombTest extends GameTestBase { // this is your game class defined in
         $this->displayResult(__FUNCTION__, $equal, count($result));
     }
 
+    function testGetPossibleLocationsForCubeInPatternIncomplete() {
+
+        $board = $this->initBoard();
+        $this->setTokensIn($board, 0, 0, [GRAY]);
+
+        $result = $this->getPossibleLocationsForCubeInPattern($board, $this->ANIMAL_CARDS[1][2]);
+
+        $equal = count($result) == 0;
+        $this->displayResult(__FUNCTION__, $equal, count($result));
+    }
+
+    function testGetPossibleLocationsForCubeInPatternOnBoardSide() {
+
+        $board = $this->initBoard();
+        $this->setTokensIn($board, 2, 1, [GREEN]);
+        $this->setTokensIn($board, 3, 1, [GREEN]);
+        $this->setTokensIn($board, 4, 2, [BLUE]);
+
+        $result = $this->getPossibleLocationsForCubeInPattern($board, $this->ANIMAL_CARDS[1][4]);
+
+        $equal = $this->containsHex($result, 4, 2) == true;
+        $this->displayResult(__FUNCTION__, $equal, $result);
+
+        $equal = count($result) == 1;
+        $this->displayResult(__FUNCTION__, $equal, count($result));
+    }
+
     function testAll() {
-        /*$this->testGetNeighboursInCenter();
+        $this->testGetNeighboursInCenter();
         $this->testGetNeighboursOnTop();
         $this->testGetNeighboursOnRightBottom();
         $this->testAreExpectedTokensInHexTrue();
         $this->testAreExpectedTokensInHexFalse();
         $this->testAreExpectedTokensInHexMissingOne();
-        $this->testAreExpectedTokensInHexWithBuilding();*/
+        $this->testAreExpectedTokensInHexWithBuilding();
         $this->testGetPossibleLocationsForCubeInPattern();
+        $this->testGetPossibleLocationsForCubeInPatternIncomplete();
+        $this->testGetPossibleLocationsForCubeInPatternOnBoardSide();
     }
 }
 

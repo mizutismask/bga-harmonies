@@ -53,10 +53,16 @@ trait ArgsTrait {
         $board = $this->getBoard($playerId);
         $possible = [];
 
+        $existingCubesLocs = array_keys($this->getAnimalCubesOnPlayerBoard($playerId));
+        //self::dump('*******************existingCubesLocs', $existingCubesLocs);
         foreach ($cards as $card) {
             $locations = $this->getPossibleLocationsForCubeInPattern($board, $card, true, $playerId);
             if ($locations) {
-                $possible[$card->id] = $locations;
+                //self::dump('*******************locations', $locations);
+                $freeLocations = array_diff($locations, $existingCubesLocs);
+                if ($freeLocations) {
+                    $possible[$card->id] = $freeLocations;
+                }
             }
         }
         return [

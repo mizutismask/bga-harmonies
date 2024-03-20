@@ -85,7 +85,6 @@ trait ActionTrait {
         if (!$this->startsWith($card->location, "board")) {
             throw new BgaUserException(self::_("This card is not on your board"));
         }
-        //todo animal cube location is free
         if(!isset($args["placeAnimalCubeArgs"][$fromCardId]) || !in_array($toHexId, $args["placeAnimalCubeArgs"][$fromCardId])){
             throw new BgaUserException(self::_("You have to respect the pattern of the card"));
         }

@@ -76,12 +76,12 @@ trait HoneycombTrait {
     function getPossibleLocationsForCubeInPattern($board, AnimalCardInfo $card, $convertNames = false, $playerId="") {
         $possible = [];
         foreach ($board as $hex) {
-            $allHexesValid = false;
+            $allHexesValid = true;
             foreach ($card->pattern as $hexPattern) {
                 //self::dump('******************$hexPattern*', $hexPattern);
                 $expected = $this->areExpectedTokensInHex($board, $hex["col"] + $hexPattern->shiftCol, $hex["row"] + $hexPattern->shiftRow, $hexPattern->colors);
                 //self::dump('******************$expected*', $expected);
-                $allHexesValid = $allHexesValid || $expected;
+                $allHexesValid = $allHexesValid && $expected;
                 if (!$allHexesValid) {
                     break;
                 }

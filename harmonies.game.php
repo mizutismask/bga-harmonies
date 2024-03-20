@@ -176,7 +176,7 @@ class Harmonies extends Table {
             $player['doneAnimalCards'] = $this->getAnimalCardsDone($playerId);
             $player['boardAnimalCards'] = $this->getAnimalCardsOnPlayerBoard($playerId);
             $player['tokensOnBoard'] = $this->getTokensForCompleteBoardByHex($playerId);
-            $player['animalCubesOnBoard'] = $this->getAnimalCubesOnPlayerBoards($playerId);
+            $player['animalCubesOnBoard'] = $this->getAnimalCubesOnPlayerBoard($playerId);
         }
 
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
