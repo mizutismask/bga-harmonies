@@ -109,48 +109,95 @@ html {
 			position: absolute;
 			top: 9%;
 			left: 16%;
+
+			.hole-token-1 {
+				top: 9%;
+				left: 61%;
+			}
+			.hole-token-2 {
+				top: 5%;
+				right: 32%;
+			}
+			.hole-token-3 {
+				top: 44%;
+				left: 3%;
+			}
 		}
 		&.hole-2 {
 			position: absolute;
 			top: 9%;
 			right: 18%;
-			rotate: 60deg;
+
+			.hole-token-1 {
+				top: 4%;
+				right: 8%;
+			}
+			.hole-token-2 {
+				top: 8%;
+				right: 60%;
+			}
+			.hole-token-3 {
+				top: 40%;
+				left: -4%;
+			}
 		}
 		&.hole-3 {
 			position: absolute;
-			top: 44%;
+			top: 49%;
 			left: 4%;
-			rotate: 240deg;
-		}
-		&.hole-4 {
-			position: absolute;
-			top: 44%;
-			right: 4%;
-			rotate: 120deg;
-		}
-		&.hole-5 {
-			position: absolute;
-			top: 65%;
-			left: 37%;
-			rotate: 180deg;
-		}
 
-		.hole-token {
-			&.hole-token-1 {
-				position: absolute;
+			.hole-token-1 {
 				top: 9%;
 				left: 61%;
 			}
-			&.hole-token-2 {
-				position: absolute;
-				top: 5%;
-				right: 18%;
+			.hole-token-2 {
+				top: -4%;
+				right: 31%;
 			}
-			&.hole-token-3 {
-				position: absolute;
+			.hole-token-3 {
 				top: 44%;
+				left: 3%;
+			}
+		}
+		&.hole-4 {
+			position: absolute;
+			top: 49%;
+			right: 4%;
+
+			.hole-token-1 {
+				top: 3%;
+				left: 21%;
+			}
+			.hole-token-2 {
+				top: 35%;
+				right: 1%;
+			}
+			.hole-token-3 {
+				top: 40%;
 				left: -6%;
 			}
+		}
+		&.hole-5 {
+			position: absolute;
+			top: 72%;
+			left: 37%;
+
+			.hole-token-1 {
+				top: 9%;
+				left: 61%;
+			}
+			.hole-token-2 {
+				top: 40%;
+				right: 18%;
+			}
+			.hole-token-3 {
+				top: -4%;
+				left: 5%;
+			}
+		}
+
+		.hole-token {
+			position: absolute;
 		}
 	}
 }
