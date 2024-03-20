@@ -6,16 +6,14 @@ class RiverDeck {
      * Init stock.
      */
     constructor(private game: HarmoniesGame, private cards:Array<AnimalCard>) {
-        let stock = new LineStock<AnimalCard>(
-            this.game.cardsManager,
-            $(`river`),
-            {
-                center: true,
-                gap: "7px",
-                direction: "row",
-                wrap: "wrap",
-            }
-        );
+        let stock = new SlotStock<AnimalCard>(this.game.cardsManager, $(`river`), {
+			center: true,
+			gap: '7px',
+			direction: 'row',
+			wrap: 'wrap',
+			slotsIds: ['riverSlot1', 'riverSlot2', 'riverSlot3', 'riverSlot4', 'riverSlot5'],
+			mapCardToSlot: (card) => `riverSlot${card.location_arg + 1}`
+		})
         stock.setSelectionMode("single");
         this.riverStock = stock;
         this.setCards(cards)

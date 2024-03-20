@@ -25,15 +25,16 @@ trait AnimalCardDeckTrait {
 
     public function refillAnimalCards() {
         $visibleCardsCount = intval($this->animalCards->countCardInLocation('river'));
+        $missingSeveral = VISIBLE_ANIMAL_CARDS_COUNT - $visibleCardsCount > 1;
         if ($visibleCardsCount < VISIBLE_ANIMAL_CARDS_COUNT) {
             $spots = [];
-            for ($i = $visibleCardsCount; $i <VISIBLE_ANIMAL_CARDS_COUNT; $i++) {
-                $newCard = $this->getAnimalCardFromDb($this->animalCards->pickCardForLocation('deck', 'river', $i));
+            for ($i = $visibleCardsCount; $i < VISIBLE_ANIMAL_CARDS_COUNT; $i++) {
+                $newCard = $this->getAnimalCardFromDb($this->animalCards->pickCardForLocation('deck', 'river', $missingSeveral ? $i : self::getGameStateValue(EMPTIED_RIVER_SLOT)));
                 $spots[] = $newCard;
 
                 $this->notifyAllPlayers('materialMove', "", [
-                    'type' =>MATERIAL_TYPE_CARD,
-                    'from' =>MATERIAL_LOCATION_DECK,
+                    'type' => MATERIAL_TYPE_CARD,
+                    'from' => MATERIAL_LOCATION_DECK,
                     'to' => MATERIAL_LOCATION_RIVER,
                     'material' => [$newCard],
                     'spot' => $i,
@@ -93,12 +94,12 @@ trait AnimalCardDeckTrait {
         $this->animalCards->moveCard($cardId, $location, $spot);
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
         self::incStat(1, "game_animal_cards_taken", $playerId);
-        
+
         $this->notifyAllPlayers('materialMove', clienttranslate('${player_name} takes an animal card to his spot ${spot}'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
-            'type' =>MATERIAL_TYPE_CARD,
-            'from' =>MATERIAL_LOCATION_RIVER,
+            'type' => MATERIAL_TYPE_CARD,
+            'from' => MATERIAL_LOCATION_RIVER,
             'to' => MATERIAL_LOCATION_HAND,
             'toArg' => $playerId,
             'material' => [$card],
@@ -121,7 +122,7 @@ trait AnimalCardDeckTrait {
         ]);
     }
 
-    public function getAnimalCardsToScore($playerId){
+    public function getAnimalCardsToScore($playerId) {
         $pending = $this->getAnimalCardsOnPlayerBoard($playerId);
         $done = $this->getAnimalCardsDone($playerId);
         return array_merge($pending, $done);

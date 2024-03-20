@@ -251,6 +251,16 @@ html {
 	}
 }
 
+.card-stock {
+	.slot {
+		border-radius: 8px;
+		height: $CARD_HEIGHT;
+		width: $CARD_WIDTH;
+		background: hsla(0, 0%, 100%, 0.4);
+		outline: 1px solid hsla(0, 0%, 100%, 0.6);
+	}
+}
+
 .harmonies-card {
 	.card-side {
 		border-radius: 3%;

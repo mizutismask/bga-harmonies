@@ -68,7 +68,7 @@ trait ActionTrait {
         if ($card->location != "river") {
             throw new BgaUserException(self::_("This card is not available in the river"));
         }
-
+        self::setGameStateValue(EMPTIED_RIVER_SLOT,$card->location_arg);
         $this->moveAnimalCardToPlayerBoard($cardId);
         $this->gamestate->nextState('continue');
     }

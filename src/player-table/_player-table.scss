@@ -3,14 +3,6 @@
 	z-index: 25; // so new animations are over the board
 	justify-content: center;
 
-	.slot {
-		border-radius: 8px;
-		height: $CARD_HEIGHT;
-		width: $CARD_WIDTH;
-		background: hsla(0,0%,100%,.4);
-		outline: 1px solid hsla(0, 0%, 100%, .6);
-	}
-
 	.player-name {
 		justify-self: center;
 		margin-top: -9%;

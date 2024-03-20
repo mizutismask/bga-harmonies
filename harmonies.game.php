@@ -58,6 +58,7 @@ class Harmonies extends Table {
             LAST_TURN => 10, // last turn is the id of the last player, 0 if it's not last turn
             EMPTIED_HOLE => 11,
             TOOK_ANIMAL_CARD => 12,
+            EMPTIED_RIVER_SLOT => 13,
             //      ...
             "NatureSSpiritCards" => 100,
             "BoardSide" => 101,
