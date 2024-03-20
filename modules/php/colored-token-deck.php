@@ -49,8 +49,12 @@ trait ColoredTokenDeckTrait {
             if (count($tokens) != $tokenCount) {
                 //end of game
             } else {
-                $this->notifyAllPlayers('coloredTokenMove', "", [
-                    'tokens' => [$tokens],
+                $this->notifyAllPlayers('materialMove', "", [
+                    'type' => MATERIAL_TYPE_TOKEN,
+                    'from' => MATERIAL_LOCATION_DECK,
+                    'to' => MATERIAL_LOCATION_HOLE,
+                    'toArg' => $hole,
+                    'material' => $tokens,
                 ]);
             }
         }
@@ -62,7 +66,7 @@ trait ColoredTokenDeckTrait {
         $zindex = count($this->getTokensAt($hexId, $playerId)) + 1;
         $this->coloredTokens->moveCard($tokenId, $hexId, $zindex);
         $this->updateChosenToken($tokenId, true);
-       
+
         $this->notifyAllPlayers('materialMove', "", [
             'type' => MATERIAL_TYPE_TOKEN,
             'from' => MATERIAL_LOCATION_DECK,

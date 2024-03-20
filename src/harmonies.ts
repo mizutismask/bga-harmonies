@@ -136,14 +136,14 @@ class Harmonies implements HarmoniesGame {
 		})
 	}
 
-	private moveCubeFromAnimalCardToHex(cube: AnimalCube, cardId: string, playerId: number) {
+	private moveCubeFromAnimalCardToHex(cube: AnimalCube, cardId: string, playerId: number | string) {
 		this.removeCubeFromCard(cardId)
 		this.playerTables[playerId].createCubeOnBoard(cube)
 	}
 
 	private removeCubeFromCard(cardId: string) {
 		//log(`#card_${cardId} .points-location-wrapper div:last-of-type`)
-		dojo.query(`#${cardId} .points-location-wrapper div:last-of-type`).removeClass("animal-cube cube")
+		dojo.query(`#${cardId} .points-location-wrapper div:last-of-type`).removeClass('animal-cube cube')
 	}
 
 	public takeCard(card: AnimalCard) {
@@ -156,19 +156,22 @@ class Harmonies implements HarmoniesGame {
 		log('click on ', hexId)
 		if ((this as any).isCurrentPlayerActive()) {
 			switch (this.gamedatas.gamestate.name) {
-				case "chooseAction":
+				case 'chooseAction':
 					if (this.clientActionData.tokenToPlace) {
-						this.takeAction('placeColoredToken', { 'tokenId': this.clientActionData.tokenToPlace.id, 'hexId': hexId })
+						this.takeAction('placeColoredToken', {
+							'tokenId': this.clientActionData.tokenToPlace.id,
+							'hexId': hexId
+						})
 					}
-					break;
-				case "client_place_animal_cube":
-					const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop();
+					break
+				case 'client_place_animal_cube':
+					const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop()
 					if (card) {
 						this.takeAction('placeAnimalCube', { 'cardId': card.id, 'hexId': hexId })
 					}
-					break;
+					break
 				default:
-					break;
+					break
 			}
 		}
 	}
@@ -179,14 +182,23 @@ class Harmonies implements HarmoniesGame {
 	 */
 	private displayColoredTokensOnCentralBoard(tokensByHole: { [hole: number]: Array<ColoredToken> }) {
 		;[1, 2, 3, 4, 5].forEach((num) => this.emptyHole(num))
-		
+
 		Object.keys(tokensByHole).forEach((hole) => {
 			tokensByHole[hole].forEach((token, i) => {
-				//log('div', `hole-${hole}-token-${i + 1}`)
 				const div = $(`hole-${hole}-token-${i + 1}`)
-				//div.classList.remove('color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6')
 				div.classList.add('color-' + token.type_arg)
 			})
+		})
+	}
+
+	private updateColoredTokensOnCentralBoard(hole: number | string, tokens: Array<ColoredToken>) {
+		this.emptyHole(hole)
+		log('tokens',  tokens)
+		tokens.forEach((token, i) => {
+			log('forEach', hole, i, token)
+			const div = $(`hole-${hole}-token-${i + 1}`)
+			log('div', div)
+			div.classList.add('color-' + token.type_arg)
 		})
 	}
 
@@ -446,7 +458,7 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
-	private setClientStatePlaceAnimalCube(args:EnteringChooseActionArgs) {
+	private setClientStatePlaceAnimalCube(args: EnteringChooseActionArgs) {
 		;(this as any).setClientState('client_place_animal_cube', {
 			descriptionmyturn: _(
 				'Select one card and then the corresponding pattern on your board where you want to place the cube'
@@ -968,6 +980,10 @@ class Harmonies implements HarmoniesGame {
 						//from deck to player hex
 						this.playerTables[notif.args.toArg].createTokenOnBoard(token)
 						break
+					case 'HOLE':
+						//from deck to hole
+						this.updateColoredTokensOnCentralBoard(notif.args.toArg, tokens)
+						break
 
 					default:
 						console.error('Token move from deck destination not handled', notif)
@@ -1003,6 +1019,11 @@ class Harmonies implements HarmoniesGame {
 	private notif_cardMove(cards: AnimalCard[], notif: Notif<NotifMaterialMove>) {
 		const card = cards.at(0)
 		switch (notif.args.from) {
+			case 'DECK':
+				//from deck to river
+				this.river.addCard(card)
+				break
+
 			case 'RIVER':
 				//from river to player hand
 				this.playerTables[notif.args.toArg].addCard(card)
@@ -1019,7 +1040,7 @@ class Harmonies implements HarmoniesGame {
 		this.emptyHole(notif.args.hole)
 	}
 
-	private emptyHole(holeNumber: number) {
+	private emptyHole(holeNumber: number | string) {
 		dojo.query(`#hole-${holeNumber} div`).removeClass([
 			'color-1',
 			'color-2',

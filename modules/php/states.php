@@ -59,6 +59,7 @@ trait StateTrait {
         } else {
             //finishing round or playing normally
             $this->refillCentralBoard();
+            $this->refillAnimalCards();
             $this->activateNextPlayerCustom();
             $this->gamestate->nextState('nextPlayer');
         }

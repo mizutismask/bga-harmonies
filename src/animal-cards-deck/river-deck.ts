@@ -29,6 +29,10 @@ class RiverDeck {
         this.riverStock.addCards(cards, { fromElement: $("upperrightmenu"), originalSide: "front" });
     }
 
+    public addCard(card: AnimalCard) {
+        this.riverStock.addCard(card, { fromElement: $("upperrightmenu"), originalSide: "front" });
+    }
+
     public removeCard(AnimalCard: AnimalCard) {
         this.riverStock.removeCard(AnimalCard);
     }

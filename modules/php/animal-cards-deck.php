@@ -27,13 +27,18 @@ trait AnimalCardDeckTrait {
         $visibleCardsCount = intval($this->animalCards->countCardInLocation('river'));
         if ($visibleCardsCount < VISIBLE_ANIMAL_CARDS_COUNT) {
             $spots = [];
-            for ($i = $visibleCardsCount; $i < VISIBLE_ANIMAL_CARDS_COUNT; $i++) {
+            for ($i = $visibleCardsCount; $i <VISIBLE_ANIMAL_CARDS_COUNT; $i++) {
                 $newCard = $this->getAnimalCardFromDb($this->animalCards->pickCardForLocation('deck', 'river', $i));
                 $spots[] = $newCard;
+
+                $this->notifyAllPlayers('materialMove', "", [
+                    'type' =>MATERIAL_TYPE_CARD,
+                    'from' =>MATERIAL_LOCATION_DECK,
+                    'to' => MATERIAL_LOCATION_RIVER,
+                    'material' => [$newCard],
+                    'spot' => $i,
+                ]);
             }
-            $this->notifyAllPlayers('newCardOnRiver', "", [
-                'cards' => $spots,
-            ]);
         }
     }
 
