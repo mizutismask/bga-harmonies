@@ -1,3 +1,7 @@
+@use 'sass:math';
+@use 'sass:string';
+@use './sass/hextile';
+
 //(classic BGA colors) :
 $player-colors: (
 	'red': 'ff0000',
@@ -17,6 +21,7 @@ $CARD_HEIGHT: 258px;
 @import 'player-table/player-table';
 @import 'settings';
 @import '../node_modules/bga-cards/bga-cards';
+@import 'player-table/hextile-static.min.css';
 
 html {
 	background: rgb(227, 194, 143);

@@ -223,6 +223,7 @@ class Harmonies implements HarmoniesGame {
 		this.playerTables[player.id] = new PlayerTable(
 			this,
 			player,
+			this.gamedatas.boardSize,
 			this.gamedatas.hexes,
 			this.gamedatas.players[player.id].boardAnimalCards,
 			this.gamedatas.players[player.id].tokensOnBoard,
