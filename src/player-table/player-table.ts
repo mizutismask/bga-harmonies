@@ -30,17 +30,15 @@ class PlayerTable {
 
 		for (let row = 0; row < boardSize.height; row++) {
 			for (let col = 0; col < boardSize.width; col++) {
-				const cellContainerName = `${player.id}_cell_container_${col}_${row}`
 				const cellName = `${player.id}_cell_${col}_${row}`
 				let html = `
-						<div class="hex invisible" id="${cellContainerName}">
-							<div class="hex-content" id="${cellName}"></div>
+						<div class="hex invisible" id="${cellName}">
 						</div>
 					`
 				dojo.place(html, `hex-grid-container-${player.id}`)
 			}
 		}
-		hexes.forEach((h) => $(`${player.id}_cell_container_${h.col}_${h.row}`).classList.remove('invisible'))
+		hexes.forEach((h) => $(`${player.id}_cell_${h.col}_${h.row}`).classList.remove('invisible'))
 
 		if (isMyTable) {
 			dojo.connect($(`grid-container-${player.id}`), 'click', (evt) => {

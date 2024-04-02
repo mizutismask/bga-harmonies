@@ -84,23 +84,18 @@ h3 {
 
 .hex {
 	z-index: 5;
-}
-
-.hex * {
-	visibility: visible;
-}
-
-.hex .invisible {
-	visibility: hidden;
-}
-
-.hex-content {
-	
 	//to display tokens in the center
 	display: grid;
 	justify-content: center;
 	align-items: center;
 
+	* {
+		visibility: visible;
+	}
+
+	.invisible {
+		visibility: hidden;
+	}
 	.colored-token {
 		&:not(:first-child) {
 			margin-top: -126px;
