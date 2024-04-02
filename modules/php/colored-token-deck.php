@@ -110,7 +110,12 @@ trait ColoredTokenDeckTrait {
             $existingTokens = $hex["tokens"];
             //self::dump('*******************hex', $hex);
             //todo check animal cube here
-            if (!$existingTokens || count($existingTokens) <= 3 && $this->isColorAllowedOnTopOfOtherColor($token->type_arg, $existingTokens[0]->type_arg)) {
+            if (
+                !$existingTokens
+                || count($existingTokens) < 3
+                && $this->isColorAllowedOnTopOfOtherColor($token->type_arg, $existingTokens[0]->type_arg)
+                && $this->isColorAllowedAtPosition($token->type_arg, count($existingTokens) + 1)
+            ) {
                 $hexes[] = $hex;
             }
         }
@@ -136,6 +141,16 @@ trait ColoredTokenDeckTrait {
         } else if ($bottomColor === GRAY && $topColor !== GRAY && $topColor !== RED) {
             $allowed = false;
         } else if ($bottomColor === RED && $topColor !== $bottomColor) {
+            $allowed = false;
+        }
+        return $allowed;
+    }
+
+    public function isColorAllowedAtPosition($topColor, int $position) {
+        $allowed = true;
+        if ($topColor === RED && $position == 3) {
+            $allowed = false;
+        } else if ($topColor === BROWN && $position == 3) {
             $allowed = false;
         }
         return $allowed;
