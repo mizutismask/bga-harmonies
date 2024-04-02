@@ -66,7 +66,7 @@ h3 {
 	}
 }
 
-.hex-grid-content {
+.hex-content {
 	z-index: 2;
 	background-color: maroon; //transparent;
 
@@ -82,19 +82,19 @@ h3 {
 	}
 }
 
-.hex-grid-item {
+.hex {
 	z-index: 5;
 }
 
-.hex-grid-item * {
+.hex * {
 	visibility: visible;
 }
 
-.hex-grid-item .invisible {
+.hex .invisible {
 	visibility: hidden;
 }
-/*
-.hex-grid-content {
+
+.hex-content {
 	
 	//to display tokens in the center
 	display: grid;
@@ -107,8 +107,8 @@ h3 {
 		}
 	}
 }
-
-div#board li .hex-grid-content[data-location]::before {
+/*
+div#board li .hex-content[data-location]::before {
 	content: '';
 	display: block;
 	width: 100%;

@@ -30,21 +30,31 @@ class PlayerTable {
 
 		for (let row = 0; row < boardSize.height; row++) {
 			for (let col = 0; col < boardSize.width; col++) {
-				const cellContainerName = `${player.id}-cell-container-${col}-${row}`
+				const cellContainerName = `${player.id}_cell_container_${col}_${row}`
 				const cellName = `${player.id}_cell_${col}_${row}`
 				let html = `
-						<div class="hex-grid-item invisible" id="${cellContainerName}">
-							<div class="hex-grid-content" id="${cellName}"></div>
+						<div class="hex invisible" id="${cellContainerName}">
+							<div class="hex-content" id="${cellName}"></div>
 						</div>
 					`
 				dojo.place(html, `hex-grid-container-${player.id}`)
 			}
 		}
-		hexes.forEach((h) => $(`${player.id}-cell-container-${h.col}-${h.row}`).classList.remove('invisible'))
+		hexes.forEach((h) => $(`${player.id}_cell_container_${h.col}_${h.row}`).classList.remove('invisible'))
 
 		if (isMyTable) {
 			dojo.connect($(`grid-container-${player.id}`), 'click', (evt) => {
-				if (evt.target.id.startsWith(`${player.id}_cell_`)) {
+				log(
+					'container click on :',
+					evt.target.id,
+					'starts with',
+					`${player.id}_cell_`,
+					evt.target.id.startsWith(`${player.id}_cell_`)
+				)
+				if (
+					!evt.target.id.startsWith(`${player.id}_cell_container`) &&
+					evt.target.id.startsWith(`${player.id}_cell_`)
+				) {
 					this.game.onHexClick(evt.target.id)
 				} else {
 					evt.preventDefault()
