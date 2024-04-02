@@ -18,7 +18,7 @@ const ANIMATION_MS = 500
 const SCORE_MS = 1500
 const IMAGE_ITEMS_PER_ROW = 10
 
-const isDebug = window.location.host == 'studio.boardgamearena.com'
+const isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1
 const log = isDebug ? console.log.bind(window.console) : function () {}
 
 class Harmonies implements HarmoniesGame {

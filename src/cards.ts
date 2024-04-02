@@ -79,6 +79,6 @@ class CardsManager extends CardManager<AnimalCard> {
 		const yBackgroundPercent = row * 100
 		cardDiv.style.backgroundPositionX = `-${xBackgroundPercent}%`
 		cardDiv.style.backgroundPositionY = `-${yBackgroundPercent}%`
-		cardDiv.style.backgroundSize = `1000%`
+		cardDiv.style.backgroundSize = `${IMAGE_ITEMS_PER_ROW * 100}%`
 	}
 }
