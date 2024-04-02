@@ -32,8 +32,8 @@ trait ArgsTrait {
 
         $takenTokens = $this->getColoredTokensChosen();
         $canTakeTokens = count($takenTokens) === 0;
-        $canPass = !$canTakeTokens;
         $canPlaceToken =  !$canTakeTokens && $this->array_some($takenTokens, fn ($tok) => $tok->done == false);
+        $canPass = !$canTakeTokens && !$canPlaceToken;
         $animalCubeArgs = $this->argPlaceAnimalCube()["hexByCardId"];
         return [
             'canTakeTokens' => $canTakeTokens,
