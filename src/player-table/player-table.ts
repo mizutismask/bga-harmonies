@@ -92,7 +92,7 @@ class PlayerTable {
 	 */
 	public createTokenOnBoard(token: ColoredToken) {
 		let html = `
-			<div class="colored-token color-${token.type_arg}"></div>
+			<div class="colored-token color-${token.type_arg} level-${token.location_arg}"></div>
         `
 		dojo.place(html, token.location)
 	}

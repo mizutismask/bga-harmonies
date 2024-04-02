@@ -41,6 +41,9 @@ h3 {
 		@include hextile.hex {
 			background: hsla(0, 0, 0, 0.75);
 		}
+		display: grid !important;
+		justify-content: center;
+		align-items: center;
 	}
 	h3 {
 		text-shadow: 1px 1px 2px hsla(0, 0, 0, 0.75);
@@ -66,22 +69,6 @@ h3 {
 	}
 }
 
-.hex-content {
-	z-index: 2;
-	background-color: maroon; //transparent;
-
-	//to display tokens in the center
-	display: grid;
-	justify-content: center;
-	align-items: center;
-
-	.colored-token {
-		&:not(:first-child) {
-			margin-top: -126px;
-		}
-	}
-}
-
 .hex {
 	z-index: 5;
 	//to display tokens in the center
@@ -91,14 +78,27 @@ h3 {
 
 	* {
 		visibility: visible;
+		z-index: 2;
 	}
 
 	.invisible {
 		visibility: hidden;
 	}
+
 	.colored-token {
-		&:not(:first-child) {
-			margin-top: -126px;
+		grid-row: 1;
+		grid-column: 1;
+		&.level-1{
+			margin-top: 72%;
+			z-index: 5;
+		}
+		&.level-2{
+			margin-top: 7%;
+			z-index: 6;
+		}
+		&.level-3{
+			margin-top: -66%;
+			z-index: 7;
 		}
 	}
 }
