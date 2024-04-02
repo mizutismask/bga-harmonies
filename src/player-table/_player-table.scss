@@ -61,7 +61,7 @@ h3 {
 		background-image: url('img/boardSideB.png');
 	}
 	.hex-grid-container {
-		padding: 13% 9%;
+		padding: 13% 10%;
 		@include hextile.grid($columns: 7, $max-rows: 4, $stagger-direction: down, $grid-spacing: 0.1em);
 	}
 }
@@ -81,23 +81,19 @@ h3 {
 		}
 	}
 }
-/*
-.hex-grid-item {
-	position: relative;
-	//height: 0;
-	//padding-bottom: 115.7%;
-	z-index: 5;
 
-	height: 0;
-	width: 0;
-	padding-bottom: 82.7%;
-	padding-left: 90%;
+.hex-grid-item {
+	z-index: 5;
 }
 
 .hex-grid-item * {
 	visibility: visible;
 }
 
+.hex-grid-item .invisible {
+	visibility: hidden;
+}
+/*
 .hex-grid-content {
 	
 	//to display tokens in the center

@@ -33,13 +33,14 @@ class PlayerTable {
 				const cellContainerName = `${player.id}-cell-container-${col}-${row}`
 				const cellName = `${player.id}_cell_${col}_${row}`
 				let html = `
-						<div class="hex-grid-item" id="${cellContainerName}">
+						<div class="hex-grid-item invisible" id="${cellContainerName}">
 							<div class="hex-grid-content" id="${cellName}"></div>
 						</div>
 					`
 				dojo.place(html, `hex-grid-container-${player.id}`)
 			}
 		}
+		hexes.forEach((h) => $(`${player.id}-cell-container-${h.col}-${h.row}`).classList.remove('invisible'))
 
 		if (isMyTable) {
 			dojo.connect($(`grid-container-${player.id}`), 'click', (evt) => {
