@@ -19,7 +19,7 @@ class PlayerTable {
             <div id="player-table-${player.id}" class="player-order${player.playerNo} player-table ${ownClass}">
 				<div id="board-${player.id}" class="hrm-player-board">
 					<div id="grid-container-${player.id}">
-						<ul id="hex-grid-container-${player.id}" class="hex-grid-container"></ul>
+						<div id="hex-grid-container-${player.id}" class="hex-grid-container"></div>
 					</div>
 				</div>
 				<span class="player-name">${player.name}</span>
@@ -32,15 +32,11 @@ class PlayerTable {
 
 			const cellName = `${player.id}_cell_${hex.col}_${hex.row}`
 			let html = `
-			<li class="hex-grid-item" id="${cellContainerName}">
+			<div class="hex-grid-item" id="${cellContainerName}">
 				<div class="hex-grid-content" id="${cellName}"></div>
-		  	</li>
+		  	</div>
         `
 			dojo.place(html, `hex-grid-container-${player.id}`)
-
-			const cellT = $(cellContainerName)
-			cellT.style.gridRow = 2 * hex.row + (hex.col % 2 == 0 ? 1 : 2) + ' / span 2'
-			cellT.style.gridColumn = 3 * hex.col + 1 + ' / span 4'
 		})
 
 		if (isMyTable) {
