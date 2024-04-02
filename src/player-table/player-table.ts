@@ -7,6 +7,7 @@ class PlayerTable {
 	constructor(
 		private game: HarmoniesGame,
 		player: HarmoniesPlayer,
+		boardSize: { width: number; height: number },
 		hexes: Array<Coordinates>,
 		cards: Array<AnimalCard>,
 		tokensOnBoard: { [hexId: string]: Array<ColoredToken> },
@@ -27,17 +28,18 @@ class PlayerTable {
         `
 		dojo.place(html, 'player-tables')
 
-		hexes.forEach((hex) => {
-			const cellContainerName = `${player.id}-cell-container-${hex.col}-${hex.row}`
-
-			const cellName = `${player.id}_cell_${hex.col}_${hex.row}`
-			let html = `
-			<div class="hex-grid-item" id="${cellContainerName}">
-				<div class="hex-grid-content" id="${cellName}"></div>
-		  	</div>
-        `
-			dojo.place(html, `hex-grid-container-${player.id}`)
-		})
+		for (let row = 0; row < boardSize.height; row++) {
+			for (let col = 0; col < boardSize.width; col++) {
+				const cellContainerName = `${player.id}-cell-container-${col}-${row}`
+				const cellName = `${player.id}_cell_${col}_${row}`
+				let html = `
+						<div class="hex-grid-item" id="${cellContainerName}">
+							<div class="hex-grid-content" id="${cellName}"></div>
+						</div>
+					`
+				dojo.place(html, `hex-grid-container-${player.id}`)
+			}
+		}
 
 		if (isMyTable) {
 			dojo.connect($(`grid-container-${player.id}`), 'click', (evt) => {
