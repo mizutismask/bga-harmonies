@@ -142,8 +142,8 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	private removeCubeFromCard(cardId: string) {
-		log(`#card_${cardId} .points-location-wrapper div:last-of-type`)
-		dojo.query(`#card_${cardId} .points-location-wrapper div:last-of-type`).removeClass('animal-cube cube')
+		log(`#card_${cardId} .points-location-wrapper div.cube`)
+		dojo.query(`#card_${cardId} .points-location-wrapper div.cube`).pop().classList.remove('animal-cube', 'cube')
 	}
 
 	public takeCard(card: AnimalCard) {
