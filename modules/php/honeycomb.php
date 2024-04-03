@@ -38,12 +38,12 @@ trait HoneycombTrait {
         $x = (int) $hex['col'];
         $y = (int) $hex['row'];
         $hexes = [];
-        $hexes[] = ['col' => $x, 'row' => $y - 1];
-        $hexes[] = ['col' => $x - 1, 'row' => $y + ($x % 2 == 0 ? -1 : 0)];
-        $hexes[] = ['col' => $x - 1, 'row' => $y + ($x % 2 == 0 ? 0 : 1)];
-        $hexes[] = ['col' => $x, 'row' => $y + 1];
-        $hexes[] = ['col' => $x + 1, 'row' => $y + ($x % 2 == 0 ? 0 : 1)];
-        $hexes[] = ['col' => $x + 1, 'row' => $y + ($x % 2 == 0 ? -1 : 0)];
+        $hexes[] = ['col' => $x, 'row' => $y - 1]; //top
+        $hexes[] = ['col' => $x - 1, 'row' => $y + ($x % 2 == 0 ? -1 : 0)]; //top left
+        $hexes[] = ['col' => $x - 1, 'row' => $y + ($x % 2 == 0 ? 0 : 1)]; //bottom left
+        $hexes[] = ['col' => $x, 'row' => $y + 1]; //bottom
+        $hexes[] = ['col' => $x + 1, 'row' => $y + ($x % 2 == 0 ? 0 : 1)]; //bottom right
+        $hexes[] = ['col' => $x + 1, 'row' => $y + ($x % 2 == 0 ? -1 : 0)]; //top right
 
         $hexes = array_filter($hexes, fn ($hex) => $this->isValidHex($hex));
         $hexes = array_values($hexes);
@@ -73,13 +73,19 @@ trait HoneycombTrait {
         return count($found) > 0;
     }
 
-    function getPossibleLocationsForCubeInPattern($board, AnimalCardInfo $card, $convertNames = false, $playerId="") {
+    function getPossibleLocationsForCubeInPattern($board, AnimalCardInfo $card, $convertNames = false, $playerId = "") {
         $possible = [];
         foreach ($board as $hex) {
             $allHexesValid = true;
+            $previousCheckedHex = null;
             foreach ($card->pattern as $hexPattern) {
                 //self::dump('******************$hexPattern*', $hexPattern);
-                $expected = $this->areExpectedTokensInHex($board, $hex["col"] + $hexPattern->shiftCol, $hex["row"] + $hexPattern->shiftRow, $hexPattern->colors);
+                if ($hexPattern->position == 0) {
+                    $previousCheckedHex = $hex;
+                } else {
+                    $previousCheckedHex = $this->getAdjacentHexCoordinate($previousCheckedHex, $hexPattern->position);
+                }
+                $expected = $this->areExpectedTokensInHex($board, $previousCheckedHex["col"], $previousCheckedHex["row"], $hexPattern->colors);
                 //self::dump('******************$expected*', $expected);
                 $allHexesValid = $allHexesValid && $expected;
                 if (!$allHexesValid) {
@@ -87,13 +93,69 @@ trait HoneycombTrait {
                 }
             }
             if ($allHexesValid) {
-                $cubeLocation = array_values(array_filter($card->pattern, fn ($hexPattern) => $hexPattern->allowCube === true))[0];
-                $cubeHex = ["col" => $hex["col"] + $cubeLocation->shiftCol, "row" => $hex["row"] + $cubeLocation->shiftRow];
+                $cubeHex = $this->getCubeCoordinate($card, $hex);
                 $possible[] = $convertNames ? $this->convertHexCoordsToName($cubeHex, $playerId) : $cubeHex;
             }
         }
         return $possible;
     }
+
+    function getCubeCoordinate($card, $firstHexInPattern) {
+        $found = false;
+        $i = 0;
+        $hex = null;
+        while (!$found && $i < count($card->pattern)) {
+            $pattern = $card->pattern[$i];
+            if ($pattern->position == 0) {
+                $hex = $firstHexInPattern;
+            } else {
+                $hex = $this->getAdjacentHexCoordinate($hex, $pattern->position);
+            }
+            $found = ($pattern->allowCube === true);
+            $i++;
+        }
+        if (!$found) {
+            throw new BgaSystemException("No cube position defined in card " . $card);
+        }
+        return $hex;
+    }
+
+    public function getAdjacentHexCoordinate($hex, $numHex) {
+        $x = (int) $hex['col'];
+        $y = (int) $hex['row'];
+
+        switch ($numHex) {
+            case 1: // top
+                $newCol = $x;
+                $newRow = $y - 1;
+                break;
+            case 6: // top left
+                $newCol = $x - 1;
+                $newRow = $y + ($x % 2 == 0 ? -1 : 0);
+                break;
+            case 5: // bottom left
+                $newCol = $x - 1;
+                $newRow = $y + ($x % 2 == 0 ? 0 : 1);
+                break;
+            case 4: // bottom
+                $newCol = $x;
+                $newRow = $y + 1;
+                break;
+            case 3: // bottom right
+                $newCol = $x + 1;
+                $newRow = $y + ($x % 2 == 0 ? 0 : 1);
+                break;
+            case 2: // top right
+                $newCol = $x + 1;
+                $newRow = $y + ($x % 2 == 0 ? -1 : 0);
+                break;
+            default:
+                throw new BgaSystemException("Hex number invalid, should be between 1 and 6 :" . $numHex);
+        }
+
+        return  ["col" => $newCol, "row" => $newRow];
+    }
+
 
     function areExpectedTokensInHex($board, int $col, int $row, $expectedColors) {
         $valid = false;
@@ -101,7 +163,7 @@ trait HoneycombTrait {
             $hex = $board[$this->getHexIndexInBoard($board, $col, $row)];
             $hexTokens = $hex["tokens"];
             //if ($hexTokens)
-                //self::dump('******************$hexTokens*', $hexTokens);
+            //self::dump('******************$hexTokens*', $hexTokens);
             if (count($hexTokens) === count($expectedColors)) {
                 $valid = true;
                 //check if colors are at the expected level

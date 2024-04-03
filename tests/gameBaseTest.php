@@ -84,9 +84,20 @@ abstract class GameTestBase extends Harmonies { // this is your game class defin
             echo " : SUCCESS\n";
         } else {
             echo " : FAILURE\n";
-            echo "Found: $result\n";
+            echo is_array($result) ? "Found: " . json_encode($result) : "Found: $result\n";
         }
     }
+
+    function expectResult($result,  $expectedResult, $testName) {
+        $equal = $result == $expectedResult;
+        $this->displayResult($testName, $equal, $result);
+    }
+
+    function expectHexResult($result,  $expectedCol, $expectedRow, $testName) {
+        $equal = $result["col"]==$expectedCol && $result["row"]==$expectedRow;
+        $this->displayResult($testName, $equal, $result);
+    }
+
     function testExemple() {
         //get this typing displayPlayerGrid() in the chat, remove the last number of each line except the last one
         $grid = $this->convertNumbersToGrid("

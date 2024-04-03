@@ -65,6 +65,18 @@ class HoneyCombTest extends GameTestBase { // this is your game class defined in
         $equal = $this->containsHex($result, 6, 2);
     }
 
+    function testGetNeighboursOnTopLeft() {
+
+        $hex = ["col" => 0, "row" => 0];
+        $result = $this->getNeighbours($hex);
+        $this->displayResult(__FUNCTION__, 2, count($result));
+
+        $equal = $this->containsHex($result, 0, 1);
+        $this->displayResult(__FUNCTION__, $equal, $result);
+        $equal = $this->containsHex($result, 1, 0);
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
     function testAreExpectedTokensInHexTrue() {
 
         $board = $this->initBoard();
@@ -178,6 +190,62 @@ class HoneyCombTest extends GameTestBase { // this is your game class defined in
         $this->displayResult(__FUNCTION__, $equal, count($result));
     }
 
+    function testGetPossibleLocationsForCubeInPatternCard4() {
+
+        $board = $this->initBoard();
+
+        $this->setTokensIn($board, 1, 1, [GREEN]);
+        $this->setTokensIn($board, 2, 2, [GREEN]);
+        $this->setTokensIn($board, 3, 2, [BLUE]);
+
+        $result = $this->getPossibleLocationsForCubeInPattern($board, $this->ANIMAL_CARDS[1][4]);
+
+        $equal = $this->containsHex($result, 3, 2) == true;
+        $this->displayResult(__FUNCTION__, $equal, $result);
+
+        $equal = count($result) == 1;
+        $this->displayResult(__FUNCTION__, $equal, count($result));
+    }
+
+    function testGetAdjacentHexCoordinate() {
+
+        $this->expectHexResult(
+            $this->getAdjacentHexCoordinate([
+                "col" => 1, "row" => 1
+            ], 3),
+            2,
+            2,
+            __FUNCTION__
+        );
+
+        $this->expectHexResult(
+            $this->getAdjacentHexCoordinate([
+                "col" => 1, "row" => 1
+            ], 2),
+            2,
+            1,
+            __FUNCTION__
+        );
+
+        $this->expectHexResult(
+            $this->getAdjacentHexCoordinate([
+                "col" => 0, "row" => 0
+            ], 3),
+            1,
+            0,
+            __FUNCTION__
+        );
+
+        $this->expectHexResult(
+            $this->getAdjacentHexCoordinate([
+                "col" => 0, "row" => 4
+            ], 2),
+            1,
+            3,
+            __FUNCTION__
+        );
+    }
+
     function testAll() {
         $this->testGetNeighboursInCenter();
         $this->testGetNeighboursOnTop();
@@ -189,6 +257,9 @@ class HoneyCombTest extends GameTestBase { // this is your game class defined in
         $this->testGetPossibleLocationsForCubeInPattern();
         $this->testGetPossibleLocationsForCubeInPatternIncomplete();
         $this->testGetPossibleLocationsForCubeInPatternOnBoardSide();
+        $this->testGetPossibleLocationsForCubeInPatternCard4();
+        $this->testGetNeighboursOnTopLeft();
+        $this->testGetAdjacentHexCoordinate();
     }
 }
 

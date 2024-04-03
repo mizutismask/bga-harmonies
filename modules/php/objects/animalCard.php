@@ -15,14 +15,12 @@ class AnimalCardInfo {
 
 class PatternHex {
     public array $colors; //from top to bottom
-    public int $shiftCol; //relative the first hex in the pattern, named 0,0
-    public int $shiftRow;
+    public int $position;//0 for the first hex of the pattern, then hex number relative to the previous one, counted from 1 to 6 from top in clockwise order
     public bool $allowCube;
 
-    public function __construct(array $colors, $shiftCol, $shiftRow, $allowCube) {
+    public function __construct(array $colors, $position, $allowCube) {
         $this->colors = $colors;
-        $this->shiftCol = $shiftCol;
-        $this->shiftRow = $shiftRow;
+        $this->position = $position;
         $this->allowCube = $allowCube;
     }
 }
