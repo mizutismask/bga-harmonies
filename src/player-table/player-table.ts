@@ -86,6 +86,10 @@ class PlayerTable {
 		this.handStock.addCard(card)
 	}
 
+	public selectCardFromId(cardId: number) {
+		this.handStock.selectCardFromId(cardId)
+	}
+
 	/**
 	 * Creates a new div inside an hex
 	 * @param args
@@ -108,6 +112,12 @@ class PlayerTable {
 	public setSelectionMode(mode: CardSelectionMode) {
 		this.handStock.setSelectionMode(mode)
 	}
+
+	public unselectAll() {
+		this.handStock.unselectAll()
+	}
+
+	
 
 	public getAnimalCardSelection() {
 		return this.handStock.getSelection()

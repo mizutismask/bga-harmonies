@@ -40,4 +40,12 @@ class PlayerBoardDeck {
 	public getSelection() {
 		return this.boardDeck.getSelection()
 	}
+
+	public selectCardFromId(cardId: number) {
+		this.boardDeck.selectCard(this.boardDeck.getCards().find(c=>c.id==cardId))
+	}
+
+	public unselectAll() {
+		this.boardDeck.unselectAll()
+	}
 }

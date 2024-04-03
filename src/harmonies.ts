@@ -193,7 +193,7 @@ class Harmonies implements HarmoniesGame {
 
 	private updateColoredTokensOnCentralBoard(hole: number | string, tokens: Array<ColoredToken>) {
 		this.emptyHole(hole)
-		log('tokens',  tokens)
+		log('tokens', tokens)
 		tokens.forEach((token, i) => {
 			log('forEach', hole, i, token)
 			const div = $(`hole-${hole}-token-${i + 1}`)
@@ -363,6 +363,11 @@ class Harmonies implements HarmoniesGame {
 
 	private onEnteringChooseAction(args: EnteringChooseActionArgs) {
 		this.resetClientActionData()
+		if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
+			this.playerTables[this.getPlayerId()].selectCardFromId(parseInt(Object.keys(args.placeAnimalCubeArgs)[0]))
+		} else {
+			this.playerTables[this.getPlayerId()].unselectAll()
+		}
 	}
 
 	// onLeavingState: this method is called each time we are leaving a game state.
