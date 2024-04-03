@@ -90,7 +90,7 @@ trait ActionTrait {
         }
 
         $cube = $this->getLastCubeOnCard($fromCardId);
-        self::dump('*******************getLastCubeOnCard', $cube);
+        //self::dump('*******************getLastCubeOnCard', $cube);
         if ($cube) {
             $this->moveCubeToHex($cube, $toHexId, $fromCardId);
         } else {

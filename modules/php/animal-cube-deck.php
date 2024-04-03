@@ -52,8 +52,8 @@ trait AnimalCubeDeckTrait {
 
     public function getLastCubeOnCard($cardId) {
         $lastCube = $this->animalCubes->getCardOnTop("card_" . $cardId);
-        self::dump('******************lastCube*', $lastCube);
-        return $lastCube ? array_pop($lastCube) : null;
+        //self::dump('******************lastCube*', $lastCube);
+        return $lastCube ? $lastCube["id"] : null;
     }
 
     public function getAnimalCubesOnCards() {
