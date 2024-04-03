@@ -44,9 +44,17 @@ class GameTest extends GameTestBase { // this is your game class defined in ggg.
         $this->displayResult(__FUNCTION__, $equal, $result);
         
     }*/
+    function testMaterialCardDescription() {
+
+        foreach ($this->ANIMAL_CARDS[1] as $i => $animalCardInfo) {
+            $this->systemAssertTrue("No position 0 in card of type " . $i, $animalCardInfo->pattern[0]->position === 0);
+            $this->systemAssertTrue("No cube allowed in card of type " . $i, $this->array_some($animalCardInfo->pattern, fn ($patHex) => $patHex->allowCube === true));
+        }
+    }
 
     function testAll() {
         $this->testYourTestNameColorsAllowed();
+        $this->testMaterialCardDescription();
     }
 }
 
