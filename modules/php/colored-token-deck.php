@@ -242,6 +242,10 @@ trait ColoredTokenDeckTrait {
         return $byHole;
     }
 
+    public function getRemainingTokensInDeck(){
+        return intval($this->coloredTokens->countCardInLocation("deck"));
+    }
+
     /**
      * move selected card to player hand, discard other selected card from the hand and empty pick$playerId.
      */

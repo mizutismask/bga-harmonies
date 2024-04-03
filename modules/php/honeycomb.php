@@ -80,6 +80,7 @@ trait HoneycombTrait {
             //self::dump('******************$rotatedPatterns*', $rotatedPatterns);
             foreach ($rotatedPatterns as $patternRotation) {
                 $allHexesValid = true;
+
                 $previousCheckedHex = null;
                 //self::dump('******************$patternRotation*', $patternRotation);
                 foreach ($patternRotation as $hexPattern) {

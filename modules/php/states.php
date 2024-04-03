@@ -26,7 +26,7 @@ trait StateTrait {
     function hasReachedEndOfGameRequirements($playerId): bool {
         $playersIds = $this->getPlayersIds();
 
-        $end = $this->has2OrLessEmptyHexes($playerId);
+        $end = $this->has2OrLessEmptyHexes($playerId) || $this->getRemainingTokensInDeck() < 3;
         if ($end && intval(self::getGameStateValue(LAST_TURN) == 0)) {
             self::setGameStateValue(LAST_TURN, $this->getLastPlayer()); //we play until the last player to finish the round
             if (!$this->isLastPlayer($playerId)) {
@@ -99,7 +99,7 @@ trait StateTrait {
                         $score = $this->calculateTreePoints($board);
                         break;
                     case MOUTAINS:
-                        $score = $this->calculateMountainsPoints($board); 
+                        $score = $this->calculateMountainsPoints($board);
                         break;
                     case FIELDS:
                         $score = $this->calculateFieldsPoints($board);
