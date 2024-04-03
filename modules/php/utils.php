@@ -7,16 +7,20 @@ trait UtilTrait {
     //////////////////////////////////////////////////////////////////////////////
     //////////// Utility functions
     ////////////
-    /*function getColorName(int $color) {
-        switch ($color) {
-            case BLUE:
-                return clienttranslate("blue");
-            case YELLOW:
-                return clienttranslate("yellow");
-            case RED:
-                return clienttranslate("red");
+    function getColorName(string $goalType) {
+        switch ($goalType) {
+            case WATER:
+                return clienttranslate("water");
+            case FIELDS:
+                return clienttranslate("fields");
+            case BUILDINGS:
+                return clienttranslate("buildings");
+            case TREES:
+                return clienttranslate("trees");
+            case MOUTAINS:
+                return clienttranslate("mountains");
         }
-    }*/
+    }
 
     function array_find(array $array, callable $fn) {
         foreach ($array as $value) {
@@ -123,8 +127,8 @@ trait UtilTrait {
     function updateChosenToken(string $placedTokenId, bool $done) {
         $gvar = $this->getGlobalVariable(TOKENS_IN_HOLE, true);
         foreach ($gvar as &$token) {
-            if($token["id"]==$placedTokenId){
-                $token["done"]=$done;
+            if ($token["id"] == $placedTokenId) {
+                $token["done"] = $done;
             }
         }
         $this->setGlobalVariable(TOKENS_IN_HOLE, $gvar);

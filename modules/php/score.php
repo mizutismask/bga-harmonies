@@ -7,7 +7,7 @@ trait ScoreTrait {
     public function calculateTreePoints($board) {
         $total = 0;
         foreach ($board as $hex) {
-            $tokens = $this->getTokensAt($hex);
+            $tokens = $hex["tokens"];
             $topToken = array_shift($tokens);
             if ($topToken && $topToken->type_arg == GREEN) {
                 $total += self::$treePoints[count($tokens)];
@@ -206,13 +206,13 @@ trait ScoreTrait {
         return $topToken && $topToken->type_arg == RED && count($tokensInHex) == 2;
     }
 
-    public function calculateAnimalCardsPoints() {
+    public function calculateAnimalCardsPoints($playerId) {
         $total = 0;
-        $cards = $this->getAnimalCardsToScore();
+        $cards = $this->getAnimalCardsToScore($playerId);
         foreach ($cards as $card) {
-            $cubesCount = count($this->getCubesOnCard($card));
+            $cubesCount = count($this->getCubesOnCard($card->id));
             if ($cubesCount < count($card->pointLocations)) {
-                $cardScore = $card->pointLocations[$cubesCount + 1];
+                $cardScore = $card->pointLocations[$cubesCount];
                 $total += $cardScore;
             }
         }

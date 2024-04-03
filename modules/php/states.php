@@ -111,7 +111,7 @@ trait StateTrait {
                         $score = $this->calculateWaterPoints($board);
                         break;
                     case ANIMAL_CARDS:
-                        $score = $this->calculateAnimalCardsPoints($board);
+                        $score = $this->calculateAnimalCardsPoints($playerId);
                         break;
 
                     default:
@@ -120,7 +120,7 @@ trait StateTrait {
                 }
                 self::dump('*******************calculatedGoalPoints', compact("goal", "score", "playerId"));
                 self::incStat($score, $goal["stat"], $playerId);
-                $this->incPlayerScore($playerId, $score, clienttranslate('${player_name} scores ${delta} points with ${source}'), ["color" => $this->getColorName($goal->color), "source" => $goal["nameTr"], "scoreType" => $this->getScoreType($goal[["type"]], $playerId)]);
+                $this->incPlayerScore($playerId, $score, clienttranslate('${player_name} scores ${delta} points with ${source}'), ["color" => $this->getColorName($goal["type"]), "source" => $goal["nameTr"], "scoreType" => $this->getScoreType($goal["type"], $playerId)]);
                 $roundScores[$playerId] += $score;
                 $totalScore[$playerId] += $score;
             }
@@ -131,5 +131,16 @@ trait StateTrait {
         } else {
             $this->gamestate->nextState('endGame');
         }
+    }
+
+    function getScoresTypes() {
+        return [
+            ["type" => TREES, "stat" => "game_score_trees", "nameTr" => clienttranslate("trees")],
+            ["type" => MOUTAINS, "stat" => "game_score_mountains", "nameTr" => clienttranslate("mountains")],
+            ["type" => FIELDS, "stat" => "game_score_fields", "nameTr" => clienttranslate("fields")],
+            ["type" => BUILDINGS, "stat" => "game_score_buildings", "nameTr" => clienttranslate("buildings")],
+            ["type" => WATER, "stat" => "game_score_water", "nameTr" => clienttranslate("water")],
+            ["type" => ANIMAL_CARDS, "stat" => "game_animal_cards_score", "nameTr" => clienttranslate("animal cards")],
+        ];
     }
 }

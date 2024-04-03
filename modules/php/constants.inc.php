@@ -83,13 +83,3 @@ const FIELDS = "FIELDS";
 const BUILDINGS = "BUILDINGS";
 const WATER = "WATER";
 const ANIMAL_CARDS = "ANIMAL_CARDS";
-function getScoresTypes() {
-    return [
-        ["type" => TREES, "stat" => "game_score_trees", "nameTr" => clienttranslate("trees")],
-        ["type" => MOUTAINS, "stat" => "game_score_mountains", "nameTr" => clienttranslate("mountains")],
-        ["type" => FIELDS, "stat" => "game_score_fields", "nameTr" => clienttranslate("fields")],
-        ["type" => BUILDINGS, "stat" => "game_score_buildings", "nameTr" => clienttranslate("buildings")],
-        ["type" => WATER, "stat" => "game_score_water", "nameTr" => clienttranslate("water")],
-        ["type" => ANIMAL_CARDS, "stat" => "game_animal_cards_score", "nameTr" => clienttranslate("animal cards")],
-    ];
-}
