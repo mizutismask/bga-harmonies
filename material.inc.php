@@ -29,5 +29,6 @@ $this->ANIMAL_CARDS = [
     4 => new AnimalCardInfo([16, 10, 5], [new PatternHex([GREEN], 0, false), new PatternHex([GREEN], 3, false), new PatternHex([BLUE],  3, true)]),
     5 => new AnimalCardInfo([15, 10, 6, 4, 2], [new PatternHex([GREEN], 0, false),  new PatternHex([BLUE], 3, true)]),
     6 => new AnimalCardInfo([13, 8, 4, 2], [new PatternHex([RED, BUILDING,], 0,  false), new PatternHex([BLUE], 3, true)]),
+    9 => new AnimalCardInfo([17, 10, 5], [new PatternHex([YELLOW], 0,  false), new PatternHex([RED, BUILDING], 2, true), new PatternHex([YELLOW], 3, false)]),
   ]
 ];

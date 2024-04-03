@@ -76,36 +76,41 @@ trait HoneycombTrait {
     function getPossibleLocationsForCubeInPattern($board, AnimalCardInfo $card, $convertNames = false, $playerId = "") {
         $possible = [];
         foreach ($board as $hex) {
-            $allHexesValid = true;
-            $previousCheckedHex = null;
-            foreach ($card->pattern as $hexPattern) {
-                //self::dump('******************$hexPattern*', $hexPattern);
-                if ($hexPattern->position == 0) {
-                    $previousCheckedHex = $hex;
-                } else {
-                    $previousCheckedHex = $this->getAdjacentHexCoordinate($previousCheckedHex, $hexPattern->position);
+            $rotatedPatterns = $this->getPatternRotations($card->pattern);
+            //self::dump('******************$rotatedPatterns*', $rotatedPatterns);
+            foreach ($rotatedPatterns as $patternRotation) {
+                $allHexesValid = true;
+                $previousCheckedHex = null;
+                //self::dump('******************$patternRotation*', $patternRotation);
+                foreach ($patternRotation as $hexPattern) {
+                    //self::dump('******************$hexPattern*', $hexPattern);
+                    if ($hexPattern->position == 0) {
+                        $previousCheckedHex = $hex;
+                    } else {
+                        $previousCheckedHex = $this->getAdjacentHexCoordinate($previousCheckedHex, $hexPattern->position);
+                    }
+                    $expected = $this->areExpectedTokensInHex($board, $previousCheckedHex["col"], $previousCheckedHex["row"], $hexPattern->colors);
+                    //self::dump('******************$expected*', $expected);
+                    $allHexesValid = $allHexesValid && $expected;
+                    if (!$allHexesValid) {
+                        break;
+                    }
                 }
-                $expected = $this->areExpectedTokensInHex($board, $previousCheckedHex["col"], $previousCheckedHex["row"], $hexPattern->colors);
-                //self::dump('******************$expected*', $expected);
-                $allHexesValid = $allHexesValid && $expected;
-                if (!$allHexesValid) {
-                    break;
+                if ($allHexesValid) {
+                    $cubeHex = $this->getCubeCoordinate($patternRotation, $hex);
+                    $possible[] = $convertNames ? $this->convertHexCoordsToName($cubeHex, $playerId) : $cubeHex;
                 }
-            }
-            if ($allHexesValid) {
-                $cubeHex = $this->getCubeCoordinate($card, $hex);
-                $possible[] = $convertNames ? $this->convertHexCoordsToName($cubeHex, $playerId) : $cubeHex;
             }
         }
         return $possible;
     }
 
-    function getCubeCoordinate($card, $firstHexInPattern) {
+    function getCubeCoordinate($patternRotation, $firstHexInPattern) {
         $found = false;
         $i = 0;
         $hex = null;
-        while (!$found && $i < count($card->pattern)) {
-            $pattern = $card->pattern[$i];
+        while (!$found && $i < count($patternRotation)) {
+            $pattern = $patternRotation[$i];
             if ($pattern->position == 0) {
                 $hex = $firstHexInPattern;
             } else {
@@ -115,7 +120,7 @@ trait HoneycombTrait {
             $i++;
         }
         if (!$found) {
-            throw new BgaSystemException("No cube position defined in card " . $card);
+            throw new BgaSystemException("No cube position defined in card");
         }
         return $hex;
     }
@@ -156,6 +161,29 @@ trait HoneycombTrait {
         return  ["col" => $newCol, "row" => $newRow];
     }
 
+    function getPatternRotations(array $patternHexList) {
+        $rotations = [];
+        $numHexes = count($patternHexList);
+
+        for ($rotation = 0; $rotation < 6; $rotation++) {
+            $rotatedHexes = [];
+            for ($i = 0; $i < $numHexes; $i++) {
+                $patternHex = $patternHexList[$i];
+                if ($patternHex->position == 0) {
+                    $rotatedHexes[] = $patternHex;
+                } else {
+                    $newPosition = ($patternHex->position + $rotation) % 6;
+                    if ($newPosition == 0) {
+                        $newPosition = 6;
+                    }
+                    $rotatedHexes[] = new PatternHex($patternHex->colors, $newPosition, $patternHex->allowCube);
+                }
+            }
+            $rotations[] = $rotatedHexes;
+        }
+
+        return $rotations;
+    }
 
     function areExpectedTokensInHex($board, int $col, int $row, $expectedColors) {
         $valid = false;

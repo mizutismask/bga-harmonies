@@ -207,6 +207,27 @@ class HoneyCombTest extends GameTestBase { // this is your game class defined in
         $this->displayResult(__FUNCTION__, $equal, count($result));
     }
 
+    function testGetPossibleLocationsForCubeInRotatedPatternCard5() {
+
+        $board = $this->initBoard();
+
+        $this->setTokensIn($board, 0, 0, [BLUE]);
+        $this->setTokensIn($board, 1, 0, [GREEN]);
+
+        $result = $this->getPossibleLocationsForCubeInPattern($board, $this->ANIMAL_CARDS[1][5]);
+
+        $equal = $this->containsHex($result, 0, 0) == true;
+        $this->displayResult(__FUNCTION__, $equal, $result);
+
+        $equal = count($result) == 1;
+        $this->displayResult(__FUNCTION__, $equal, count($result));
+    }
+
+    function testGetPatternRotations() {
+        $result = $this->getPatternRotations($this->ANIMAL_CARDS[1][9]->pattern);
+        //echo  json_encode($result);
+    }
+
     function testGetAdjacentHexCoordinate() {
 
         $this->expectHexResult(
@@ -260,6 +281,8 @@ class HoneyCombTest extends GameTestBase { // this is your game class defined in
         $this->testGetPossibleLocationsForCubeInPatternCard4();
         $this->testGetNeighboursOnTopLeft();
         $this->testGetAdjacentHexCoordinate();
+        $this->testGetPatternRotations();
+        $this->testGetPossibleLocationsForCubeInRotatedPatternCard5();
     }
 }
 
