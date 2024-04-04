@@ -148,7 +148,9 @@ class Harmonies implements HarmoniesGame {
 
 	public takeCard(card: AnimalCard) {
 		if ((this as any).isCurrentPlayerActive()) {
-			this.takeAction('takeAnimalCard', { cardId: card.id })
+			if (this.river.riverStock.getCardElement(card).classList.contains(this.river.riverStock.getSelectableCardClass())) {
+				this.takeAction('takeAnimalCard', { cardId: card.id })
+			}
 		}
 	}
 
@@ -362,11 +364,24 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	private onEnteringChooseAction(args: EnteringChooseActionArgs) {
-		this.resetClientActionData()
-		if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
-			this.playerTables[this.getPlayerId()].selectCardFromId(parseInt(Object.keys(args.placeAnimalCubeArgs)[0]))
+		if ((this as any).isCurrentPlayerActive()) {
+			this.resetClientActionData()
+			if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
+				this.playerTables[this.getPlayerId()].selectCardFromId(
+					parseInt(Object.keys(args.placeAnimalCubeArgs)[0])
+				)
+			} else {
+				this.playerTables[this.getPlayerId()].unselectAll()
+			}
+
+			if (args.canTakeAnimalCard) {
+				this.river.setSelectionMode('single')
+				this.river.setSelectableCards(this.river.getCards())
+			} else {
+				this.river.setSelectionMode('none')
+			}
 		} else {
-			this.playerTables[this.getPlayerId()].unselectAll()
+			this.river.setSelectionMode('none')
 		}
 	}
 

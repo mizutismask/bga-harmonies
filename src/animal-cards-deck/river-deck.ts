@@ -38,4 +38,12 @@ class RiverDeck {
     public setSelectionMode(mode: CardSelectionMode) {
         this.riverStock.setSelectionMode(mode);
     }
+
+    public setSelectableCards(cards: AnimalCard[]) {
+        this.riverStock.setSelectableCards(cards);
+    }
+
+    public getCards() {
+        return this.riverStock.getCards();
+    }
 }

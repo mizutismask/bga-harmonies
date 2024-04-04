@@ -37,7 +37,6 @@ trait AnimalCardDeckTrait {
                     'from' => MATERIAL_LOCATION_DECK,
                     'to' => MATERIAL_LOCATION_RIVER,
                     'material' => [$newCard],
-                    'spot' => $i,
                 ]);
             }
         }

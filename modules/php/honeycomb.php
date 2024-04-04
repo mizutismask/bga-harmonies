@@ -99,11 +99,11 @@ trait HoneycombTrait {
                 }
                 if ($allHexesValid) {
                     $cubeHex = $this->getCubeCoordinate($patternRotation, $hex);
-                    $possible[] = $convertNames ? $this->convertHexCoordsToName($cubeHex, $playerId) : $cubeHex;
+                    $possible[] = $convertNames ? $this->convertHexCoordsToName($cubeHex, $playerId) : $cubeHex;//todo check if unique necessary when not converting names
                 }
             }
         }
-        return $possible;
+        return array_unique($possible);
     }
 
     function getCubeCoordinate($patternRotation, $firstHexInPattern) {
