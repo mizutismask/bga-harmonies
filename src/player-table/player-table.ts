@@ -61,26 +61,15 @@ class PlayerTable {
 					evt.stopPropagation()
 				}
 			})
-
-			const doneHtml = `
-				<div id="done-${player.id}" class="hrm-player-done"></div>
-        	`
-			dojo.place(doneHtml, `player-table-${player.id}`)
-			this.doneStock = new LineStock<AnimalCard>(this.game.cardsManager, $('done-' + player.id), {
-				center: true,
-				gap: '7px',
-				direction: 'row',
-				wrap: 'nowrap'
-			})
-			this.doneStock.setSelectionMode('none')
-			this.doneStock.addCards(doneAnimalCards)
 		}
+
+		this.initDoneStock(player, doneAnimalCards)
+
 		Object.keys(tokensOnBoard).forEach((cell) => {
 			tokensOnBoard[cell].forEach((token) => this.createTokenOnBoard(token))
 		})
 
 		if (animalCubesOnBoard) {
-			//log('animalCubesOnBoard', animalCubesOnBoard)
 			Object.keys(animalCubesOnBoard).forEach((cell) => {
 				animalCubesOnBoard[cell].forEach((cube) => this.createCubeOnBoard(cube))
 			})
@@ -91,6 +80,21 @@ class PlayerTable {
         `
 		dojo.place(handHtml, `player-table-${player.id}`, 'first')
 		this.initHand(player, cards)
+	}
+
+	private initDoneStock(player: HarmoniesPlayer, doneAnimalCards: Array<AnimalCard>) {
+		const doneHtml = `
+			<div id="done-${player.id}" class="hrm-player-done"></div>
+		`
+		dojo.place(doneHtml, `player-table-${player.id}`)
+		this.doneStock = new LineStock<AnimalCard>(this.game.cardsManager, $('done-' + player.id), {
+			center: true,
+			gap: '7px',
+			direction: 'row',
+			wrap: 'nowrap'
+		})
+		this.doneStock.setSelectionMode('none')
+		this.doneStock.addCards(doneAnimalCards)
 	}
 
 	private initHand(player: HarmoniesPlayer, cards: Array<AnimalCard>) {
