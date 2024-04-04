@@ -229,7 +229,8 @@ class Harmonies implements HarmoniesGame {
 			this.gamedatas.hexes,
 			this.gamedatas.players[player.id].boardAnimalCards,
 			this.gamedatas.players[player.id].tokensOnBoard,
-			this.gamedatas.players[player.id].animalCubesOnBoard
+			this.gamedatas.players[player.id].animalCubesOnBoard,
+			this.gamedatas.players[player.id].doneAnimalCards
 		)
 	}
 
@@ -1048,6 +1049,10 @@ class Harmonies implements HarmoniesGame {
 			case 'RIVER':
 				//from river to player hand
 				this.playerTables[notif.args.toArg].addCard(card)
+				break
+			case 'HAND':
+				//from player hand to player done
+				this.playerTables[notif.args.toArg].addDoneCard(card)
 				break
 
 			default:

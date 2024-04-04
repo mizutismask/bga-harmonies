@@ -28,6 +28,7 @@ interface HarmoniesPlayer extends Player {
 	boardAnimalCards: Array<AnimalCard>
 	tokensOnBoard: { [hexId: string]: Array<ColoredToken> }
 	animalCubesOnBoard: { [hexId: string]: Array<AnimalCube> }
+	doneAnimalCards: Array<AnimalCard>
 }
 
 type Coordinates = { col: number; row: number }
@@ -107,7 +108,7 @@ interface NotifScorePointArgs {
 interface NotifMaterialMove {
 	type: 'CARD' | 'TOKEN' | 'FIRST_PLAYER_TOKEN' | 'CUBE'
 	from: 'HAND' | 'DECK' | 'STOCK' | 'RIVER'
-	to: 'HAND' | 'DECK' | 'STOCK' | 'CARD' | 'HEX'| 'HOLE'
+	to: 'HAND' | 'DECK' | 'STOCK' | 'CARD' | 'HEX' | 'HOLE' | 'DONE'
 	fromArg: number | string
 	toArg: number | string
 	material: Array<any | string> //elements (cards for exemple), or tokenIds

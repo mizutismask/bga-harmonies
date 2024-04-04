@@ -3,6 +3,7 @@
  */
 class PlayerTable {
 	private handStock: PlayerBoardDeck
+	private doneStock: LineStock<AnimalCard>
 
 	constructor(
 		private game: HarmoniesGame,
@@ -11,7 +12,8 @@ class PlayerTable {
 		hexes: Array<Coordinates>,
 		cards: Array<AnimalCard>,
 		tokensOnBoard: { [hexId: string]: Array<ColoredToken> },
-		animalCubesOnBoard: { [hexId: string]: Array<AnimalCube> }
+		animalCubesOnBoard: { [hexId: string]: Array<AnimalCube> },
+		doneAnimalCards: Array<AnimalCard>
 	) {
 		const isMyTable = player.id === game.getPlayerId().toString()
 		const ownClass = isMyTable ? 'own' : ''
@@ -59,6 +61,19 @@ class PlayerTable {
 					evt.stopPropagation()
 				}
 			})
+
+			const doneHtml = `
+				<div id="done-${player.id}" class="hrm-player-done"></div>
+        	`
+			dojo.place(doneHtml, `player-table-${player.id}`)
+			this.doneStock = new LineStock<AnimalCard>(this.game.cardsManager, $('done-' + player.id), {
+				center: true,
+				gap: '7px',
+				direction: 'row',
+				wrap: 'nowrap'
+			})
+			this.doneStock.setSelectionMode('none')
+			this.doneStock.addCards(doneAnimalCards)
 		}
 		Object.keys(tokensOnBoard).forEach((cell) => {
 			tokensOnBoard[cell].forEach((token) => this.createTokenOnBoard(token))
@@ -84,6 +99,10 @@ class PlayerTable {
 
 	public addCard(card: AnimalCard) {
 		this.handStock.addCard(card)
+	}
+
+	public addDoneCard(card: AnimalCard) {
+		this.doneStock.addCard(card)
 	}
 
 	public selectCardFromId(cardId: number) {
@@ -116,8 +135,6 @@ class PlayerTable {
 	public unselectAll() {
 		this.handStock.unselectAll()
 	}
-
-	
 
 	public getAnimalCardSelection() {
 		return this.handStock.getSelection()

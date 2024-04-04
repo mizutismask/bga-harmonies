@@ -90,12 +90,11 @@ trait ActionTrait {
             throw new BgaUserException(self::_("You have to respect the pattern of the card"));
         }
 
-        $cube = $this->getLastCubeOnCard($fromCardId);
         //self::dump('*******************getLastCubeOnCard', $cube);
-        if ($cube) {
-            $this->moveCubeToHex($cube, $toHexId, $fromCardId);
-        } else {
-            $this->moveAnimalCardToFinishedCards();
+        $this->moveCubeToHex($this->getLastCubeOnCard($fromCardId), $toHexId, $fromCardId);
+        $cube = $this->getLastCubeOnCard($fromCardId);
+        if (!$cube) {
+            $this->moveAnimalCardToFinishedCards($fromCardId);
         }
         $this->gamestate->nextState('continue');
     }

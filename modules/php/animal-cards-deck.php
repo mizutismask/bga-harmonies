@@ -113,11 +113,15 @@ trait AnimalCardDeckTrait {
 
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
         self::incStat(1, "game_animal_cards_finished", $playerId);
-        $this->notifyAllPlayers('cardMoved', clienttranslate('${player_name} finishes an animal card'), [
+
+        $this->notifyAllPlayers('materialMove', clienttranslate('${player_name} finishes an animal card'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
-            'card' => [$card],
-            'moveType' => "done",
+            'type' => MATERIAL_TYPE_CARD,
+            'from' => MATERIAL_LOCATION_HAND,
+            'to' => MATERIAL_LOCATION_DONE,
+            'toArg' => $playerId,
+            'material' => [$card],
         ]);
     }
 
