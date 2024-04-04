@@ -58,13 +58,13 @@ class CardsManager extends CardManager<AnimalCard> {
 	public getTooltip(card: AnimalCard, cardUniqueId: number) {
 		let tooltip = `
 		<div class="xpd-city-zoom-wrapper">
-			<div id="xpd-city-${cardUniqueId}-zoom" class="xpd-city-zoom" style="${getBackgroundInlineStyleForHarmoniesCard(
-			card
-		)}"></div>
 			<div class="xpd-city-zoom-desc-wrapper">
-				<div class="xpd-city">${dojo.string.substitute(_('${to}'), {
-					to: 'replace'
-				})}</div>
+				<div class="xpd-city">${dojo.string.substitute(
+					_('Gain those points if you put a cube on this exact pattern several times: ${points}'),
+					{
+						points: card.pointLocations.reverse().join(', ')
+					}
+				)}</div>
 			</div>
 		</div>`
 		return tooltip
