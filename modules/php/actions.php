@@ -68,7 +68,8 @@ trait ActionTrait {
         if ($card->location != "river") {
             throw new BgaUserException(self::_("This card is not available in the river"));
         }
-        self::setGameStateValue(EMPTIED_RIVER_SLOT,$card->location_arg);
+        self::setGameStateValue(EMPTIED_RIVER_SLOT, $card->location_arg);
+        self::setGameStateValue(TOOK_ANIMAL_CARD, 1);
         $this->moveAnimalCardToPlayerBoard($cardId);
         $this->gamestate->nextState('continue');
     }
@@ -79,13 +80,13 @@ trait ActionTrait {
         $args = $this->argChooseAction();
 
         if (!$args['canPlaceAnimalCube']) {
-           throw new BgaUserException(self::_("You can’t place an animal cube"));
+            throw new BgaUserException(self::_("You can’t place an animal cube"));
         }
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($fromCardId));
         if (!$this->startsWith($card->location, "board")) {
             throw new BgaUserException(self::_("This card is not on your board"));
         }
-        if(!isset($args["placeAnimalCubeArgs"][$fromCardId]) || !in_array($toHexId, $args["placeAnimalCubeArgs"][$fromCardId])){
+        if (!isset($args["placeAnimalCubeArgs"][$fromCardId]) || !in_array($toHexId, $args["placeAnimalCubeArgs"][$fromCardId])) {
             throw new BgaUserException(self::_("You have to respect the pattern of the card"));
         }
 
