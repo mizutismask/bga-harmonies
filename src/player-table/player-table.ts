@@ -25,7 +25,7 @@ class PlayerTable {
 						<div id="hex-grid-container-${player.id}" class="hex-grid-container"></div>
 					</div>
 				</div>
-				<span class="player-name">${player.name}</span>
+				<span class="player-name" style="color:#${player.color}">${player.name}</span>
             </div>
         `
 		dojo.place(html, 'player-tables')
