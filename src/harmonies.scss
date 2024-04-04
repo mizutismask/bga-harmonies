@@ -86,6 +86,11 @@ html {
 	//border: 2px solid red;
 }
 
+.place-token-button{
+	&.selected{
+		box-shadow: 0 0 4px 4px greenyellow;
+	}
+}
 .token-button {
 	width: 30px;
 	height: 27px;

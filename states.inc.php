@@ -85,10 +85,8 @@ $playerActionsGameStates = [
 
     ST_PLAYER_CHOOSE_ACTION => [
         "name" => "chooseAction",
-        "description" => clienttranslate('${actplayer} must take/place tokens or take an animal card or place an animal cube'),
-        "descriptionmyturn" => clienttranslate('${you} must take/place tokens or take an animal card or place an animal cube'),
-        "descriptionOptionalActions" => clienttranslate('${actplayer} can take an animal card or place an animal cube'),
-        "descriptionmyturnOptionalActions" => clienttranslate('${you} can take an animal card or place an animal cube'),
+        "description" => clienttranslate('${actplayer} must choose an action'),
+        "descriptionmyturn" => clienttranslate('${you} must choose an action'),
         "type" => "activeplayer",
         "args" => "argChooseAction",
         "possibleactions" => [
