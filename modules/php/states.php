@@ -111,7 +111,15 @@ trait StateTrait {
                         $score = $this->calculateWaterPoints($board);
                         break;
                     case ANIMAL_CARDS:
-                        $score = $this->calculateAnimalCardsPoints($playerId);
+                        $cardsPoints = $this->calculateAnimalCardsPoints($playerId);
+                        $this->setGlobalVariable(CARDS_POINTS_FOR_PLAYER.$playerId, $cardsPoints);
+                        $score = array_sum($cardsPoints);
+                        foreach ($cardsPoints as $i=>$cardScore) {
+                            $index = $i+1;
+                            $scoreType = "score-card-$index-$playerId";
+                            $this->incPlayerScore($playerId, $cardScore, "", ["scoreType" => $scoreType]);
+                        }
+                        $this->notifyPoints($playerId, $score, "", ["scoreType" => "score-total-2-$playerId"]);
                         break;
 
                     default:

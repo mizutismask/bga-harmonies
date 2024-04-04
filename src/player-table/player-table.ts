@@ -125,7 +125,6 @@ class PlayerTable {
 	}
 
 	public createCubeOnBoard(cube: AnimalCube) {
-		log('createCubeOnBoard', cube)
 		let html = `
 			<div class="animal-cube cube"></div>
         `

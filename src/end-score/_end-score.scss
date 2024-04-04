@@ -25,8 +25,8 @@
 			position: relative;
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
-			width: 25%;
-			padding: 7px;
+			width: 23%;
+			padding: 1%;
 			justify-items: center;
 			.player-name {
 				grid-column: 1 / span 2;

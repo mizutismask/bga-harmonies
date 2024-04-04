@@ -38,6 +38,9 @@ const EMPTIED_HOLE = "EMPTIED_HOLE";
 const EMPTIED_RIVER_SLOT = "EMPTIED_RIVER_SLOT";
 const TOOK_ANIMAL_CARD = "TOOK_ANIMAL_CARD";
 
+//custom globals
+const CARDS_POINTS_FOR_PLAYER = "CARD_POINTS_";
+
 /**
  * Options
  */

@@ -178,6 +178,9 @@ class Harmonies extends Table {
             $player['boardAnimalCards'] = $this->getAnimalCardsOnPlayerBoard($playerId);
             $player['tokensOnBoard'] = $this->getTokensForCompleteBoardByHex($playerId);
             $player['animalCubesOnBoard'] = $this->getAnimalCubesOnPlayerBoard($playerId);
+            if ($isEnd) {
+                $player['scores'] = $this->getPlayerScoreBoard($playerId, $player);
+            }
         }
 
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
@@ -316,18 +319,23 @@ class Harmonies extends Table {
         self::warn("upgradeTableDb complete: from_version=$from_version");
     }
 
-    function notifyMaterialMove($material, $msg = "") {
+    function getPlayerScoreBoard($playerId, $player) {
+        $board = [];
+        $board["score-land-4-$playerId"] = intval(self::getStat("game_score_trees", $playerId));
+        $board["score-land-2-$playerId"] = intval(self::getStat("game_score_mountains", $playerId));
+        $board["score-land-5-$playerId"] = intval(self::getStat("game_score_fields", $playerId));
+        $board["score-land-6-$playerId"] = intval(self::getStat("game_score_buildings", $playerId));
+        $board["score-land-1-$playerId"] = intval(self::getStat("game_score_water", $playerId));
 
-        $this->notifyAllPlayers('materialMove', $msg, [
-            'type' => MATERIAL_TYPE_CARD,
-            'material' => is_array($material) ? $material : [$material],
-            'from' => MATERIAL_LOCATION_DECK,
-            'to' => MATERIAL_LOCATION_HAND,
-            'toArg' => $this->getMostlyActivePlayerId(),
-        ]);
-    }
+        $cardPoints = $this->getGlobalVariable(CARDS_POINTS_FOR_PLAYER . $playerId);
+        foreach ($cardPoints as $i => $points) {
+            $index = $i+1;
+            $board["score-card-$index-$playerId"] =  $points;
+        }
 
-    function toto() {
-        $this->notifyMaterialMove("token");
+        $board["score-total-1-$playerId"] = $this->calculateLandTotalFromStats($playerId);
+        $board["score-total-2-$playerId"] = intval(self::getStat("game_animal_cards_score", $playerId));
+        $board["score-total-3-$playerId"] = intval($player['score']);
+        return $board;
     }
 }

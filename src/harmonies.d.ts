@@ -29,6 +29,7 @@ interface HarmoniesPlayer extends Player {
 	tokensOnBoard: { [hexId: string]: Array<ColoredToken> }
 	animalCubesOnBoard: { [hexId: string]: Array<AnimalCube> }
 	doneAnimalCards: Array<AnimalCard>
+	scores?: { [scoreType: string]: number }
 }
 
 type Coordinates = { col: number; row: number }
