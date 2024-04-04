@@ -110,7 +110,7 @@ class Harmonies implements HarmoniesGame {
 		if (this.getPlayersCount() > 1) {
 			for (let i = 1; i <= 5; i++) {
 				dojo.place(
-					`<div id="hole-${i}" class="central-board-hole hole-${i}" data-hole="${i}">
+					`<div id="hole-${i}" class="central-board-hole hole-${i}" data-hole="${i}" title="${_("Take those tokens to reproduce card patterns on your board")}">
 						<div id="hole-${i}-token-1" class="colored-token hole-token hole-token-1"></div>
 						<div id="hole-${i}-token-2" class="colored-token hole-token hole-token-2"></div>
 						<div id="hole-${i}-token-3" class="colored-token hole-token hole-token-3"></div>
@@ -120,7 +120,7 @@ class Harmonies implements HarmoniesGame {
 				)
 				if (this.isNotSpectator()) {
 					dojo.connect($('hole-' + i), 'onclick', (evt) => {
-						if ((this as any).isCurrentPlayerActive()) {
+						if ((this as any).isCurrentPlayerActive() && $("central-board").classList.contains("canTakeTokens")) {
 							this.takeAction('takeTokens', { hole: evt.currentTarget.dataset.hole })
 						}
 					})
@@ -148,7 +148,11 @@ class Harmonies implements HarmoniesGame {
 
 	public takeCard(card: AnimalCard) {
 		if ((this as any).isCurrentPlayerActive()) {
-			if (this.river.riverStock.getCardElement(card).classList.contains(this.river.riverStock.getSelectableCardClass())) {
+			if (
+				this.river.riverStock
+					.getCardElement(card)
+					.classList.contains(this.river.riverStock.getSelectableCardClass())
+			) {
 				this.takeAction('takeAnimalCard', { cardId: card.id })
 			}
 		}
@@ -367,6 +371,7 @@ class Harmonies implements HarmoniesGame {
 	private onEnteringChooseAction(args: EnteringChooseActionArgs) {
 		if ((this as any).isCurrentPlayerActive()) {
 			this.resetClientActionData()
+
 			if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
 				this.playerTables[this.getPlayerId()].selectCardFromId(
 					parseInt(Object.keys(args.placeAnimalCubeArgs)[0])
@@ -381,8 +386,11 @@ class Harmonies implements HarmoniesGame {
 			} else {
 				this.river.setSelectionMode('none')
 			}
+
+			$('central-board').classList.toggle('canTakeTokens', args.canTakeTokens)
 		} else {
 			this.river.setSelectionMode('none')
+			$('central-board').classList.remove('canTakeTokens')
 		}
 	}
 
