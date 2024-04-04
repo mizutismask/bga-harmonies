@@ -110,7 +110,7 @@ trait ScoreTrait {
                 if ($distance > $maxDistance) {
                     $maxDistance = $distance;
                 }
-                echo "longest" . $path[0]["col"] . "_" . $path[0]["row"]  . " to " . $path[1]["col"] . "_" . $path[1]["row"] . " = " . $path[2];
+                //echo "longest" . $path[0]["col"] . "_" . $path[0]["row"]  . " to " . $path[1]["col"] . "_" . $path[1]["row"] . " = " . $path[2];
             }
             $score = self::$riverPoints[min(6, $distance) - 1];
             for ($i = 6; $i < $distance; $i++) {

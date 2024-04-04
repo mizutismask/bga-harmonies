@@ -78,9 +78,9 @@ define('TOKENS_IN_HOLE', 'TOKENS_IN_HOLE'); //chosen colored tokens during manda
 */
 //define('STAT_POINTS_WITH_PLAYER_COMPLETED_DESTINATIONS', 'pointsWithPlayerCompletedDestinations');
 
-const TREES = "TREES";
-const MOUTAINS = "MOUTAINS";
-const FIELDS = "FIELDS";
-const BUILDINGS = "BUILDINGS";
-const WATER = "WATER";
-const ANIMAL_CARDS = "ANIMAL_CARDS";
+const TREES = GREEN;
+const MOUTAINS = GRAY;
+const FIELDS = YELLOW;
+const BUILDINGS = RED;
+const WATER = BLUE;
+const ANIMAL_CARDS = 10;

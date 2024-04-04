@@ -286,8 +286,8 @@ trait UtilTrait {
         ] + $messageArgs);
     }
 
-    function getScoreType($name, $playerId) {
-        return "${name}-${playerId}";
+    function getScoreName($name, $playerId) {
+        return "score-land-${name}-${playerId}";
     }
 
     function updatePlayer(int $playerId, String $field, int $newValue) {

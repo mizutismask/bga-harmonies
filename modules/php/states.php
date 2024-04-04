@@ -120,7 +120,9 @@ trait StateTrait {
                 }
                 self::dump('*******************calculatedGoalPoints', compact("goal", "score", "playerId"));
                 self::incStat($score, $goal["stat"], $playerId);
-                $this->incPlayerScore($playerId, $score, clienttranslate('${player_name} scores ${delta} points with ${source}'), ["color" => $this->getColorName($goal["type"]), "source" => $goal["nameTr"], "scoreType" => $this->getScoreType($goal["type"], $playerId)]);
+                if ($goal["type"] != ANIMAL_CARDS) {
+                    $this->incPlayerScore($playerId, $score, clienttranslate('${player_name} scores ${delta} points with ${source}'), ["color" => $this->getColorName($goal["type"]), "source" => $goal["nameTr"], "scoreType" => $this->getScoreName($goal["type"], $playerId)]);
+                }
                 $roundScores[$playerId] += $score;
                 $totalScore[$playerId] += $score;
             }

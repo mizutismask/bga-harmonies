@@ -110,7 +110,9 @@ class Harmonies implements HarmoniesGame {
 		if (this.getPlayersCount() > 1) {
 			for (let i = 1; i <= 5; i++) {
 				dojo.place(
-					`<div id="hole-${i}" class="central-board-hole hole-${i}" data-hole="${i}" title="${_('Take those tokens to reproduce card patterns on your board')}">
+					`<div id="hole-${i}" class="central-board-hole hole-${i}" data-hole="${i}" title="${_(
+						'Take those tokens to reproduce card patterns on your board'
+					)}">
 						<div id="hole-${i}-token-1" class="colored-token hole-token hole-token-1"></div>
 						<div id="hole-${i}-token-2" class="colored-token hole-token hole-token-2"></div>
 						<div id="hole-${i}-token-3" class="colored-token hole-token hole-token-3"></div>
@@ -351,6 +353,9 @@ class Harmonies implements HarmoniesGame {
 					const dataArgs = args.args as EnteringChooseActionArgs
 					this.onEnteringChooseAction(dataArgs)
 				}
+				break
+			case 'endScore':
+				this.onEnteringEndScore()
 				break
 		}
 
@@ -783,7 +788,8 @@ class Harmonies implements HarmoniesGame {
 	/**
 	 * Update player score.
 	 */
-	private setPoints(playerId: number, points: number) {
+	private setPoints(playerId: number, scoreType: string, points: number, delta: number) {
+		this.scoreBoard.updateScore(playerId, scoreType, delta)
 		;(this as any).scoreCtrl[playerId]?.toValue(points)
 	}
 
@@ -958,7 +964,8 @@ class Harmonies implements HarmoniesGame {
 	 * Update player score.
 	 */
 	notif_points(notif: Notif<NotifPointsArgs>) {
-		this.setPoints(notif.args.playerId, notif.args.points)
+		log('notif_points', notif)
+		this.setPoints(notif.args.playerId, notif.args.scoreType, notif.args.points, notif.args.delta)
 	}
 
 	/**
