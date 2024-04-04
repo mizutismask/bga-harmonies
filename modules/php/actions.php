@@ -53,7 +53,7 @@ trait ActionTrait {
             'hole' => $holeNumber,
         ]);
 
-        $this->gamestate->nextState('continue');
+        $this->continueOrEndTurn();
     }
 
     function takeAnimalCard($cardId) {
@@ -71,7 +71,7 @@ trait ActionTrait {
         self::setGameStateValue(EMPTIED_RIVER_SLOT, $card->location_arg);
         self::setGameStateValue(TOOK_ANIMAL_CARD, 1);
         $this->moveAnimalCardToPlayerBoard($cardId);
-        $this->gamestate->nextState('continue');
+        $this->continueOrEndTurn();
     }
 
     function placeAnimalCube($fromCardId, $toHexId) {
@@ -96,7 +96,7 @@ trait ActionTrait {
         if (!$cube) {
             $this->moveAnimalCardToFinishedCards($fromCardId);
         }
-        $this->gamestate->nextState('continue');
+        $this->continueOrEndTurn();
     }
 
     function placeColoredToken($tokenId, $toHexId) {
@@ -119,6 +119,15 @@ trait ActionTrait {
 
         $this->moveColoredTokenToBoard($tokenId, $toHexId);
 
-        $this->gamestate->nextState('continue');
+        $this->continueOrEndTurn();
+    }
+
+    function continueOrEndTurn() {
+        $args = $this->argChooseAction();
+        if ($args['canTakeTokens'] || $args['canPlaceToken'] || $args['canTakeAnimalCard'] || $args['canPlaceAnimalCube']) {
+            $this->gamestate->nextState('continue');
+        } else {
+            $this->gamestate->nextState('nextPlayer');
+        }
     }
 }
