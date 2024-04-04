@@ -277,6 +277,10 @@ trait UtilTrait {
 
     function incPlayerScore(int $playerId, int $delta, $message = null, $messageArgs = []) {
         self::DbQuery("UPDATE player SET `player_score` = `player_score` + $delta where `player_id` = $playerId");
+        $this->notifyPoints($playerId,  $delta, $message, $messageArgs);
+    }
+
+    function notifyPoints(int $playerId, int $delta, $message = null, $messageArgs = []) {
 
         self::notifyAllPlayers('points', $message !== null ? $message : '', [
             'playerId' => $playerId,

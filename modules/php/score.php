@@ -209,13 +209,18 @@ trait ScoreTrait {
     public function calculateAnimalCardsPoints($playerId) {
         $total = 0;
         $cards = $this->getAnimalCardsToScore($playerId);
+        $i = 1;
         foreach ($cards as $card) {
+            $cardScore = 0;
             $cubesCount = count($this->getCubesOnCard($card->id));
             if ($cubesCount < count($card->pointLocations)) {
                 $cardScore = $card->pointLocations[$cubesCount];
                 $total += $cardScore;
             }
+            $this->incPlayerScore($playerId, $cardScore, "", ["scoreType" => "score-card-$i-$playerId"]);
+            $i++;
         }
+        $this->notifyPoints($playerId, $total, "", ["scoreType" => "score-total-2-$playerId"]);
         return $total;
     }
 }

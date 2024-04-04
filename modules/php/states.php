@@ -127,12 +127,30 @@ trait StateTrait {
                 $totalScore[$playerId] += $score;
             }
         }
+        foreach ($players as $playerId => $playerDb) {
+            $this->notifyPoints($playerId, $this->calculateLandTotalFromStats($playerId), "", ["scoreType" => "score-total-1-$playerId"]);
+            $this->notifyPoints($playerId, $totalScore[$playerId], "", ["scoreType" => "score-total-3-$playerId"]);
+        }
 
         if ($this->isStudio()) {
             $this->gamestate->nextState('debugEndGame');
         } else {
             $this->gamestate->nextState('endGame');
         }
+    }
+
+    function calculateLandTotalFromStats($playerId) {
+        return self::getStat("game_score_trees", $playerId)
+            + self::getStat("game_score_mountains", $playerId)
+            + self::getStat(
+                "game_score_fields",
+                $playerId
+            )
+            + self::getStat("game_score_buildings", $playerId)
+            + self::getStat(
+                "game_score_water",
+                $playerId
+            );
     }
 
     function getScoresTypes() {
