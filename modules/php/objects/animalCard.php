@@ -6,16 +6,18 @@
 class AnimalCardInfo {
     public array $pointLocations;
     public array $pattern; //array of PatternHex
+    public bool $isSpirit;
 
     public function __construct(array $pointLocations, array $pattern) {
         $this->pointLocations = $pointLocations;
         $this->pattern = $pattern;
+        $this->isSpirit = count($pointLocations) === 1;
     }
 }
 
 class PatternHex {
     public array $colors; //from top to bottom
-    public int $position;//0 for the first hex of the pattern, then hex number relative to the previous one, counted from 1 to 6 from top in clockwise order
+    public int $position; //0 for the first hex of the pattern, then hex number relative to the previous one, counted from 1 to 6 from top in clockwise order
     public bool $allowCube;
 
     public function __construct(array $colors, $position, $allowCube) {
@@ -48,5 +50,6 @@ class AnimalCard extends AnimalCardInfo {
         $animalCardInfo = $ANIMAL_CARDS[$this->type][$this->type_arg];
         $this->pointLocations = $animalCardInfo->pointLocations;
         $this->pattern = $animalCardInfo->pattern;
+        $this->isSpirit = $animalCardInfo->isSpirit;
     }
 }

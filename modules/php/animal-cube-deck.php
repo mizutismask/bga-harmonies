@@ -12,6 +12,9 @@ trait AnimalCubeDeckTrait {
         $tokens = array(
             array('type' => 1, 'type_arg' => 1, 'nbr' => 66),
         );
+        if ($this->isSpiritCardsOn()) {
+            $tokens[] =  array('type' => 1, 'type_arg' => 2, 'nbr' => $this->getPlayerCount());
+        }
         $this->animalCubes->createCards($tokens, 'deck');
     }
 
@@ -20,8 +23,21 @@ trait AnimalCubeDeckTrait {
      */
     public function fillAnimalCard(AnimalCard $card) {
         $cubes = [];
-        for ($i = 0; $i < count($card->pointLocations); $i++) {
-            $cubes[] = $this->animalCubes->pickCardForLocation("deck", "card_" . $card->id, $i);
+        $isSpirit = $card->isSpirit;
+
+        if ($isSpirit) {
+            $spiritCubes = $this->getCardsOfTypeArgFromLocation("animalCube", 2, "deck");
+            $this->systemAssertTrue("There is not spirit cube available", count($spiritCubes) > 0);
+            $cube = array_pop($spiritCubes);
+            $this->animalCubes->moveCard($cube["id"], "card_" . $card->id, 0);
+            $cubes[] = $this->animalCubes->getCard($cube["id"]); //refresh
+        } else {
+            for ($i = 0; $i < count($card->pointLocations); $i++) {
+                $normalCubes = $this->getCardsOfTypeArgFromLocation("animalCube", 1, "deck");
+                $cube = array_pop($normalCubes);
+                $this->animalCubes->moveCard($cube["id"], "card_" . $card->id, $i);
+                $cubes[] = $this->animalCubes->getCard($cube["id"]); //refresh
+            }
         }
         $this->notifyAllPlayers('materialMove', "", [
             'type' => MATERIAL_TYPE_CUBE,
@@ -29,6 +45,7 @@ trait AnimalCubeDeckTrait {
             'to' => MATERIAL_LOCATION_CARD,
             'toArg' => $card->id,
             'material' => $this->getAnimalCubesFromDb($cubes),
+            //'context' => $isSpirit ? "cubespirit" : "",
         ]);
     }
 

@@ -18,6 +18,7 @@ interface Card {
 }
 interface AnimalCard extends Card {
 	pointLocations: Array<number>
+	isSpirit: boolean
 }
 
 interface ColoredToken extends Card {}
@@ -59,6 +60,8 @@ interface HarmoniesGamedatas {
 	river: Array<AnimalCard>
 	cubesOnAnimalCards: Array<AnimalCube>
 	tokensOnCentralBoard: { [hole: number]: Array<ColoredToken> }
+	expansion: number
+	spiritsCards: AnimalCard[]
 }
 
 interface HarmoniesGame extends Game {
@@ -71,6 +74,8 @@ interface HarmoniesGame extends Game {
 	setTooltipToClass(className: string, html: string): void
 	takeCard(card: AnimalCard): void
 	onHexClick(hexId: string): void
+	isSpiritCardsOn(): unknown
+	takeAction(action: string, data?: any): void
 }
 
 interface EnteringChooseActionArgs {
@@ -79,6 +84,7 @@ interface EnteringChooseActionArgs {
 	canPlaceToken: boolean
 	canTakeAnimalCard: boolean
 	canPlaceAnimalCube: boolean
+	canChooseSpirit: boolean
 	tokensOnCentralBoard: any
 	tokensToPlace: Array<ColoredToken>
 	placeAnimalCubeArgs: { [cardId: number]: Array<string> }
@@ -108,10 +114,11 @@ interface NotifScorePointArgs {
 
 interface NotifMaterialMove {
 	type: 'CARD' | 'TOKEN' | 'FIRST_PLAYER_TOKEN' | 'CUBE'
-	from: 'HAND' | 'DECK' | 'STOCK' | 'RIVER'
-	to: 'HAND' | 'DECK' | 'STOCK' | 'CARD' | 'HEX' | 'HOLE' | 'DONE'
+	from: 'HAND' | 'DECK' | 'STOCK' | 'RIVER' | 'SPIRITS'
+	to: 'HAND' | 'DECK' | 'STOCK' | 'CARD' | 'HEX' | 'HOLE' | 'DONE' | 'SPIRITS' | 'RIVER'
 	fromArg: number | string
 	toArg: number | string
+	//context?: number | string | boolean
 	material: Array<any | string> //elements (cards for exemple), or tokenIds
 }
 

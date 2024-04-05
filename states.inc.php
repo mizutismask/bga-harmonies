@@ -90,7 +90,7 @@ $playerActionsGameStates = [
         "type" => "activeplayer",
         "args" => "argChooseAction",
         "possibleactions" => [
-            "pass", "takeTokens", "placeToken", "takeAnimalCard", "placeAnimal"
+            "pass", "takeTokens", "placeToken", "takeAnimalCard", "placeAnimal", "chooseSpirit"
         ],
         "transitions" => [
             "nextPlayer" => ST_NEXT_PLAYER,

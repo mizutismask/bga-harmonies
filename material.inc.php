@@ -58,5 +58,17 @@ $this->ANIMAL_CARDS = [
 
     31 => new AnimalCardInfo([17, 12, 8, 5, 2], [new PatternHex([GREEN], 0,  false), new PatternHex([YELLOW], 3, true)]),
     32 => new AnimalCardInfo([11, 5], [new PatternHex([GREEN, BROWN], 0,  false), new PatternHex([GREEN, BROWN], 3, false), new PatternHex([YELLOW], 3, true)]),
+
+    //spirit cards
+    33 => new AnimalCardInfo([0], [new PatternHex([GREEN, BROWN], 0,  false), new PatternHex([YELLOW], 3, true), new PatternHex([YELLOW], 3, false)]),
+    34=> new AnimalCardInfo([0], [new PatternHex([YELLOW], 0,  false), new PatternHex([BLUE], 2, false) , new PatternHex([BLUE], 4, false), new PatternHex([YELLOW], 2, true)]),
+    35 => new AnimalCardInfo([0], [new PatternHex([GREEN, BROWN, BROWN], 0,  false), new PatternHex([GREEN, BROWN], 3, true), new PatternHex([GREEN], 3, false)]),
+    36 => new AnimalCardInfo([0], [new PatternHex([GREEN], 0,  false), new PatternHex([GREEN, BROWN, BROWN], 3, true), new PatternHex([GREEN], 5, false)]),
+    37 => new AnimalCardInfo([0], [new PatternHex([RED, BUILDING], 0,  false), new PatternHex([GREEN], 3, false), new PatternHex([RED, BUILDING], 3, true)]),
+    38 => new AnimalCardInfo([0], [new PatternHex([YELLOW], 0,  false), new PatternHex([RED, BUILDING], 3, false), new PatternHex([RED, BUILDING], 3, true)]),
+    39 => new AnimalCardInfo([0], [new PatternHex([GRAY, GRAY], 0,  false), new PatternHex([GRAY, GRAY,GRAY], 3, true)]),
+    40 => new AnimalCardInfo([0], [new PatternHex([GRAY], 0,  false), new PatternHex([GRAY, GRAY], 2, true), new PatternHex([GRAY], 3, false)]),
+    41 => new AnimalCardInfo([0], [new PatternHex([GREEN, BROWN], 0,  false), new PatternHex([BLUE], 3, true), new PatternHex([GREEN, BROWN], 3, false)]),
+    42 => new AnimalCardInfo([0], [new PatternHex([GRAY, GRAY], 0,  false), new PatternHex([BLUE], 3, true), new PatternHex([BLUE], 3, false)]),
   ]
 ];

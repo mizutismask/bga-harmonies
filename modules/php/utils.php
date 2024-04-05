@@ -460,6 +460,37 @@ trait UtilTrait {
         }
     }
 
+    function getCardsFromLocationLike(string $tableName, string $likePattern) {
+        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM $tableName where card_location like '$likePattern%'";
+        return self::getCollectionFromDb($sql);
+    }
+
+    function getCardsOfTypeArgFromLocation(string $tableName, int $typeArg, string $location) {
+        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM $tableName where card_location = '$location' and card_type_arg = '$typeArg'";
+        return self::getCollectionFromDb($sql);
+    }
+
+    function getCardsOfTypeArgAmongSeveralFromLocation(string $tableName, array $typeArgs, string $location) {
+        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM $tableName where card_location = '$location' and card_type_arg in (" . $this->dbArrayParam($typeArgs) . ")";
+        return self::getCollectionFromDb($sql);
+    }
+
+    function arrayGroupBy(array $data, $extractKeyFunction) {
+        $dataByKey = [];
+        foreach (array_values($data) as $token) {
+            $key = $extractKeyFunction($token);
+            if (!isset($dataByKey[$key])) {
+                $dataByKey[$key] = [];
+            }
+            $dataByKey[$key][] = $token;
+        }
+        return $dataByKey;
+    }
+
+    function dbArrayParam($arrayp) {
+        return '"' . implode( '","',$arrayp) . '"';
+    }
+
     /**
      * This will throw an exception if condition is false.
      * The message should be translated and shown to the user.

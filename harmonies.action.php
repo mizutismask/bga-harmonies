@@ -92,6 +92,16 @@ class action_harmonies extends APP_GameAction {
         self::ajaxResponse();
     }
 
+    public function chooseSpirit() {
+        self::setAjaxMode();
+        self::checkVersion();
+
+        $cardId = self::getArg("cardId", AT_posint, true);
+        $this->game->chooseSpirit($cardId);
+
+        self::ajaxResponse();
+    }
+
     public function placeAnimalCube() {
         self::setAjaxMode();
         self::checkVersion();

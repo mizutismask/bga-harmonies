@@ -14,12 +14,10 @@ trait StateTrait {
     function stDealInitialSetup() {
         $playersIds = $this->getPlayersIds();
         $this->fillCentralBoard();
+        if ($this->isSpiritCardsOn())
+            $this->pickInitialSpiritsCards();
+
         $this->refillAnimalCards();
-
-        foreach ($playersIds as $playerId) {
-            //$this->pickInitialDestinationCards($playerId);
-        }
-
         $this->gamestate->nextState('');
     }
 
@@ -112,10 +110,10 @@ trait StateTrait {
                         break;
                     case ANIMAL_CARDS:
                         $cardsPoints = $this->calculateAnimalCardsPoints($playerId);
-                        $this->setGlobalVariable(CARDS_POINTS_FOR_PLAYER.$playerId, $cardsPoints);
+                        $this->setGlobalVariable(CARDS_POINTS_FOR_PLAYER . $playerId, $cardsPoints);
                         $score = array_sum($cardsPoints);
-                        foreach ($cardsPoints as $i=>$cardScore) {
-                            $index = $i+1;
+                        foreach ($cardsPoints as $i => $cardScore) {
+                            $index = $i + 1;
                             $scoreType = "score-card-$index-$playerId";
                             $this->incPlayerScore($playerId, $cardScore, "", ["scoreType" => $scoreType]);
                         }

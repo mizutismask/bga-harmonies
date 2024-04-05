@@ -16,12 +16,12 @@ trait ColoredTokenDeckTrait {
     /**
      * Pick destination cards for beginning choice.
      */
-    public function pickInitialDestinationCards(int $playerId) {
-        $cardsNumber = $this->getInitialDestinationCardNumber();
+   /* public function (pickInitialSpiritsCards)(int $playerId) {
+        $cardsNumber = $this->getInitialSpiritCardNumber();
         $cards = $this->pickDestinationCards($playerId, $cardsNumber);
-        $this->keepInitialDestinationCards($playerId, $this->getDestinationIds($cards), $this->getInitialDestinationCardNumber());
+        $this->keepInitialDestinationCards($playerId, $this->getDestinationIds($cards), $this->getInitialSpiritCardNumber());
         return $cards;
-    }
+    }*/
 
     /**
      * Pick tokens to fill central board.

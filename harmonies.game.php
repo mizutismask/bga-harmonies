@@ -184,13 +184,14 @@ class Harmonies extends Table {
         }
 
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
-        $result['expansion'] = EXPANSION;
+        $result['expansion'] = $this->getExpansion();
         $result['boardSide'] = $this->isBoardSideA() ? "sideA" : "sideB";
         $result['boardSize'] = ["width" => $this->getBoardWidth(), "height" => $this->getBoardHeight()];
         $result['hexes'] = $this->getHexesCoordinates();
         $result['river'] = $this->getAnimalCardsInRiver();
         $result['tokensOnCentralBoard'] = $this->getColoredTokensOnCentralBoard();
         $result['cubesOnAnimalCards'] = $this->getAnimalCubesOnCards();
+        $result['spiritsCards'] = $this->getSpiritCardsToChoose($currentPlayerId);
 
         if ($isEnd) {
             $maxScore = max(array_map(fn ($player) => intval($player['score']), $result['players']));
@@ -222,7 +223,7 @@ class Harmonies extends Table {
             // game is over
             return 100;
         }
-        //return 100 * $this->getHighestCompletedDestinationsCount() / $this->getInitialDestinationCardNumber();
+        //return 100 * $this->getHighestCompletedDestinationsCount() / $this->getInitialSpiritCardNumber();
         return 0;
     }
 

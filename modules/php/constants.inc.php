@@ -21,6 +21,7 @@ const MATERIAL_LOCATION_DONE = "DONE";
 const MATERIAL_LOCATION_CARD = "CARD";
 const MATERIAL_LOCATION_HEX = "HEX";
 const MATERIAL_LOCATION_HOLE = "HOLE";
+const MATERIAL_LOCATION_SPIRITS = "SPIRITS";
 
 /* 
  * Game constants 
@@ -45,6 +46,7 @@ const CARDS_POINTS_FOR_PLAYER = "CARD_POINTS_";
  * Options
  */
 define('EXPANSION', 0); // 0 => base game
+define('SPIRITS', 1); // 1 => nature spirits on
 
 /*
  * State constants

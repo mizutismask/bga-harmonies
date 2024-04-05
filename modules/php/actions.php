@@ -74,6 +74,30 @@ trait ActionTrait {
         $this->continueOrEndTurn();
     }
 
+    function chooseSpirit($cardId) {
+        self::checkAction('chooseSpirit');
+        $playerId = intval(self::getActivePlayerId());
+
+        $possibleCards = $this->getSpiritCardsToChoose($playerId);
+        if (!$this->isSpiritCardsOn() || count($possibleCards) == 0) {
+            throw new BgaUserException(self::_("You can’t take a spirit card now"));
+        }
+
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        if ($card->location != "spirit" || $card->location_arg != $playerId) {
+            throw new BgaUserException(self::_("This card is not available to choose"));
+        }
+
+        $this->moveAnimalCardToPlayerBoard($cardId);
+
+        $toDiscard = $this->getSpiritCardsToChoose($playerId);
+        $this->systemAssertTrue("There is no second spirit to discard", count($toDiscard) === 1);
+        $this->animalCards->playCard(array_pop($toDiscard)->id);
+
+        $this->gamestate->nextState('continue');
+    }
+
+
     function placeAnimalCube($fromCardId, $toHexId) {
         self::checkAction('placeAnimal');
 

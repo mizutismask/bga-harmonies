@@ -137,7 +137,10 @@ class Harmonies implements HarmoniesGame {
 
 	private displayCubesOnAnimalCards(cubes: Array<AnimalCube>) {
 		cubes.forEach((c) => {
-			dojo.addClass(`${c.location}-score-${c.location_arg}`, 'animal-cube cube')
+			dojo.addClass(
+				`${c.location}-score-${c.location_arg}`,
+				`animal-cube ${c.type_arg === 2 ? 'cubespirit' : 'cube'}`
+			)
 		})
 	}
 
@@ -239,7 +242,8 @@ class Harmonies implements HarmoniesGame {
 			this.gamedatas.players[player.id].boardAnimalCards,
 			this.gamedatas.players[player.id].tokensOnBoard,
 			this.gamedatas.players[player.id].animalCubesOnBoard,
-			this.gamedatas.players[player.id].doneAnimalCards
+			this.gamedatas.players[player.id].doneAnimalCards,
+			this.gamedatas.spiritsCards
 		)
 	}
 
@@ -379,6 +383,9 @@ class Harmonies implements HarmoniesGame {
 	private onEnteringChooseAction(args: EnteringChooseActionArgs) {
 		if ((this as any).isCurrentPlayerActive()) {
 			this.resetClientActionData()
+			if (args.canChooseSpirit) {
+				this.river.setSelectionMode('none')
+			}
 
 			if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
 				this.playerTables[this.getPlayerId()].selectCardFromId(
@@ -468,29 +475,34 @@ class Harmonies implements HarmoniesGame {
 
 		const chooseActionArgs = this.gamedatas.gamestate.args as EnteringChooseActionArgs
 
-		;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {})
-		dojo.toggleClass('take_tokens_button', 'disabled', !chooseActionArgs.canTakeTokens)
-		;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => {})
-		dojo.toggleClass('take_card_button', 'disabled', !chooseActionArgs.canTakeAnimalCard)
-		this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
+		if (chooseActionArgs.canChooseSpirit) {
+			//first thing to do
+			;(this as any).addActionButton('take_spirit_button', _('Take a spirit card'), () => {})
+		} else {
+			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {})
+			dojo.toggleClass('take_tokens_button', 'disabled', !chooseActionArgs.canTakeTokens)
+			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => {})
+			dojo.toggleClass('take_card_button', 'disabled', !chooseActionArgs.canTakeAnimalCard)
+			this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
 
-		if (chooseActionArgs.canPlaceToken) {
-			this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace)
-		}
-
-		this.addImageActionButton(
-			'placeAnimalCube_button',
-			this.createDiv('hrm-button animal-cube cube', 'place-animal-cube-button'),
-			'blue',
-			_('Place a cube from one of your card to the corresponding pattern on your board'),
-			() => {
-				this.setClientStatePlaceAnimalCube(chooseActionArgs)
+			if (chooseActionArgs.canPlaceToken) {
+				this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace)
 			}
-		)
-		dojo.toggleClass('placeAnimalCube_button', 'disabled', !chooseActionArgs.canPlaceAnimalCube)
 
-		if (chooseActionArgs.canPass) {
-			;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())
+			this.addImageActionButton(
+				'placeAnimalCube_button',
+				this.createDiv('hrm-button animal-cube cube', 'place-animal-cube-button'),
+				'blue',
+				_('Place a cube from one of your card to the corresponding pattern on your board'),
+				() => {
+					this.setClientStatePlaceAnimalCube(chooseActionArgs)
+				}
+			)
+			dojo.toggleClass('placeAnimalCube_button', 'disabled', !chooseActionArgs.canPlaceAnimalCube)
+
+			if (chooseActionArgs.canPass) {
+				;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())
+			}
 		}
 	}
 
@@ -886,6 +898,10 @@ class Harmonies implements HarmoniesGame {
 		document.getElementById('pagemaintitletext').innerHTML = newText ?? this.originalTextChooseAction
 	}
 
+	public isSpiritCardsOn(): boolean {
+		return this.gamedatas.expansion === 1
+	}
+
 	///////////////////////////////////////////////////
 	//// Player's action
 
@@ -1063,9 +1079,27 @@ class Harmonies implements HarmoniesGame {
 		switch (notif.args.from) {
 			case 'DECK':
 				//from deck to river
-				this.river.addCard(card)
+
+				switch (notif.args.to) {
+					case 'RIVER':
+						this.river.addCard(card)
+						break
+					case 'SPIRITS':
+						this.playerTables[notif.args.toArg].addSpiritCard(card)
+						break
+
+					default:
+						console.error('Card move from deck destination not handled', notif)
+						break
+				}
 				break
 
+			case 'SPIRITS':
+				this.playerTables[notif.args.toArg].addCard(card)
+				if (notif.args.toArg == this.getPlayerId()) {
+					this.playerTables[notif.args.toArg].removeAllSpiritsCards()
+				}
+				break
 			case 'RIVER':
 				//from river to player hand
 				this.playerTables[notif.args.toArg].addCard(card)

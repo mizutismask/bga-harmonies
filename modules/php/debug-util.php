@@ -21,7 +21,7 @@ trait DebugUtilTrait {
 
     /*function debugCompleteDestinations() {
         $players = $this->getPlayersIds();
-        $restriction = " limit " . ($this->getInitialDestinationCardNumber() - 1);
+        $restriction = " limit " . ($this->getInitialSpiritCardNumber() - 1);
         foreach ($players as $playerId) {
             self::DbQuery("UPDATE `destination` set `completed` = true WHERE `card_location_arg`= $playerId" . $restriction);
         }

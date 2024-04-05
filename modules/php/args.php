@@ -40,6 +40,7 @@ trait ArgsTrait {
             'canPlaceToken' => $canPlaceToken,
             'canTakeAnimalCard' => boolval(self::getGameStateValue(TOOK_ANIMAL_CARD)) === false && intval($this->animalCards->countCardInLocation("board" . $playerId)) < 4,
             'canPlaceAnimalCube' => !empty($animalCubeArgs),
+            'canChooseSpirit' => $this->isSpiritCardsOn() && count($this->getSpiritCardsToChoose($playerId))>0,
             'canPass' => $canPass,
             'tokensOnCentralBoard' => $canTakeTokens ? $this->getColoredTokensOnCentralBoard() : [],
             'tokensToPlace' => $canPlaceToken ? array_values(array_filter($this->getColoredTokensChosen(), fn ($token) => $token->done == false)) : [],

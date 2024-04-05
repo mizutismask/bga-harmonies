@@ -14,14 +14,37 @@ trait AnimalCardDeckTrait {
     }
 
     /**
-     * Pick destination cards for beginning choice.
+     * Pick spirits cards for beginning choice.
      */
-    /* public function pickInitialDestinationCards(int $playerId) {
-        $cardsNumber = $this->getInitialDestinationCardNumber();
-        $cards = $this->pickDestinationCards($playerId, $cardsNumber);
-        $this->keepInitialDestinationCards($playerId, $this->getDestinationIds($cards), $this->getInitialDestinationCardNumber());
-        return $cards;
-    }*/
+    public function pickInitialSpiritsCards() {
+        $cardsNumber = $this->getInitialSpiritCardNumber();
+        $players = $this->getPlayersIds();
+        $possibleSpirits = array_filter($this->ANIMAL_CARDS[1], fn ($c) => $c->isSpirit === true);
+        $possibleTypes = array_keys($possibleSpirits);
+        foreach ($players as $playerId) {
+            for ($c = 0; $c < $cardsNumber; $c++) {
+                $cards  = $this->getCardsOfTypeArgAmongSeveralFromLocation("animalCard", $possibleTypes, "deck");
+                $i = bga_rand(0, count($cards) - 1);
+
+                $card = array_values($cards)[$i];
+                $this->animalCards->moveCard($card["id"], "spirit", $playerId);
+
+                $this->notifyAllPlayers('materialMove', "", [
+                    'type' => MATERIAL_TYPE_CARD,
+                    'from' => MATERIAL_LOCATION_DECK,
+                    'to' => MATERIAL_LOCATION_SPIRITS,
+                    'material' => [$card],
+                ]);
+            }
+        }
+        //discards all others
+        $remaining  = $this->getCardsOfTypeArgAmongSeveralFromLocation("animalCard", $possibleTypes, "deck");
+        $this->animalCards->moveCards(array_map(fn($c)=>$c["id"],$remaining), "discard");
+    }
+
+    public function getSpiritCardsToChoose($playerId) {
+        return $this->getAnimalCardsFromDb($this->animalCards->getCardsInLocation("spirit", $playerId));
+    }
 
     public function refillAnimalCards() {
         $visibleCardsCount = intval($this->animalCards->countCardInLocation('river'));
@@ -88,8 +111,10 @@ trait AnimalCardDeckTrait {
 
     public function moveAnimalCardToPlayerBoard(int $cardId) {
         $playerId = $this->getMostlyActivePlayerId();
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        $isSpirit = $card->isSpirit;
         $location = "board" . $playerId;
-        $spot = intval($this->animalCards->countCardInLocation($location));
+        $spot = $isSpirit ? 0 : intval($this->animalCards->countCardInLocation($location));
         $this->animalCards->moveCard($cardId, $location, $spot);
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
         self::incStat(1, "game_animal_cards_taken", $playerId);
@@ -98,7 +123,7 @@ trait AnimalCardDeckTrait {
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
             'type' => MATERIAL_TYPE_CARD,
-            'from' => MATERIAL_LOCATION_RIVER,
+            'from' => $isSpirit ? MATERIAL_LOCATION_SPIRITS : MATERIAL_LOCATION_RIVER,
             'to' => MATERIAL_LOCATION_HAND,
             'toArg' => $playerId,
             'material' => [$card],

@@ -4,6 +4,7 @@
 class PlayerTable {
 	private handStock: PlayerBoardDeck
 	private doneStock: LineStock<AnimalCard>
+	private spiritsStock: LineStock<AnimalCard>
 
 	constructor(
 		private game: HarmoniesGame,
@@ -13,7 +14,8 @@ class PlayerTable {
 		cards: Array<AnimalCard>,
 		tokensOnBoard: { [hexId: string]: Array<ColoredToken> },
 		animalCubesOnBoard: { [hexId: string]: Array<AnimalCube> },
-		doneAnimalCards: Array<AnimalCard>
+		doneAnimalCards: Array<AnimalCard>,
+		spiritCards: Array<AnimalCard>
 	) {
 		const isMyTable = player.id === game.getPlayerId().toString()
 		const ownClass = isMyTable ? 'own' : ''
@@ -80,6 +82,12 @@ class PlayerTable {
         `
 		dojo.place(handHtml, `player-table-${player.id}`, 'first')
 		this.initHand(player, cards)
+
+		if (isMyTable) {
+			if (this.game.isSpiritCardsOn()) {
+				this.initSpiritsStock(player, spiritCards)
+			}
+		}
 	}
 
 	private initDoneStock(player: HarmoniesPlayer, doneAnimalCards: Array<AnimalCard>) {
@@ -97,12 +105,44 @@ class PlayerTable {
 		this.doneStock.addCards(doneAnimalCards)
 	}
 
+	private initSpiritsStock(player: HarmoniesPlayer, spiritsCards: Array<AnimalCard>) {
+		const container = `
+			<div id="spirits-${player.id}" class="hrm-player-spirits"></div>
+		`
+		dojo.place(container, `player-table-${player.id}`, 'first')
+		this.spiritsStock = new LineStock<AnimalCard>(this.game.cardsManager, $('spirits-' + player.id), {
+			center: true,
+			gap: '7px',
+			direction: 'row',
+			wrap: 'nowrap'
+		})
+		this.spiritsStock.setSelectionMode('single')
+		this.spiritsStock.addCards(spiritsCards)
+
+		this.spiritsStock.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
+			if (selection.length === 1) {
+				this.game.takeAction('chooseSpirit', {
+					'cardId': this.spiritsStock.getSelection()[0].id
+				})
+				this.unselectAll()
+			}
+		}
+	}
+
 	private initHand(player: HarmoniesPlayer, cards: Array<AnimalCard>) {
 		this.handStock = new PlayerBoardDeck(this.game, player, cards)
 	}
 
 	public addCard(card: AnimalCard) {
 		this.handStock.addCard(card)
+	}
+
+	public addSpiritCard(card: AnimalCard) {
+		this.spiritsStock.addCard(card)
+	}
+
+	public removeAllSpiritsCards(): void {
+		this.spiritsStock.removeAll()
 	}
 
 	public addDoneCard(card: AnimalCard) {
