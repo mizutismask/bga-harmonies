@@ -109,7 +109,7 @@ trait StateTrait {
                         $score = $this->calculateWaterPoints($board);
                         break;
                     case ANIMAL_CARDS:
-                        $cardsPoints = $this->calculateAnimalCardsPoints($playerId);
+                        $cardsPoints = $this->calculateAnimalCardsPoints($playerId, $board);
                         $this->setGlobalVariable(CARDS_POINTS_FOR_PLAYER . $playerId, $cardsPoints);
                         $score = array_sum($cardsPoints);
                         foreach ($cardsPoints as $i => $cardScore) {

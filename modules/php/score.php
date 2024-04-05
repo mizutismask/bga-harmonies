@@ -206,17 +206,135 @@ trait ScoreTrait {
         return $topToken && $topToken->type_arg == RED && count($tokensInHex) == 2;
     }
 
-    public function calculateAnimalCardsPoints($playerId) {
+    public function calculateAnimalCardsPoints($playerId, $board) {
         $cards = $this->getAnimalCardsToScore($playerId);
+        $normalCards = array_filter($cards, fn ($c) => !$c->isSpirit);
         $points = [];
-        foreach ($cards as $card) {
+        foreach ($normalCards as $card) {
             $cardScore = 0;
             $cubesCount = count($this->getCubesOnCard($card->id));
             if ($cubesCount < count($card->pointLocations)) {
                 $cardScore = $card->pointLocations[$cubesCount];
             }
-            $points[]=$cardScore;
+            $points[] = $cardScore;
+        }
+        $spiritPoints = $this->calculateSpiritCardsPoints($playerId, $board);
+        return array_merge($points,$spiritPoints);
+    }
+
+    public function calculateSpiritCardsPoints($playerId, $board) {
+        $points = [];
+        if ($this->isSpiritCardsOn()) {
+            $cards = $this->getAnimalCardsToScore($playerId);
+            $spiritCards = array_filter($cards, fn ($c) => $c->isSpirit);
+            foreach ($spiritCards as $card) {
+                $cardScore = 0;
+                $cubesCount = count($this->getCubesOnCard($card->id));
+                if ($cubesCount < count($card->pointLocations)) {
+                    $cardScore = $this->calculatePointsForSpiritCard($playerId, $card, $board);
+                }
+                $points[] = $cardScore;
+            }
         }
         return $points;
+    }
+
+    public function calculatePointsForSpiritCard($playerId, $card, $board) {
+        $points = 0;
+        switch ($card->type_arg) {
+            case 33:
+            case 34:
+                $zones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == YELLOW);
+                $pointsPerZone = array_map(fn ($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn ($z) => count($z), $zones));
+                $points = array_sum($pointsPerZone);
+                break;
+            case 37:
+            case 38:
+                $zones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == RED);
+                $pointsPerZone = array_map(fn ($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn ($z) => count($z), $zones));
+                $points = array_sum($pointsPerZone);
+                break;
+            case 41:
+                $zones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == BLUE);
+                $pointsPerZone = array_map(fn ($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn ($z) => count($z), $zones));
+                $points = array_sum($pointsPerZone);
+                break;
+
+            case 35:
+                $score1 = $this->getPointsForPattern($card->type_arg, $board, [GREEN, BROWN]);
+                $score2 = $this->getPointsForPattern($card->type_arg, $board, [GREEN, BROWN, BROWN]);
+                $points = $score1 + $score2;
+                break;
+            case 36:
+                $score1 = $this->getPointsForPattern($card->type_arg, $board, [GREEN]);
+                $score2 = $this->getPointsForPattern($card->type_arg, $board, [GREEN, BROWN]);
+                $score3 = $this->getPointsForPattern($card->type_arg, $board, [GREEN, BROWN, BROWN]);
+                $points = $score1 + $score2 + $score3;
+                break;
+            case 39:
+                $score1 = $this->getPointsForPattern($card->type_arg, $board, [GRAY, GRAY]);
+                $score2 = $this->getPointsForPattern($card->type_arg, $board, [GRAY, GRAY, GRAY]);
+                $points = $score1 + $score2;
+                break;
+            case 40:
+                $score1 = $this->getPointsForPattern($card->type_arg, $board, [GRAY]);
+                $score2 = $this->getPointsForPattern($card->type_arg, $board, [GRAY, GRAY]);
+                $score3 = $this->getPointsForPattern($card->type_arg, $board, [GRAY, GRAY, GRAY]);
+                $points = $score1 + $score2 + $score3;
+                break;
+            case 42:
+                $points = $this->getPointsForPattern($card->type_arg, $board, [BLUE]);
+                break;
+
+            default:
+                throw new BgaSystemException("This spirit card can not be calculated : " . $card->type_arg);
+        }
+        return $points;
+    }
+
+    private function getPointsAccordingToZoneLength($cardType, $length) {
+        switch ($cardType) {
+            case 33:
+                return $length >= 3 ? 10 : 2;
+            case 34:
+                return 5;
+            case 37:
+                return 4;
+            case 38:
+                return $length >= 2 ? 4 : 0;
+            case 41:
+                return $length >= 2 ? 7 : 0;
+
+            default:
+                throw new BgaSystemException("This spirit card has not points defined : " . $cardType);
+        }
+    }
+    private function getPointsForPattern($cardType, $board, $pattern) {
+        $total = 0;
+        foreach ($board as $hex) {
+            $expected = $this->areExpectedTokensInHex($board, $hex["col"], $hex["row"], $pattern);
+            if ($expected) {
+                $total += $this->getPointsAccordingPatternHeight($cardType, count($pattern));
+            }
+        }
+        return $total;
+    }
+
+    private function getPointsAccordingPatternHeight($cardType, $height) {
+        switch ($cardType) {
+            case 35:
+                return $height >= 2 ? 4 : 0;
+            case 36:
+                return $height < 3 ? 3 : 1;
+            case 39:
+                return  $height >= 2 ? 4 : 0;
+            case 40:
+                return $height < 3 ? 3 : 1;
+            case 42:
+                return $height == 1 ? 2 : 0;
+
+            default:
+                throw new BgaSystemException("This spirit card has not points defined for height: " . $cardType);
+        }
     }
 }
