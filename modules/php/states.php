@@ -70,10 +70,12 @@ trait StateTrait {
         $player_id = $this->activeNextPlayer();
         self::setGameStateValue(TOOK_ANIMAL_CARD, 0);
         $this->deleteGlobalVariable(TOKENS_IN_HOLE);
+        $this->setGlobalVariable(CAN_RESET_TURN, false);
         $this->giveExtraTime($player_id);
         $this->incStat(1, 'turns_number', $player_id);
         $this->incStat(1, 'turns_number');
         $this->notifyWithName('msg', clienttranslate('&#10148; Start of ${player_name}\'s turn'));
+        $this->makeSavepoint();
     }
 
 

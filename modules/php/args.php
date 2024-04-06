@@ -42,6 +42,7 @@ trait ArgsTrait {
             'canPlaceAnimalCube' => !empty($animalCubeArgs),
             'canChooseSpirit' => $this->isSpiritCardsOn() && count($this->getSpiritCardsToChoose($playerId))>0,
             'canPass' => $canPass,
+            'canResetTurn' => $this->getGlobalVariable(CAN_RESET_TURN),
             'tokensOnCentralBoard' => $canTakeTokens ? $this->getColoredTokensOnCentralBoard() : [],
             'tokensToPlace' => $canPlaceToken ? array_values(array_filter($this->getColoredTokensChosen(), fn ($token) => $token->done == false)) : [],
             'placeAnimalCubeArgs' => $animalCubeArgs,

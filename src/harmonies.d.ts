@@ -79,6 +79,7 @@ interface HarmoniesGame extends Game {
 }
 
 interface EnteringChooseActionArgs {
+	canResetTurn: boolean
 	canPass: boolean
 	canTakeTokens: boolean
 	canPlaceToken: boolean

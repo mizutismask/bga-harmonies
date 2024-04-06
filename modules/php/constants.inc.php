@@ -77,6 +77,7 @@ define('LAST_TURN', 'LAST_TURN');
  * Global variables (objects)
  */
 define('TOKENS_IN_HOLE', 'TOKENS_IN_HOLE'); //chosen colored tokens during mandatory action
+define('CAN_RESET_TURN', 'CAN_RESET_TURN'); 
 
 /*
     Stats

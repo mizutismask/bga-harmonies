@@ -123,4 +123,10 @@ class action_harmonies extends APP_GameAction {
 
         self::ajaxResponse();
     }
+
+    public function resetPlayerTurn() {
+        self::setAjaxMode();
+        $this->game->resetPlayerTurn();
+        self::ajaxResponse();
+    }
 }

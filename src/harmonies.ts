@@ -479,7 +479,7 @@ class Harmonies implements HarmoniesGame {
 
 		if (chooseActionArgs.canChooseSpirit) {
 			//first thing to do
-			;(this as any).addActionButton('take_spirit_button', _('Take a spirit card'), () => {})
+			; (this as any).addActionButton('take_spirit_button', _('Take a spirit card'), () => { })
 		} else {
 			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {})
 			dojo.toggleClass('take_tokens_button', 'disabled', !chooseActionArgs.canTakeTokens)
@@ -504,6 +504,11 @@ class Harmonies implements HarmoniesGame {
 
 			if (chooseActionArgs.canPass) {
 				;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())
+			}
+
+			if(chooseActionArgs.canResetTurn){
+				;(this as any).addActionButton('reset_turn_button', _('Reset my turn'), () => {this.takeAction("resetPlayerTurn")}, undefined, undefined, 'red')
+				;(this as any).addTooltip('reset_turn_button', _('Reset your entire round'), '')
 			}
 		}
 	}

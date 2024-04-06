@@ -237,9 +237,14 @@ class Harmonies extends Table {
     function getBoardHeight(): int {
         return $this->isBoardSideA() ? 5 : 4;
     }
-    /*
-        In this space, you can put any utility methods useful for your game logic
-    */
+
+    function makeSavepoint($player_id=null) {
+        $this->undoSavepoint();
+    }
+
+    function toggleResetTurn($value) {
+        $this->setGlobalVariable(CAN_RESET_TURN, $value);
+    }
 
     //////////////////////////////////////////////////////////////////////////////
     //////////// Zombie

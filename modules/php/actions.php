@@ -94,7 +94,7 @@ trait ActionTrait {
         $this->systemAssertTrue("There is no second spirit to discard", count($toDiscard) === 1);
         $this->animalCards->playCard(array_pop($toDiscard)->id);
 
-        $this->gamestate->nextState('continue');
+        $this->continueOrEndTurn();
     }
 
 
@@ -147,11 +147,22 @@ trait ActionTrait {
     }
 
     function continueOrEndTurn() {
+        $this->toggleResetTurn(true);
         $args = $this->argChooseAction();
         if ($args['canTakeTokens'] || $args['canPlaceToken'] || $args['canTakeAnimalCard'] || $args['canPlaceAnimalCube']) {
             $this->gamestate->nextState('continue');
         } else {
             $this->gamestate->nextState('nextPlayer');
         }
+    }
+
+    /** Undo all the player turn actions. */
+    function resetPlayerTurn() {
+        $possible = $this->getGlobalVariable(CAN_RESET_TURN);
+        if (!$possible) {
+            throw new BgaUserException(self::_("Undo is not available"));
+        }
+        $this->undoRestorePoint();
+        $this->toggleResetTurn(false);
     }
 }
