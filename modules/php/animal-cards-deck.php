@@ -39,7 +39,7 @@ trait AnimalCardDeckTrait {
         }
         //discards all others
         $remaining  = $this->getCardsOfTypeArgAmongSeveralFromLocation("animalCard", $possibleTypes, "deck");
-        $this->animalCards->moveCards(array_map(fn($c)=>$c["id"],$remaining), "discard");
+        $this->animalCards->moveCards(array_map(fn ($c) => $c["id"], $remaining), "discard");
     }
 
     public function getSpiritCardsToChoose($playerId) {
@@ -114,7 +114,7 @@ trait AnimalCardDeckTrait {
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
         $isSpirit = $card->isSpirit;
         $location = "board" . $playerId;
-        $spot = $isSpirit ? 0 : intval($this->animalCards->countCardInLocation($location));
+        $spot = $this->getFirstEmptySlot($playerId);
         $this->animalCards->moveCard($cardId, $location, $spot);
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
         self::incStat(1, "game_animal_cards_taken", $playerId);
@@ -130,6 +130,17 @@ trait AnimalCardDeckTrait {
             'spot' => $spot,
         ]);
         $this->fillAnimalCard($card);
+    }
+
+    private function getFirstEmptySlot($playerId) {
+        $i = 0;
+        $full = true;
+        $location = "board" . $playerId;
+        while ($i < 4 && $full) {
+            $full = intval($this->animalCards->countCardInLocation($location, $i)) > 0;
+            if ($full) $i++;
+        }
+        return $i;
     }
 
     public function moveAnimalCardToFinishedCards(int $cardId) {
