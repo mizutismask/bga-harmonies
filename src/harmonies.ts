@@ -508,7 +508,7 @@ class Harmonies implements HarmoniesGame {
 
 			if(chooseActionArgs.canResetTurn){
 				;(this as any).addActionButton('reset_turn_button', _('Reset my turn'), () => {this.takeAction("resetPlayerTurn")}, undefined, undefined, 'red')
-				;(this as any).addTooltip('reset_turn_button', _('Reset your entire round'), '')
+				//;(this as any).addTooltip('reset_turn_button', _('Reset your entire round'), '')
 			}
 		}
 	}
