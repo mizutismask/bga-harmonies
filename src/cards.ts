@@ -56,17 +56,28 @@ class CardsManager extends CardManager<AnimalCard> {
 	}
 
 	public getTooltip(card: AnimalCard, cardUniqueId: number) {
-		let tooltip = `
-		<div class="xpd-city-zoom-wrapper">
-			<div class="xpd-city-zoom-desc-wrapper">
-				<div class="xpd-city">${dojo.string.substitute(
-					_('Gain those points if you put a cube on this exact pattern several times: ${points}'),
-					{
-						points: card.pointLocations.reverse().join(', ')
-					}
-				)}</div>
-			</div>
-		</div>`
+		let tooltip = ''
+		if (card.isSpirit) {
+			const desc = this.getSpiritDescription(card)
+			tooltip = `
+			<div class="xpd-city-zoom-wrapper">
+				<div class="xpd-city-zoom-desc-wrapper">
+					<div class="xpd-city">${desc}</div>
+				</div>
+			</div>`
+		} else {
+			tooltip = `
+			<div class="xpd-city-zoom-wrapper">
+				<div class="xpd-city-zoom-desc-wrapper">
+					<div class="xpd-city">${dojo.string.substitute(
+						_('Gain those points if you put a cube on this exact pattern several times: ${points}'),
+						{
+							points: card.pointLocations.reverse().join(', ')
+						}
+					)}</div>
+				</div>
+			</div>`
+		}
 		return tooltip
 	}
 
@@ -80,5 +91,34 @@ class CardsManager extends CardManager<AnimalCard> {
 		cardDiv.style.backgroundPositionX = `-${xBackgroundPercent}%`
 		cardDiv.style.backgroundPositionY = `-${yBackgroundPercent}%`
 		cardDiv.style.backgroundSize = `${IMAGE_ITEMS_PER_ROW * 100}%`
+	}
+
+	private getSpiritDescription(card: AnimalCard) {
+		switch (card.type_arg) {
+			case 33:
+				return _('Gain 10 points for each group of 3 fields tokens or more, 2 otherwise')
+			case 34:
+				return _('Gain 5 points for each group of 1 field token or more ')
+			case 35:
+				return _('Gain 4 points for each tree of height 2 or 3')
+			case 36:
+				return _('Gain 3 points for each tree of height 1 or 2, 1 otherwise')
+			case 37:
+				return _('Gain 4 points for each group of 1 building or more')
+			case 38:
+				return _('Gain 4 points for each group of 2 buildings or more')
+			case 39:
+				return _('Gain 4 points for each moutain of height 2 or 3')
+			case 40:
+				return _('Gain 3 points for each moutain of height 1 or 2, 1 otherwise')
+			case 41:
+				return _('Gain 7 points for each group of 2 water tokens or more')
+			case 42:
+				return _('Gain 2 points for each water token')
+
+			default:
+				console.error('no tooltip available for spirit ' + card.type_arg)
+				break
+		}
 	}
 }
