@@ -408,6 +408,9 @@ class Harmonies implements HarmoniesGame {
 		} else {
 			this.river.setSelectionMode('none')
 			$('central-board').classList.remove('canTakeTokens')
+			if (this.isNotSpectator() && this.isSpiritCardsOn()) {
+				this.playerTables[this.getPlayerId()].setSpiritSelectionMode("none")
+			}
 		}
 	}
 

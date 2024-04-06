@@ -175,6 +175,10 @@ class PlayerTable {
 		this.handStock.setSelectionMode(mode)
 	}
 
+	public setSpiritSelectionMode(mode: CardSelectionMode) {
+		this.spiritsStock.setSelectionMode(mode)
+	}
+
 	public unselectAll() {
 		this.handStock.unselectAll()
 	}
