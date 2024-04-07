@@ -325,107 +325,115 @@ html {
     background-image: none;
 }*/
 
-@media only screen and (max-width: 937px) {
+@mixin reset-hole-position {
+	position: relative;
+	top: unset;
+	left: unset;
+	right: unset;
+	bottom: unset;
+}
 
-	@mixin reset-hole-position{
-		position: relative;
-		top: unset;
-		left: unset;
-		right: unset;
-		bottom: unset;
-	}
-	
-	.central-board {
-		background: none;
-		height: unset;
-		aspect-ratio: unset;
-		display: flex;
-		column-gap: 10px;
-		margin: 12px 0px 12px 15px;
+@mixin small-central-board {
+	background: none;
+	height: unset;
+	aspect-ratio: unset;
+	display: flex;
+	column-gap: 10px;
+	margin: 12px 0px 12px 15px;
 
-		.central-board-hole {
-			box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
-			background-color: rgb(181, 150, 109);
-			width: 80px;
-			aspect-ratio: 1 / 1;
-			border-radius: 50%;
+	.central-board-hole {
+		box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
+		background-color: rgb(181, 150, 109);
+		width: 80px;
+		aspect-ratio: 1 / 1;
+		border-radius: 50%;
 
-			&.hole-1 {
-				@include reset-hole-position;
+		&.hole-1 {
+			@include reset-hole-position;
 
-				.hole-token-1 {
-					top: 39%;
-					left: 46%;
-				}
-				.hole-token-2 {
-					top: 5%;
-					right: 32%;
-				}
-				.hole-token-3 {
-					top: 44%;
-					left: 3%;
-				}
+			.hole-token-1 {
+				top: 39%;
+				left: 46%;
 			}
-			&.hole-2 {
-				@include reset-hole-position;
-				.hole-token-1 {
-					top: 13%;
-					right: 8%;
-				}
-				.hole-token-2 {
-					top: 10%;
-					right: 49%;
-				}
-				.hole-token-3 {
-					top: 51%;
-					left: 26%;
-				}
+			.hole-token-2 {
+				top: 5%;
+				right: 32%;
 			}
-			&.hole-3 {
-				@include reset-hole-position;
-				.hole-token-1 {
-					top: 9%;
-					left: 48%;
-				}
-				.hole-token-2 {
-					top: 26%;
-					right: 52%;
-				}
-				.hole-token-3 {
-					top: 44%;
-					left: 43%;
-				}
+			.hole-token-3 {
+				top: 44%;
+				left: 3%;
 			}
-			&.hole-4 {
-				@include reset-hole-position;
-				.hole-token-1 {
-					top: 3%;
-					left: 21%;
-				}
-				.hole-token-2 {
-					top: 35%;
-					right: 1%;
-				}
-				.hole-token-3 {
-					top: 40%;
-					left: 2%;
-				}
+		}
+		&.hole-2 {
+			@include reset-hole-position;
+			.hole-token-1 {
+				top: 13%;
+				right: 8%;
 			}
-			&.hole-5 {
-				@include reset-hole-position;
-				.hole-token-1 {
-					top: 9%;
-					left: 49%;
-				}
-				.hole-token-2 {
-					top: 48%;
-					right: 18%;
-				}
-				.hole-token-3 {
-					top: 12%;
-					left: 5%;
-				}
+			.hole-token-2 {
+				top: 10%;
+				right: 49%;
+			}
+			.hole-token-3 {
+				top: 51%;
+				left: 26%;
+			}
+		}
+		&.hole-3 {
+			@include reset-hole-position;
+			.hole-token-1 {
+				top: 9%;
+				left: 48%;
+			}
+			.hole-token-2 {
+				top: 26%;
+				right: 52%;
+			}
+			.hole-token-3 {
+				top: 44%;
+				left: 43%;
+			}
+		}
+		&.hole-4 {
+			@include reset-hole-position;
+			.hole-token-1 {
+				top: 3%;
+				left: 21%;
+			}
+			.hole-token-2 {
+				top: 35%;
+				right: 1%;
+			}
+			.hole-token-3 {
+				top: 40%;
+				left: 2%;
+			}
+		}
+		&.hole-5 {
+			@include reset-hole-position;
+			.hole-token-1 {
+				top: 9%;
+				left: 49%;
+			}
+			.hole-token-2 {
+				top: 48%;
+				right: 18%;
+			}
+			.hole-token-3 {
+				top: 12%;
+				left: 5%;
 			}
 		}
 	}
+
 }
+@media only screen and (max-width: 1218px) {
+	.central-board {
+		@include small-central-board;
+	}
+}
+/*.mobile_version {
+	.central-board {
+		@include small-central-board;
+	}
+}*/
