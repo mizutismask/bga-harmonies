@@ -10,7 +10,7 @@ class RiverDeck {
 			center: true,
 			gap: '7px',
 			direction: 'row',
-			wrap: 'wrap',
+			wrap: 'nowrap',
 			slotsIds: ['riverSlot1', 'riverSlot2', 'riverSlot3', 'riverSlot4', 'riverSlot5'],
 			mapCardToSlot: (card) => `riverSlot${card.location_arg + 1}`
 		})

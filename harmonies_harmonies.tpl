@@ -9,8 +9,8 @@
 </div>
 
 <div class="shared-elements">
-    <div id="central-board" class="central-board"></div>
     <div id="river"></div>
+    <div id="central-board" class="central-board"></div>
 </div>
 <div id="player-tables"></div>
 {OVERALL_GAME_FOOTER}

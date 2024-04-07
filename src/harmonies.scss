@@ -104,10 +104,11 @@ html {
 
 .central-board {
 	background: url('img/centralBoard.png') no-repeat;
-	width: 300px;
-	height: 298px;
-	position: relative;
-	background-size: 100%;
+	height: 258px;
+    aspect-ratio: 300 / 298;
+    position: relative;
+    background-size: 100%;
+    margin: 0 0px 12px 15px;
 
 	&.canTakeTokens {
 		.central-board-hole {
@@ -312,6 +313,7 @@ html {
 .shared-elements {
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 }
 
 /*#reset_turn_button {
