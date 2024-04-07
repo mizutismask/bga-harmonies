@@ -11,8 +11,9 @@ $player-colors: (
 	'purple': '982fff'
 );
 
-$CARD_WIDTH: 150px; //also change in stock-utils.ts
-$CARD_HEIGHT: 258px;
+$cardSizeModifier:1;
+$CARD_WIDTH: calc(150px*$cardSizeModifier); //also change in stock-utils.ts
+$CARD_HEIGHT:  calc(258px*$cardSizeModifier);
 
 @import 'playerboards';
 @import 'game-steps/game-steps';
@@ -104,7 +105,7 @@ html {
 
 .central-board {
 	background: url('img/centralBoard.png') no-repeat;
-	height: 258px;
+	height: $CARD_HEIGHT;
     aspect-ratio: 300 / 298;
     position: relative;
     background-size: 100%;
@@ -283,6 +284,8 @@ html {
 }
 
 .harmonies-card {
+	width: $CARD_WIDTH;
+	height: $CARD_HEIGHT;
 	.card-side {
 		border-radius: 3%;
 	}
