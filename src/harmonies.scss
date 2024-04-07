@@ -11,7 +11,7 @@ $player-colors: (
 	'purple': '982fff'
 );
 
-$cardSizeModifier:1;
+$cardSizeModifier:.9;
 $CARD_WIDTH: calc(150px*$cardSizeModifier); //also change in stock-utils.ts
 $CARD_HEIGHT:  calc(258px*$cardSizeModifier);
 

@@ -2,6 +2,8 @@
 	display: grid;
 	z-index: 25; // so new animations are over the board
 	justify-content: center;
+	justify-items: center;
+	margin-bottom: 15px;
 
 	.player-name {
 		justify-self: center;
@@ -29,9 +31,11 @@ h3 {
 }
 
 .hrm-player-board {
-	//800x643
-	width: 640px;
-	height: 514px;
+	$boardSizeModifier:.6;
+	$BOARD_WIDTH: calc(800px*$boardSizeModifier);
+	$BOARD_HEIGHT:  calc(643px*$boardSizeModifier);
+	width: $BOARD_WIDTH;
+	height: $BOARD_HEIGHT;
 	background-size: 100%;
 	position: relative;
 }
