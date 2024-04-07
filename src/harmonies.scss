@@ -326,6 +326,15 @@ html {
 }*/
 
 @media only screen and (max-width: 937px) {
+
+	@mixin reset-hole-position{
+		position: relative;
+		top: unset;
+		left: unset;
+		right: unset;
+		bottom: unset;
+	}
+	
 	.central-board {
 		background: none;
 		height: unset;
@@ -340,14 +349,9 @@ html {
 			width: 80px;
 			aspect-ratio: 1 / 1;
 			border-radius: 50%;
-			//border: 2px solid white;
 
 			&.hole-1 {
-				position: relative;
-				top: unset;
-				left: unset;
-				right: unset;
-				bottom: unset;
+				@include reset-hole-position;
 
 				.hole-token-1 {
 					top: 39%;
@@ -363,11 +367,7 @@ html {
 				}
 			}
 			&.hole-2 {
-				position: relative;
-				top: unset;
-				left: unset;
-				right: unset;
-				bottom: unset;
+				@include reset-hole-position;
 				.hole-token-1 {
 					top: 13%;
 					right: 8%;
@@ -382,11 +382,7 @@ html {
 				}
 			}
 			&.hole-3 {
-				position: relative;
-				top: unset;
-				left: unset;
-				right: unset;
-				bottom: unset;
+				@include reset-hole-position;
 				.hole-token-1 {
 					top: 9%;
 					left: 48%;
@@ -401,11 +397,7 @@ html {
 				}
 			}
 			&.hole-4 {
-				position: relative;
-				top: unset;
-				left: unset;
-				right: unset;
-				bottom: unset;
+				@include reset-hole-position;
 				.hole-token-1 {
 					top: 3%;
 					left: 21%;
@@ -420,11 +412,7 @@ html {
 				}
 			}
 			&.hole-5 {
-				position: relative;
-				top: unset;
-				left: unset;
-				right: unset;
-				bottom: unset;
+				@include reset-hole-position;
 				.hole-token-1 {
 					top: 9%;
 					left: 49%;
