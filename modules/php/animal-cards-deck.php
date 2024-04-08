@@ -133,6 +133,23 @@ trait AnimalCardDeckTrait {
         $this->fillAnimalCard($card);
     }
 
+    public function discardAndReplaceAnimalCard(int $cardId) {
+        $playerId = $this->getMostlyActivePlayerId();
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        $this->animalCards->playCard($cardId);
+
+        $this->notifyAllPlayers('materialMove', clienttranslate('${player_name} discards a card from the river'), [
+            'playerId' => $playerId,
+            'player_name' => $this->getPlayerName($playerId),
+            'type' => MATERIAL_TYPE_CARD,
+            'from' =>MATERIAL_LOCATION_RIVER,
+            'to' => MATERIAL_LOCATION_DISCARD,
+            'material' => [$card],
+        ]);
+
+        $this->refillAnimalCards();
+    }
+
     private function getFirstEmptySlot($playerId) {
         $i = 0;
         $full = true;

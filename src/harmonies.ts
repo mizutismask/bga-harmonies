@@ -162,7 +162,9 @@ class Harmonies implements HarmoniesGame {
 					.getCardElement(card)
 					.classList.contains(this.river.riverStock.getSelectableCardClass())
 			) {
-				this.takeAction('takeAnimalCard', { cardId: card.id })
+				const action =
+					this.gamedatas.gamestate.name === 'discardFromRiver' ? 'discardFromRiver' : 'takeAnimalCard'
+				this.takeAction(action, { cardId: card.id })
 			}
 		}
 	}
@@ -456,6 +458,12 @@ class Harmonies implements HarmoniesGame {
 						false,
 						'red'
 					)
+					break
+				case 'discardFromRiver':
+					//;(this as any).addActionButton('discard_card_button', _('Discard from river'), () => {})
+					//dojo.toggleClass('discard_card_button', 'disabled', true)
+					;(this as any).addActionButton('pass_button', _('Decline'), () => this.declineDiscard())
+					this.river.setSelectionMode('single')
 					break
 			}
 		}
@@ -946,6 +954,14 @@ class Harmonies implements HarmoniesGame {
 		this.takeAction('pass')
 	}
 
+	public declineDiscard() {
+		if (!(this as any).checkAction('declineDiscard')) {
+			return
+		}
+
+		this.takeAction('declineDiscard')
+	}
+
 	public takeAction(action: string, data?: any) {
 		data = data || {}
 		data.lock = true
@@ -1067,7 +1083,7 @@ class Harmonies implements HarmoniesGame {
 						break
 				}
 				break
-			
+
 			default:
 				console.error('Token move origin not handled', notif)
 				break
@@ -1120,8 +1136,18 @@ class Harmonies implements HarmoniesGame {
 				}
 				break
 			case 'RIVER':
-				//from river to player hand
-				this.playerTables[notif.args.toArg].addCard(card)
+				switch (notif.args.to) {
+					case 'HAND':
+						this.playerTables[notif.args.toArg].addCard(card)
+						break
+					case 'DISCARD':
+						this.river.removeCard(card)
+						break
+
+					default:
+						console.error('Card move from river destination not handled', notif)
+						break
+				}
 				break
 			case 'HAND':
 				//from player hand to player done

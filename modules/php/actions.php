@@ -32,6 +32,11 @@ trait ActionTrait {
             throw new BgaUserException("You cannot pass");
         }
 
+        $this->goToDiscardOrNextPlayer();
+    }
+
+    function declineDiscard() {
+        self::checkAction('declineDiscard');
         $this->gamestate->nextState('nextPlayer');
     }
 
@@ -71,6 +76,19 @@ trait ActionTrait {
         self::setGameStateValue(EMPTIED_RIVER_SLOT, $card->location_arg);
         self::setGameStateValue(TOOK_ANIMAL_CARD, 1);
         $this->moveAnimalCardToPlayerBoard($cardId);
+        $this->continueOrEndTurn();
+    }
+
+    function discardFromRiver($cardId) {
+        self::checkAction('discardFromRiver');
+
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        if ($card->location != "river") {
+            throw new BgaUserException(self::_("This card is not available in the river"));
+        }
+        self::setGameStateValue(EMPTIED_RIVER_SLOT, $card->location_arg);
+        self::setGameStateValue(TOOK_ANIMAL_CARD, 1);//to prevent discarding again
+        $this->discardAndReplaceAnimalCard($cardId);
         $this->continueOrEndTurn();
     }
 
@@ -151,6 +169,15 @@ trait ActionTrait {
         $args = $this->argChooseAction();
         if ($args['canTakeTokens'] || $args['canPlaceToken'] || $args['canTakeAnimalCard'] || $args['canPlaceAnimalCube']) {
             $this->gamestate->nextState('continue');
+        } else {
+            //no action possible
+           $this->goToDiscardOrNextPlayer();
+        }
+    }
+
+    function goToDiscardOrNextPlayer(){
+        if ($this->getPlayerCount() === 1 && intval(self::getGameStateValue(TOOK_ANIMAL_CARD)) == 0) {
+            $this->gamestate->nextState('discardFromRiver');
         } else {
             $this->gamestate->nextState('nextPlayer');
         }
