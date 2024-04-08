@@ -1067,7 +1067,7 @@ class Harmonies implements HarmoniesGame {
 						break
 				}
 				break
-
+			
 			default:
 				console.error('Token move origin not handled', notif)
 				break
