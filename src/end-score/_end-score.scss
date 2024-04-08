@@ -11,6 +11,7 @@
 	display: none;//todo remettre
 	justify-content: center;
 	margin-bottom:1em;
+	text-align: center;
 
 	#score-wrapper {
 		background-image: url('img/score.jpg');
@@ -31,6 +32,8 @@
 			justify-items: center;
 			.player-name {
 				grid-column: 1 / span 2;
+				align-self: center;
+				margin-top: -4px;
 			}
 			.totals-container {
 				grid-column: 1 / span 2;
@@ -43,6 +46,7 @@
 			text-shadow: 0px 0px 1px white, 0px 0px 2px white, 0px 0px 3px white;
 			word-break: break-all;
 			text-overflow: ellipsis;
+			font-size: smaller;
 			//width: 130px;
 			height: 19px;
 			overflow: hidden;
@@ -60,7 +64,7 @@
 		.land-container {
 			display: flex;
 			flex-direction: column;
-			grid-row-gap: 41px;
+			grid-row-gap: 43px;
 			align-self: flex-end;
 		}
 
@@ -69,7 +73,7 @@
 			flex-direction: column;
 			align-self: flex-end;
 			align-items: center;
-			grid-row-gap: 9px;
+			grid-row-gap: 12px;
 		}
 		.totals-container {
 			display: grid;
