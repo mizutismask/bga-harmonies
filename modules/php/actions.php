@@ -165,9 +165,10 @@ trait ActionTrait {
     }
 
     function continueOrEndTurn() {
+        $stateName = $this->getStateName();
         $this->toggleResetTurn(true);
         $args = $this->argChooseAction();
-        if ($args['canTakeTokens'] || $args['canPlaceToken'] || $args['canTakeAnimalCard'] || $args['canPlaceAnimalCube']) {
+        if ($stateName == "chooseAction" && ($args['canTakeTokens'] || $args['canPlaceToken'] || $args['canTakeAnimalCard'] || $args['canPlaceAnimalCube'])) {
             $this->gamestate->nextState('continue');
         } else {
             //no action possible
