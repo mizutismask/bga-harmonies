@@ -33,7 +33,7 @@ trait ScoreTrait {
         $neighbours = $this->getNeighbours($hex);
         $colors = [];
         $i = 0;
-        while (count($colors) < $goal && $i < count($neighbours)) {
+        while (count(array_unique($colors)) < $goal && $i < count($neighbours)) {
             $neighb = $neighbours[$i];
             $top = $this->getTopTokenAtHexFromBoard($board, $neighb);
             if ($top) {
