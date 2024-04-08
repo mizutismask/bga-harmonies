@@ -34,6 +34,7 @@ const YELLOW = 5;
 const RED = 6;
 const BUILDING = 7;//stands for either gray, red or brown
 const VISIBLE_ANIMAL_CARDS_COUNT = 5;
+const VISIBLE_ANIMAL_CARDS_COUNT_SOLO = 3;
 
 const EMPTIED_HOLE = "EMPTIED_HOLE";
 const EMPTIED_RIVER_SLOT = "EMPTIED_RIVER_SLOT";

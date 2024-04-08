@@ -16,7 +16,7 @@ trait ColoredTokenDeckTrait {
     /**
      * Pick destination cards for beginning choice.
      */
-   /* public function (pickInitialSpiritsCards)(int $playerId) {
+    /* public function (pickInitialSpiritsCards)(int $playerId) {
         $cardsNumber = $this->getInitialSpiritCardNumber();
         $cards = $this->pickDestinationCards($playerId, $cardsNumber);
         $this->keepInitialDestinationCards($playerId, $this->getDestinationIds($cards), $this->getInitialSpiritCardNumber());
@@ -27,9 +27,10 @@ trait ColoredTokenDeckTrait {
      * Pick tokens to fill central board.
      */
     public function fillCentralBoard() {
+        $holeCount = $this->getPlayerCount() === 1 ? 3 : 5;
         $tokenCount = 3;
         $tokensByHole = [];
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= $holeCount; $i++) {
             $tokens = $this->pickTokensForCentralBoard($tokenCount, $i);
             $tokensByHole[$i] = $tokens;
         }
@@ -235,14 +236,14 @@ trait ColoredTokenDeckTrait {
 
     public function getColoredTokensOnCentralBoard() {
         $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard'));
-        $byHole = array_fill_keys([1, 2, 3, 4, 5], []);
+        $byHole = $this->getPlayerCount() === 1 ? array_fill_keys([1, 2, 3], []) : array_fill_keys([1, 2, 3, 4, 5], []);
         foreach ($tokens as $tok) {
             $byHole[$tok->location_arg][] = $tok;
         }
         return $byHole;
     }
 
-    public function getRemainingTokensInDeck(){
+    public function getRemainingTokensInDeck() {
         return intval($this->coloredTokens->countCardInLocation("deck"));
     }
 

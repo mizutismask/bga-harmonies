@@ -48,10 +48,11 @@ trait AnimalCardDeckTrait {
 
     public function refillAnimalCards() {
         $visibleCardsCount = intval($this->animalCards->countCardInLocation('river'));
-        $missingSeveral = VISIBLE_ANIMAL_CARDS_COUNT - $visibleCardsCount > 1;
-        if ($visibleCardsCount < VISIBLE_ANIMAL_CARDS_COUNT) {
+        $expectedCardsCount = $this->getPlayerCount() === 1 ? VISIBLE_ANIMAL_CARDS_COUNT_SOLO : VISIBLE_ANIMAL_CARDS_COUNT;
+        $missingSeveral = $expectedCardsCount - $visibleCardsCount > 1;
+        if ($visibleCardsCount < $expectedCardsCount) {
             $spots = [];
-            for ($i = $visibleCardsCount; $i < VISIBLE_ANIMAL_CARDS_COUNT; $i++) {
+            for ($i = $visibleCardsCount; $i < $expectedCardsCount; $i++) {
                 $newCard = $this->getAnimalCardFromDb($this->animalCards->pickCardForLocation('deck', 'river', $missingSeveral ? $i : self::getGameStateValue(EMPTIED_RIVER_SLOT)));
                 $spots[] = $newCard;
 
