@@ -19,6 +19,7 @@
 		height: 500px;
 		display: flex;
 		font-family: "Kalam";
+		font-size: larger;
 		margin: 0 auto;
 
 		.score-player-container {
@@ -51,7 +52,7 @@
 			font-weight: bold;
 		}
 		.highlight {
-			color: gold;
+			color: #ec1918;
 		}
 
 		//.land-container div, cards-container div, , totals-container div{}
