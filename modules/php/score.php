@@ -112,8 +112,8 @@ trait ScoreTrait {
                 }
                 //echo "longest" . $path[0]["col"] . "_" . $path[0]["row"]  . " to " . $path[1]["col"] . "_" . $path[1]["row"] . " = " . $path[2];
             }
-            $score = self::$riverPoints[min(6, $distance) - 1];
-            for ($i = 6; $i < $distance; $i++) {
+            $score = self::$riverPoints[min(6, $maxDistance) - 1];
+            for ($i = 6; $i < $maxDistance; $i++) {
                 $score += 4;
             }
             return $score;

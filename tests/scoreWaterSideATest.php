@@ -71,10 +71,30 @@ class ScoreWaterSideATest extends GameTestBase { // this is your game class defi
         $this->displayResult(__FUNCTION__, $equal, $result);
     }
 
+    function testScoreWaterZigZag() {
+
+        $grid = $this->initBoard();
+        $this->setTokensIn($grid, 2, 0, [BLUE]);
+        $this->setTokensIn($grid, 4, 1, [BLUE]);
+        
+        $this->setTokensIn($grid, 0, 3, [BLUE]);
+        $this->setTokensIn($grid, 1, 3, [BLUE]);
+        $this->setTokensIn($grid, 2, 3, [BLUE]);
+        $this->setTokensIn($grid, 3, 3, [BLUE]);
+        $this->setTokensIn($grid, 4, 3, [BLUE]);
+
+        $result = $this->calculateWaterPoints($grid);
+
+        $equal = $result == 11;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
     function testAll() {
         $this->testScoreWaterFromRules();
         $this->testScoreWaterWithAdditionalTokens();
         $this->testScoreWaterWithUnclearPath();
+        $this->testScoreWaterZigZag();
     }
 }
 
