@@ -48,10 +48,11 @@ trait AnimalCardDeckTrait {
 
     public function refillAnimalCards() {
         $visibleCardsCount = intval($this->animalCards->countCardInLocation('river'));
-        $missingSeveral = VISIBLE_ANIMAL_CARDS_COUNT - $visibleCardsCount > 1;
-        if ($visibleCardsCount < VISIBLE_ANIMAL_CARDS_COUNT) {
+        $expectedCardsCount = $this->getPlayerCount() === 1 ? VISIBLE_ANIMAL_CARDS_COUNT_SOLO : VISIBLE_ANIMAL_CARDS_COUNT;
+        $missingSeveral = $expectedCardsCount - $visibleCardsCount > 1;
+        if ($visibleCardsCount < $expectedCardsCount) {
             $spots = [];
-            for ($i = $visibleCardsCount; $i < VISIBLE_ANIMAL_CARDS_COUNT; $i++) {
+            for ($i = $visibleCardsCount; $i < $expectedCardsCount; $i++) {
                 $newCard = $this->getAnimalCardFromDb($this->animalCards->pickCardForLocation('deck', 'river', $missingSeveral ? $i : self::getGameStateValue(EMPTIED_RIVER_SLOT)));
                 $spots[] = $newCard;
 
@@ -130,6 +131,23 @@ trait AnimalCardDeckTrait {
             'spot' => $spot,
         ]);
         $this->fillAnimalCard($card);
+    }
+
+    public function discardAndReplaceAnimalCard(int $cardId) {
+        $playerId = $this->getMostlyActivePlayerId();
+        $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
+        $this->animalCards->playCard($cardId);
+
+        $this->notifyAllPlayers('materialMove', clienttranslate('${player_name} discards a card from the river'), [
+            'playerId' => $playerId,
+            'player_name' => $this->getPlayerName($playerId),
+            'type' => MATERIAL_TYPE_CARD,
+            'from' =>MATERIAL_LOCATION_RIVER,
+            'to' => MATERIAL_LOCATION_DISCARD,
+            'material' => [$card],
+        ]);
+
+        $this->refillAnimalCards();
     }
 
     private function getFirstEmptySlot($playerId) {

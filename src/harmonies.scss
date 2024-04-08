@@ -220,6 +220,29 @@ html {
 	}
 }
 
+.player-count-1 {
+	.central-board {
+		background: url('img/centralBoardSolo.png') no-repeat;
+		aspect-ratio: 700/710;
+		background-size: 100%;
+	}
+
+	.central-board-hole {
+		&.hole-1 {
+			top: 25%;
+			left: 21%;
+		}
+		&.hole-2 {
+			top: 25%;
+			right: 18%;
+		}
+		&.hole-3 {
+			top: 53%;
+			left: 37%;
+		}
+	}
+}
+
 .color-1,
 .color-2,
 .color-3,
@@ -425,7 +448,6 @@ html {
 			}
 		}
 	}
-
 }
 @media only screen and (max-width: 1218px) {
 	.central-board {

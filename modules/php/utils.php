@@ -488,7 +488,7 @@ trait UtilTrait {
     }
 
     function dbArrayParam($arrayp) {
-        return '"' . implode( '","',$arrayp) . '"';
+        return '"' . implode('","', $arrayp) . '"';
     }
 
     /**
@@ -569,5 +569,9 @@ trait UtilTrait {
 
     function getMostlyActivePlayerOrder() {
         return $this->getPlayerPosition($this->getMostlyActivePlayerId());
+    }
+
+    function isValueInRange(int $value, int $minValue, int $maxValue): bool {
+        return $value >= $minValue && $value <= $maxValue;
     }
 }

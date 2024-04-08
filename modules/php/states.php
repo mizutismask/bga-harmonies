@@ -139,12 +139,42 @@ trait StateTrait {
             $this->notifyPoints($playerId, $this->calculateLandTotalFromStats($playerId), "", ["scoreType" => "score-total-1-$playerId"]);
             $this->notifyPoints($playerId, $totalScore[$playerId], "", ["scoreType" => "score-total-3-$playerId"]);
         }
+        if ($this->getPlayerCount() == 1) {
+            $soloPlayerId = array_keys($players)[0];
+            $this->scoreSolo($soloPlayerId, $totalScore[$soloPlayerId]);
+        }
 
         if ($this->isStudio()) {
             $this->gamestate->nextState('debugEndGame');
         } else {
             $this->gamestate->nextState('endGame');
         }
+    }
+
+    function scoreSolo($soloPlayerId, $totalScore){
+        $suns = $this->convertScoreToSuns($totalScore);
+        self::notifyWithName('msg', clienttranslate('${player_name} scores ${sunsCount} sun(s) for ${totalPoints} points'), ["sunsCount" => $suns, "totalPoints" => $totalScore,]);
+
+        if ($this->isBoardSideA()) {
+            $suns += 1;
+            self::notifyWithName('msg', clienttranslate('${player_name} scores 1 sun for using side A of the board'));
+
+        }
+        if (!$this->isSpiritCardsOn()) {
+            $suns += 2;
+            self::notifyWithName('msg', clienttranslate('${player_name} scores 2 suns for not using spirit cards'));
+        } else {
+            $cards = $this->getAnimalCardsToScore($soloPlayerId);
+            $spirit = array_pop(array_filter($cards, fn ($c) => $c->isSpirit));
+            if (in_array($spirit->type_arg, [33, 34, 37, 38, 41])) {
+                $suns += 1;
+                self::notifyWithName('msg', clienttranslate('${player_name} scores 1 sun for choosing a group spirit card'));
+            }
+        }
+
+        self::DbQuery("UPDATE player SET player_score_aux = player_score WHERE player_id = $soloPlayerId");
+        self::DbQuery("UPDATE player SET `player_score` = $suns where `player_id` = $soloPlayerId");
+        $this->notifyPoints($soloPlayerId, $suns);
     }
 
     function calculateLandTotalFromStats($playerId) {

@@ -16,7 +16,7 @@ trait ColoredTokenDeckTrait {
     /**
      * Pick destination cards for beginning choice.
      */
-   /* public function (pickInitialSpiritsCards)(int $playerId) {
+    /* public function (pickInitialSpiritsCards)(int $playerId) {
         $cardsNumber = $this->getInitialSpiritCardNumber();
         $cards = $this->pickDestinationCards($playerId, $cardsNumber);
         $this->keepInitialDestinationCards($playerId, $this->getDestinationIds($cards), $this->getInitialSpiritCardNumber());
@@ -27,38 +27,47 @@ trait ColoredTokenDeckTrait {
      * Pick tokens to fill central board.
      */
     public function fillCentralBoard() {
+        $holeCount = $this->getPlayerCount() === 1 ? 3 : 5;
         $tokenCount = 3;
-        $tokensByHole = [];
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= $holeCount; $i++) {
             $tokens = $this->pickTokensForCentralBoard($tokenCount, $i);
-            $tokensByHole[$i] = $tokens;
+            $this->notifyAllPlayers('materialMove', "", [
+                'type' => MATERIAL_TYPE_TOKEN,
+                'from' => MATERIAL_LOCATION_DECK,
+                'to' => MATERIAL_LOCATION_HOLE,
+                'toArg' => $i,
+                'material' => $tokens,
+            ]);
         }
-        $this->notifyAllPlayers('coloredTokenMove', "", [
-            'tokensByHole' => $tokensByHole,
-        ]);
     }
 
     /**
      * Pick tokens to refill central board.
      */
     public function refillCentralBoard() {
-        $hole = intval(self::getGameStateValue(EMPTIED_HOLE));
-        if ($hole) {
-            $tokenCount = 3;
-            $tokens = $this->pickTokensForCentralBoard($tokenCount, $hole);
-            if (count($tokens) != $tokenCount) {
-                //end of game
-            } else {
-                $this->notifyAllPlayers('materialMove', "", [
-                    'type' => MATERIAL_TYPE_TOKEN,
-                    'from' => MATERIAL_LOCATION_DECK,
-                    'to' => MATERIAL_LOCATION_HOLE,
-                    'toArg' => $hole,
-                    'material' => $tokens,
-                ]);
+        if ($this->getPlayerCount() === 1) {
+            //discard all tokens before replenishing
+            $toDiscard = $this->coloredTokens->getCardsInLocation("centralBoard");
+            $this->coloredTokens->moveCards(array_keys($toDiscard), "discard");
+            $this->fillCentralBoard();
+        } else {
+            $hole = intval(self::getGameStateValue(EMPTIED_HOLE));
+            if ($hole) {
+                $tokenCount = 3;
+                $tokens = $this->pickTokensForCentralBoard($tokenCount, $hole);
+                if (count($tokens) != $tokenCount) {
+                    //end of game
+                } else {
+                    $this->notifyAllPlayers('materialMove', "", [
+                        'type' => MATERIAL_TYPE_TOKEN,
+                        'from' => MATERIAL_LOCATION_DECK,
+                        'to' => MATERIAL_LOCATION_HOLE,
+                        'toArg' => $hole,
+                        'material' => $tokens,
+                    ]);
+                }
             }
         }
-        // return $tokens;
     }
 
     public function moveColoredTokenToBoard($tokenId, $hexId) {
@@ -235,14 +244,14 @@ trait ColoredTokenDeckTrait {
 
     public function getColoredTokensOnCentralBoard() {
         $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard'));
-        $byHole = array_fill_keys([1, 2, 3, 4, 5], []);
+        $byHole = $this->getPlayerCount() === 1 ? array_fill_keys([1, 2, 3], []) : array_fill_keys([1, 2, 3, 4, 5], []);
         foreach ($tokens as $tok) {
             $byHole[$tok->location_arg][] = $tok;
         }
         return $byHole;
     }
 
-    public function getRemainingTokensInDeck(){
+    public function getRemainingTokensInDeck() {
         return intval($this->coloredTokens->countCardInLocation("deck"));
     }
 

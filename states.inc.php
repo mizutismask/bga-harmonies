@@ -95,6 +95,20 @@ $playerActionsGameStates = [
         "transitions" => [
             "nextPlayer" => ST_NEXT_PLAYER,
             "continue" => ST_PLAYER_CHOOSE_ACTION,
+            "discardFromRiver" => ST_PLAYER_DISCARD_FROM_RIVER,
+        ]
+    ],
+
+    ST_PLAYER_DISCARD_FROM_RIVER => [
+        "name" => "discardFromRiver",
+        "description" => "", //solo only
+        "descriptionmyturn" => clienttranslate('${you} can discard a card from the river'),
+        "type" => "activeplayer",
+        "possibleactions" => [
+            "declineDiscard", "discardFromRiver"
+        ],
+        "transitions" => [
+            "nextPlayer" => ST_NEXT_PLAYER,
         ]
     ],
 ];
@@ -112,7 +126,7 @@ $gameGameStates = [
 
     ST_NEXT_PLAYER => [
         "name" => "nextPlayer",
-        "description" => "",
+        "description" => clienttranslate('End of turn actions'),
         "type" => "game",
         "action" => "stNextPlayer",
         "updateGameProgression" => true,

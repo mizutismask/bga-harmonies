@@ -15,3 +15,7 @@ function removeClass(className: string, rootNode?: HTMLElement | Document): void
 function isReadOnly() {
 	return this.isSpectator || typeof (this as any).g_replayFrom != 'undefined' || (this as any).g_archive_mode
 }
+
+function isValueInRange(value: number, minValue: number, maxValue: number): boolean {
+	return value >= minValue && value <= maxValue
+}

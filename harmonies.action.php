@@ -92,6 +92,25 @@ class action_harmonies extends APP_GameAction {
         self::ajaxResponse();
     }
 
+    public function discardFromRiver() {
+        self::setAjaxMode();
+        self::checkVersion();
+
+        $cardId = self::getArg("cardId", AT_posint, true);
+        $this->game->discardFromRiver($cardId);
+
+        self::ajaxResponse();
+    }
+
+    public function declineDiscard() {
+        self::setAjaxMode();
+        self::checkVersion();
+
+        $this->game->declineDiscard();
+
+        self::ajaxResponse();
+    }
+
     public function chooseSpirit() {
         self::setAjaxMode();
         self::checkVersion();

@@ -71,7 +71,7 @@ class Harmonies implements HarmoniesGame {
 		log('gamedatas', gamedatas)
 
 		this.cardsManager = new CardsManager(this)
-		this.river = new RiverDeck(this, this.gamedatas.river)
+		this.river = new RiverDeck(this, this.gamedatas.river, this.getPlayersCount())
 		this.animationManager = new AnimationManager(this)
 
 		this.initCentralBoard()
@@ -107,29 +107,28 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	private initCentralBoard() {
-		if (this.getPlayersCount() > 1) {
-			for (let i = 1; i <= 5; i++) {
-				dojo.place(
-					`<div id="hole-${i}" class="central-board-hole hole-${i}" data-hole="${i}" title="${_(
-						'Take those tokens to reproduce card patterns on your board'
-					)}">
+		const holeCount = this.getPlayersCount() > 1 ? 5 : 3
+		for (let i = 1; i <= holeCount; i++) {
+			dojo.place(
+				`<div id="hole-${i}" class="central-board-hole hole-${i}" data-hole="${i}" title="${_(
+					'Take those tokens to reproduce card patterns on your board'
+				)}">
 						<div id="hole-${i}-token-1" class="colored-token hole-token hole-token-1"></div>
 						<div id="hole-${i}-token-2" class="colored-token hole-token hole-token-2"></div>
 						<div id="hole-${i}-token-3" class="colored-token hole-token hole-token-3"></div>
 					</div>
 					`,
-					`central-board`
-				)
-				if (this.isNotSpectator()) {
-					dojo.connect($('hole-' + i), 'onclick', (evt) => {
-						if (
-							(this as any).isCurrentPlayerActive() &&
-							$('central-board').classList.contains('canTakeTokens')
-						) {
-							this.takeAction('takeTokens', { hole: evt.currentTarget.dataset.hole })
-						}
-					})
-				}
+				`central-board`
+			)
+			if (this.isNotSpectator()) {
+				dojo.connect($('hole-' + i), 'onclick', (evt) => {
+					if (
+						(this as any).isCurrentPlayerActive() &&
+						$('central-board').classList.contains('canTakeTokens')
+					) {
+						this.takeAction('takeTokens', { hole: evt.currentTarget.dataset.hole })
+					}
+				})
 			}
 		}
 		this.displayColoredTokensOnCentralBoard(this.gamedatas.tokensOnCentralBoard)
@@ -163,7 +162,9 @@ class Harmonies implements HarmoniesGame {
 					.getCardElement(card)
 					.classList.contains(this.river.riverStock.getSelectableCardClass())
 			) {
-				this.takeAction('takeAnimalCard', { cardId: card.id })
+				const action =
+					this.gamedatas.gamestate.name === 'discardFromRiver' ? 'discardFromRiver' : 'takeAnimalCard'
+				this.takeAction(action, { cardId: card.id })
 			}
 		}
 	}
@@ -197,7 +198,8 @@ class Harmonies implements HarmoniesGame {
 	 * @param args
 	 */
 	private displayColoredTokensOnCentralBoard(tokensByHole: { [hole: number]: Array<ColoredToken> }) {
-		;[1, 2, 3, 4, 5].forEach((num) => this.emptyHole(num))
+		const holes = this.getPlayersCount() === 1 ? [1, 2, 3] : [1, 2, 3, 4, 5]
+		holes.forEach((num) => this.emptyHole(num))
 
 		Object.keys(tokensByHole).forEach((hole) => {
 			tokensByHole[hole].forEach((token, i) => {
@@ -409,7 +411,7 @@ class Harmonies implements HarmoniesGame {
 			this.river.setSelectionMode('none')
 			$('central-board').classList.remove('canTakeTokens')
 			if (this.isNotSpectator() && this.isSpiritCardsOn()) {
-				this.playerTables[this.getPlayerId()].setSpiritSelectionMode("none")
+				this.playerTables[this.getPlayerId()].setSpiritSelectionMode('none')
 			}
 		}
 	}
@@ -457,6 +459,12 @@ class Harmonies implements HarmoniesGame {
 						'red'
 					)
 					break
+				case 'discardFromRiver':
+					//;(this as any).addActionButton('discard_card_button', _('Discard from river'), () => {})
+					//dojo.toggleClass('discard_card_button', 'disabled', true)
+					;(this as any).addActionButton('pass_button', _('Decline'), () => this.declineDiscard())
+					this.river.setSelectionMode('single')
+					break
 			}
 		}
 	}
@@ -482,7 +490,7 @@ class Harmonies implements HarmoniesGame {
 
 		if (chooseActionArgs.canChooseSpirit) {
 			//first thing to do
-			; (this as any).addActionButton('take_spirit_button', _('Take a spirit card'), () => { })
+			;(this as any).addActionButton('take_spirit_button', _('Take a spirit card'), () => {})
 		} else {
 			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {})
 			dojo.toggleClass('take_tokens_button', 'disabled', !chooseActionArgs.canTakeTokens)
@@ -509,8 +517,17 @@ class Harmonies implements HarmoniesGame {
 				;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())
 			}
 
-			if(chooseActionArgs.canResetTurn){
-				;(this as any).addActionButton('reset_turn_button', _('Reset my turn'), () => {this.takeAction("resetPlayerTurn")}, undefined, undefined, 'red')
+			if (chooseActionArgs.canResetTurn) {
+				;(this as any).addActionButton(
+					'reset_turn_button',
+					_('Reset my turn'),
+					() => {
+						this.takeAction('resetPlayerTurn')
+					},
+					undefined,
+					undefined,
+					'red'
+				)
 				//;(this as any).addTooltip('reset_turn_button', _('Reset your entire round'), '')
 			}
 		}
@@ -937,6 +954,14 @@ class Harmonies implements HarmoniesGame {
 		this.takeAction('pass')
 	}
 
+	public declineDiscard() {
+		if (!(this as any).checkAction('declineDiscard')) {
+			return
+		}
+
+		this.takeAction('declineDiscard')
+	}
+
 	public takeAction(action: string, data?: any) {
 		data = data || {}
 		data.lock = true
@@ -1111,8 +1136,18 @@ class Harmonies implements HarmoniesGame {
 				}
 				break
 			case 'RIVER':
-				//from river to player hand
-				this.playerTables[notif.args.toArg].addCard(card)
+				switch (notif.args.to) {
+					case 'HAND':
+						this.playerTables[notif.args.toArg].addCard(card)
+						break
+					case 'DISCARD':
+						this.river.removeCard(card)
+						break
+
+					default:
+						console.error('Card move from river destination not handled', notif)
+						break
+				}
 				break
 			case 'HAND':
 				//from player hand to player done
