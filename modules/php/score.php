@@ -219,7 +219,7 @@ trait ScoreTrait {
             $points[] = $cardScore;
         }
         $spiritPoints = $this->calculateSpiritCardsPoints($playerId, $board);
-        return array_merge($points,$spiritPoints);
+        return array_merge($points, $spiritPoints);
     }
 
     public function calculateSpiritCardsPoints($playerId, $board) {
@@ -336,5 +336,17 @@ trait ScoreTrait {
             default:
                 throw new BgaSystemException("This spirit card has not points defined for height: " . $cardType);
         }
+    }
+
+    public function convertScoreToSuns($score): int {
+        if ($this->isValueInRange($score, 0, 39)) return 0;
+        if ($this->isValueInRange($score, 40, 69)) return 1;
+        if ($this->isValueInRange($score, 70, 89)) return 2;
+        if ($this->isValueInRange($score, 90, 109)) return 3;
+        if ($this->isValueInRange($score, 110, 129)) return 4;
+        if ($this->isValueInRange($score, 130, 139)) return 5;
+        if ($this->isValueInRange($score, 140, 149)) return 6;
+        if ($this->isValueInRange($score, 150, 159)) return 7;
+        return 8;
     }
 }

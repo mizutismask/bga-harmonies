@@ -166,7 +166,7 @@ class Harmonies extends Table {
 
         // Get information about players
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
-        $sql = "SELECT player_id id, player_score score, player_no playerNo FROM player ";
+        $sql = "SELECT player_id id, player_score score, player_score_aux scoreAux, player_no playerNo FROM player ";
         $result['players'] = self::getCollectionFromDb($sql);
         $result['playerOrderWorkingWithSpectators'] = $this->getPlayerIdsInOrder($currentPlayerId);
         $result['turnOrderClockwise'] = true;
@@ -238,7 +238,7 @@ class Harmonies extends Table {
         return $this->isBoardSideA() ? 5 : 4;
     }
 
-    function makeSavepoint($player_id=null) {
+    function makeSavepoint($player_id = null) {
         $this->undoSavepoint();
     }
 
@@ -335,13 +335,13 @@ class Harmonies extends Table {
 
         $cardPoints = $this->getGlobalVariable(CARDS_POINTS_FOR_PLAYER . $playerId);
         foreach ($cardPoints as $i => $points) {
-            $index = $i+1;
+            $index = $i + 1;
             $board["score-card-$index-$playerId"] =  $points;
         }
 
         $board["score-total-1-$playerId"] = $this->calculateLandTotalFromStats($playerId);
         $board["score-total-2-$playerId"] = intval(self::getStat("game_animal_cards_score", $playerId));
-        $board["score-total-3-$playerId"] = intval($player['score']);
+        $board["score-total-3-$playerId"] = $this->getPlayerCount() == 1 ? intval($player['scoreAux']) : intval($player['score']);
         return $board;
     }
 }
