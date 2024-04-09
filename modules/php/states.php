@@ -165,7 +165,8 @@ trait StateTrait {
             self::notifyWithName('msg', clienttranslate('${player_name} scores 2 suns for not using spirit cards'));
         } else {
             $cards = $this->getAnimalCardsToScore($soloPlayerId);
-            $spirit = array_pop(array_filter($cards, fn ($c) => $c->isSpirit));
+            $spirits = array_filter($cards, fn ($c) => $c->isSpirit);
+            $spirit = array_pop($spirits);
             if (in_array($spirit->type_arg, [33, 34, 37, 38, 41])) {
                 $suns += 1;
                 self::notifyWithName('msg', clienttranslate('${player_name} scores 1 sun for choosing a group spirit card'));
