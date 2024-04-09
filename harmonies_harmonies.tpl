@@ -6,6 +6,8 @@
 <div id="score">
     <div id="score-wrapper">
     </div>
+    <div class="score-solo-suns-help">
+    </div>
 </div>
 
 <div class="shared-elements">

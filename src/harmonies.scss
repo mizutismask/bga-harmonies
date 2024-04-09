@@ -350,6 +350,21 @@ html {
 		height: 27px;
 	}
 }
+
+.player-count-1{
+	.score-solo-suns-help{
+		display: inline-block;
+	}
+}
+.score-solo-suns-help{
+	display: none;
+	background-size: 100%;
+	background-image: url('img/soloSunsHelp.jpg');
+	width: 354px;
+	height: 162px;
+	margin: 0 auto;
+}
+
 /*#reset_turn_button {
     float: right;
     background-color: red;
