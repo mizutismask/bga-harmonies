@@ -53,7 +53,7 @@ trait AnimalCubeDeckTrait {
 
         $this->animalCubes->moveCard($cubeId, $hexId, 4);
 
-        $this->notifyAllPlayers('materialMove', "", [
+        $this->notifyWithName('materialMove', clienttranslate('${player_name} places a cube'), [
             'type' => MATERIAL_TYPE_CUBE,
             'from' => MATERIAL_LOCATION_CARD,
             'fromArg' => $fromCardId,

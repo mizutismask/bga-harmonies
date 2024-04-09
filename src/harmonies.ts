@@ -490,7 +490,7 @@ class Harmonies implements HarmoniesGame {
 
 		if (chooseActionArgs.canChooseSpirit) {
 			//first thing to do
-			;(this as any).addActionButton('take_spirit_button', _('Take a spirit card'), () => {})
+			;(this as any).addActionButton('take_spirit_button', _('Choose one of the two spirit cards'), () => {})
 		} else {
 			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {})
 			dojo.toggleClass('take_tokens_button', 'disabled', !chooseActionArgs.canTakeTokens)
@@ -1191,12 +1191,12 @@ class Harmonies implements HarmoniesGame {
 					args.ticket = `<div class="icon expTicket"></div>`
 				}
 
-				// make cities names in bold
-				;['cities_names'].forEach((field) => {
-					if (args[field] !== null && args[field] !== undefined && args[field][0] != '<') {
-						args[field] = `<span style="color:#2cd51e"><strong>${_(args[field])}</strong></span>`
-					}
-				})
+				if (args.tokens && Array.isArray(args.tokens)) {
+					args.tokens = (args.tokens as Array<ColoredToken>)
+						.map((t) => `<div class="log-icon colored-token color-${t.type_arg}"></div>`)
+						.join(' ')
+				}
+				
 				;['you', 'actplayer', 'player_name'].forEach((field) => {
 					if (
 						typeof args[field] === 'string' &&

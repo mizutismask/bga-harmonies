@@ -53,9 +53,10 @@ trait ActionTrait {
         self::setGameStateValue(EMPTIED_HOLE, $holeNumber);
         $this->setGlobalVariable(TOKENS_IN_HOLE, $tokens);
 
-        $this->notifyAllPlayers('holeEmptied',  clienttranslate('${player_name} takes tokens'), [
+        $this->notifyAllPlayers('holeEmptied',  clienttranslate('${player_name} takes ${tokens}'), [
             'player_name' => $this->getPlayerName($this->getMostlyActivePlayerId()),
             'hole' => $holeNumber,
+            'tokens' => $tokens,
         ]);
 
         $this->continueOrEndTurn();
