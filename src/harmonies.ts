@@ -225,8 +225,7 @@ class Harmonies implements HarmoniesGame {
 		this.setTooltipToClass('revealed-tokens-back-counter', _('counter1 tooltip'))
 		this.setTooltipToClass('tickets-counter', _('counter2 tooltip'))
 
-		this.setTooltipToClass('xpd-help-icon', `<div class="help-card recto"></div>`)
-		this.setTooltipToClass('xpd-help-icon-mini', `<div class="help-card verso"></div>`)
+		this.setTooltipToClass('xpd-help-icon', `<div class="help-card help-${this.gamedatas.boardSide}"></div>`)
 		this.setTooltipToClass('player-turn-order', _('First player'))
 	}
 
