@@ -128,7 +128,7 @@ trait AnimalCardDeckTrait {
             'to' => MATERIAL_LOCATION_HAND,
             'toArg' => $playerId,
             'material' => [$card],
-            'spot' => $spot,
+            'spot' => $spot+1,
         ]);
         $this->fillAnimalCard($card);
     }
