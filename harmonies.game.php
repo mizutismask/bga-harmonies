@@ -223,8 +223,17 @@ class Harmonies extends Table {
             // game is over
             return 100;
         }
-        //return 100 * $this->getHighestCompletedDestinationsCount() / $this->getInitialSpiritCardNumber();
-        return 0;
+        $players = self::loadPlayersBasicInfos();
+        $hexesToFill = count($this->getHexesCoordinates()) - 2;
+        $maxFilled = 0;
+        foreach ($players as $playerId => $info) {
+            $filled = count(array_keys($this->getTokensForCompleteBoardByHex($playerId)));
+            if ($filled > $maxFilled) {
+                $maxFilled = $filled;
+            }
+        }
+        $initialTokenCount = 120;
+        return max(100 * $maxFilled / $hexesToFill, 100 * ($initialTokenCount-$this->getRemainingTokensInDeck()) / $initialTokenCount);
     }
 
 
