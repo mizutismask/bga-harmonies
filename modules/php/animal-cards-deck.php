@@ -120,7 +120,7 @@ trait AnimalCardDeckTrait {
         $card = $this->getAnimalCardFromDb($this->animalCards->getCard($cardId));
         self::incStat(1, "game_animal_cards_taken", $playerId);
 
-        $this->notifyAllPlayers('materialMove', clienttranslate('${player_name} takes an animal card to his spot ${spot}'), [
+        $this->notifyAllPlayers('materialMove', clienttranslate('${player_name} takes ${cardType} card to his spot ${spot}'), [
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
             'type' => MATERIAL_TYPE_CARD,
@@ -128,7 +128,9 @@ trait AnimalCardDeckTrait {
             'to' => MATERIAL_LOCATION_HAND,
             'toArg' => $playerId,
             'material' => [$card],
-            'spot' => $spot+1,
+            'spot' => $spot + 1,
+            'cardType' => $card->isSpirit ? clienttranslate('a spirit') : clienttranslate('an animal'),
+            'i18n' => ['cardType'],
         ]);
         $this->fillAnimalCard($card);
     }
@@ -142,7 +144,7 @@ trait AnimalCardDeckTrait {
             'playerId' => $playerId,
             'player_name' => $this->getPlayerName($playerId),
             'type' => MATERIAL_TYPE_CARD,
-            'from' =>MATERIAL_LOCATION_RIVER,
+            'from' => MATERIAL_LOCATION_RIVER,
             'to' => MATERIAL_LOCATION_DISCARD,
             'material' => [$card],
         ]);
