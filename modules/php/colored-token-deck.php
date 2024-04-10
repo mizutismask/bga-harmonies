@@ -114,16 +114,21 @@ trait ColoredTokenDeckTrait {
         $board = $this->getBoard($playerId);
         $hexes = [];
         $token = $this->getColoredTokenFromDb($this->coloredTokens->getCard($tokenId));
+        $existingCubesLocs = array_keys($this->getAnimalCubesOnPlayerBoard($playerId));
         foreach ($board as $hex) {
-            //$existingTokens = $this->getTokensAt($hex, $playerId);
             $existingTokens = $hex["tokens"];
             //self::dump('*******************hex', $hex);
-            //todo check animal cube here
+            $col = $hex['col'];
+            $row = $hex['row'];
+            $cellName = "${playerId}_cell_${col}_${row}";
+            $alreadyHasCube = in_array($cellName, $existingCubesLocs);
+
             if (
                 !$existingTokens
                 || count($existingTokens) < 3
                 && $this->isColorAllowedOnTopOfOtherColor($token->type_arg, $existingTokens[0]->type_arg)
                 && $this->isColorAllowedAtPosition($token->type_arg, count($existingTokens) + 1)
+                && !$alreadyHasCube
             ) {
                 $hexes[] = $hex;
             }
