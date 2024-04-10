@@ -85,6 +85,15 @@ trait ColoredTokenDeckTrait {
         ]);
     }
 
+    /* Called by zombie */
+    public function discardChosenTokens(){
+        $tokens = $this->getColoredTokensChosen();
+        foreach($tokens as $token){
+            $this->coloredTokens->moveCard($token->id, "discard");
+            $this->updateChosenToken($token->id, true);
+        }
+    }
+
     public function getTokensAt($hexId, $playerId) {
         $location = $hexId;
         $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation($location, null, "location_arg desc"));

@@ -77,7 +77,7 @@ class action_harmonies extends APP_GameAction {
         self::checkVersion();
 
         $hole = self::getArg("hole", AT_posint, true);
-        $this->game->takeTokens($hole);
+        $this->game->takeTokens($this->game->getActivePlayerId(), $hole);
 
         self::ajaxResponse();
     }
@@ -127,7 +127,7 @@ class action_harmonies extends APP_GameAction {
 
         $fromCardId = self::getArg("cardId", AT_posint, true);
         $toHexId = self::getArg("hexId", AT_alphanum, true);
-        $this->game->placeAnimalCube($fromCardId,$toHexId);
+        $this->game->placeAnimalCube($fromCardId, $toHexId);
 
         self::ajaxResponse();
     }
@@ -138,7 +138,7 @@ class action_harmonies extends APP_GameAction {
 
         $tokenId = self::getArg("tokenId", AT_posint, true);
         $toHexId = self::getArg("hexId", AT_alphanum, true);
-        $this->game->placeColoredToken($tokenId,$toHexId);
+        $this->game->placeColoredToken($tokenId, $toHexId);
 
         self::ajaxResponse();
     }

@@ -40,13 +40,14 @@ trait ActionTrait {
         $this->gamestate->nextState('nextPlayer');
     }
 
-    function takeTokens($holeNumber) {
+    function takeTokens($playerId, $holeNumber, $zombie = false) {
         self::checkAction('takeTokens');
 
-        $args = $this->argChooseAction();
-
-        if (!$args['canTakeTokens']) {
-            throw new BgaUserException(self::_("You already took colored tokens"));
+        if (!$zombie) {
+            $args = $this->argChooseAction();
+            if (!$args['canTakeTokens']) {
+                throw new BgaUserException(self::_("You already took colored tokens"));
+            }
         }
 
         $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard', $holeNumber));
@@ -54,12 +55,14 @@ trait ActionTrait {
         $this->setGlobalVariable(TOKENS_IN_HOLE, $tokens);
 
         $this->notifyAllPlayers('holeEmptied',  clienttranslate('${player_name} takes ${tokens}'), [
-            'player_name' => $this->getPlayerName($this->getMostlyActivePlayerId()),
+            'player_name' => $this->getPlayerName($playerId),
             'hole' => $holeNumber,
             'tokens' => $tokens,
         ]);
 
-        $this->continueOrEndTurn();
+        if (!$zombie) {
+            $this->continueOrEndTurn();
+        }
     }
 
     function takeAnimalCard($cardId) {
@@ -88,7 +91,7 @@ trait ActionTrait {
             throw new BgaUserException(self::_("This card is not available in the river"));
         }
         self::setGameStateValue(EMPTIED_RIVER_SLOT, $card->location_arg);
-        self::setGameStateValue(TOOK_ANIMAL_CARD, 1);//to prevent discarding again
+        self::setGameStateValue(TOOK_ANIMAL_CARD, 1); //to prevent discarding again
         $this->discardAndReplaceAnimalCard($cardId);
         $this->continueOrEndTurn();
     }
@@ -176,11 +179,11 @@ trait ActionTrait {
             $this->gamestate->nextState('continue');
         } else {
             //no action possible
-           $this->goToDiscardOrNextPlayer();
+            $this->goToDiscardOrNextPlayer();
         }
     }
 
-    function goToDiscardOrNextPlayer(){
+    function goToDiscardOrNextPlayer() {
         if ($this->getPlayerCount() === 1 && intval(self::getGameStateValue(TOOK_ANIMAL_CARD)) == 0) {
             $this->gamestate->nextState('discardFromRiver');
         } else {

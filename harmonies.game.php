@@ -233,7 +233,7 @@ class Harmonies extends Table {
             }
         }
         $initialTokenCount = 120;
-        return max(100 * $maxFilled / $hexesToFill, 100 * ($initialTokenCount-$this->getRemainingTokensInDeck()) / $initialTokenCount);
+        return max(100 * $maxFilled / $hexesToFill, 100 * ($initialTokenCount - $this->getRemainingTokensInDeck()) / $initialTokenCount);
     }
 
 
@@ -278,7 +278,12 @@ class Harmonies extends Table {
         if ($state['type'] === "activeplayer") {
             switch ($statename) {
                 default:
-                    $this->gamestate->nextState("zombiePass");
+                    $canTakeTokens = count($this->getColoredTokensChosen()) === 0;
+                    if ($canTakeTokens) {
+                        $this->takeTokens($active_player, bga_rand(0, 5), true);
+                        $this->discardChosenTokens();
+                    }
+                    $this->gamestate->jumpToState(ST_NEXT_PLAYER);
                     break;
             }
 
