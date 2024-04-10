@@ -39,7 +39,7 @@
 		},
 		"game_animal_cards_score": {
 			"id": 16,
-			"name": "Water",
+			"name": "Cards total score",
 			"type": "int"
 		},
 		"game_animal_cards_taken": {
@@ -50,6 +50,11 @@
 		"game_animal_cards_finished": {
 			"id": 18,
 			"name": "Animal cards finished",
+			"type": "int"
+		},
+		"game_animal_cubes": {
+			"id": 19,
+			"name": "Cubes placed",
 			"type": "int"
 		}
 	}

@@ -119,6 +119,7 @@ trait ActionTrait {
 
     function placeAnimalCube($fromCardId, $toHexId) {
         self::checkAction('placeAnimal');
+        $playerId = intval(self::getActivePlayerId());
 
         $args = $this->argChooseAction();
 
@@ -132,6 +133,8 @@ trait ActionTrait {
         if (!isset($args["placeAnimalCubeArgs"][$fromCardId]) || !in_array($toHexId, $args["placeAnimalCubeArgs"][$fromCardId])) {
             throw new BgaUserException(self::_("You have to respect the pattern of the card"));
         }
+
+        self::incStat(1, "game_animal_cubes", $playerId);
 
         //self::dump('*******************getLastCubeOnCard', $cube);
         $this->moveCubeToHex($this->getLastCubeOnCard($fromCardId), $toHexId, $fromCardId);
