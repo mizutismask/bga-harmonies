@@ -1,5 +1,7 @@
 .player-board {
-	color: white;
+	$playerBoardTextColor:white;
+
+	color: $playerBoardTextColor;
 	background: url('img/playerboard-background-bottom.jpg');
 	background-position: bottom;
 	background-size: cover;
@@ -15,41 +17,22 @@
 			background: url('img/playerboard-background.png'), ##{$color};
 			background-size: cover;
 			background-repeat: no-repeat;
-			box-shadow: 0 0 3px 2px #8181c7;
+			box-shadow: 0 0 3px 2px #b1690a;
 			border-radius: 8px;
 		}
 	}
 
+	.fa-star{
+		color: $playerBoardTextColor;
+	}
 	.player-name,
 	.player-name a {
-		color: white !important; // to override inline color
+		color: $playerBoardTextColor !important; // to override inline color
 		text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 	}
 	.player_score_value {
 		font-weight: bold;
 		text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-	}
-	.token {
-		background-image: url('img/tokens.png');
-
-		&[data-player-color='d8d7d7'] {
-			background-position: #{calc(0 * 100% / 5)} 50%;
-		}
-		&[data-player-color='df74b2'] {
-			background-position: #{calc(1 * 100% / 5)} 50%;
-		}
-		&[data-player-color='eca51c'] {
-			background-position: #{calc(2 * 100% / 5)} 50%;
-		}
-		&[data-player-color='77bd25'] {
-			background-position: #{calc(3 * 100% / 5)} 50%;
-		}
-		&[data-player-color='30b0e1'] {
-			background-position: #{calc(4 * 100% / 5)} 50%;
-		}
-		&[data-player-color='df3e33'] {
-			background-position: #{calc(5 * 100% / 5)} 50%;
-		}
 	}
 
 	.additional-icons {
@@ -87,7 +70,7 @@
 .counters {
 	display: flex;
 	align-items: center;
-	margin: 5px 0;
+	margin-top: 10px;
 	font-weight: bold;
 
 	.counter {
