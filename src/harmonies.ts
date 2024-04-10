@@ -389,11 +389,10 @@ class Harmonies implements HarmoniesGame {
 			if (args.canChooseSpirit) {
 				this.river.setSelectionMode('none')
 			}
-
 			if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
-				this.playerTables[this.getPlayerId()].selectCardFromId(
-					parseInt(Object.keys(args.placeAnimalCubeArgs)[0])
-				)
+				const cardId = parseInt(Object.keys(args.placeAnimalCubeArgs)[0])
+				this.playerTables[this.getPlayerId()].setSelectionMode('single')
+				this.playerTables[this.getPlayerId()].selectCardFromId(cardId)
 			} else {
 				this.playerTables[this.getPlayerId()].unselectAll()
 			}
@@ -507,7 +506,7 @@ class Harmonies implements HarmoniesGame {
 				'blue',
 				_('Place a cube from one of your card to the corresponding pattern on your board'),
 				() => {
-					this.setClientStatePlaceAnimalCube(chooseActionArgs)
+					this.onPlaceAnimalCubeButton(chooseActionArgs)
 				}
 			)
 			dojo.toggleClass('placeAnimalCube_button', 'disabled', !chooseActionArgs.canPlaceAnimalCube)
@@ -532,13 +531,22 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
-	private setClientStatePlaceAnimalCube(args: EnteringChooseActionArgs) {
-		;(this as any).setClientState('client_place_animal_cube', {
-			descriptionmyturn: _(
-				'Select one card and then the corresponding pattern on your board where you want to place the cube'
-			)
-		})
-		this.playerTables[this.getPlayerId()].setSelectionMode('single')
+	private onPlaceAnimalCubeButton(args: EnteringChooseActionArgs) {
+		if (
+			Object.keys(args.placeAnimalCubeArgs).length === 1 &&
+			args.placeAnimalCubeArgs[Object.keys(args.placeAnimalCubeArgs)[0]].length === 1
+		) {
+			const cardId = Object.keys(args.placeAnimalCubeArgs)[0]
+			const hexId = Object.values(args.placeAnimalCubeArgs)[0]
+			this.takeAction('placeAnimalCube', { 'cardId': cardId, 'hexId': hexId })
+		} else {
+			;(this as any).setClientState('client_place_animal_cube', {
+				descriptionmyturn: _(
+					'Select one card and then the corresponding pattern on your board where you want to place the cube'
+				)
+			})
+			this.playerTables[this.getPlayerId()].setSelectionMode('single')
+		}
 	}
 
 	/*private addColoredTokensButtons(tokensByHole: { [holeId: number]: Array<ColoredToken> }) {
@@ -1195,7 +1203,7 @@ class Harmonies implements HarmoniesGame {
 						.map((t) => `<div class="log-icon colored-token color-${t.type_arg}"></div>`)
 						.join(' ')
 				}
-				
+
 				;['you', 'actplayer', 'player_name'].forEach((field) => {
 					if (
 						typeof args[field] === 'string' &&

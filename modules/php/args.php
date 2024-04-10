@@ -63,7 +63,7 @@ trait ArgsTrait {
                 //self::dump('*******************locations', $locations);
                 $freeLocations = array_diff($locations, $existingCubesLocs);
                 if ($freeLocations) {
-                    $possible[$card->id] = $freeLocations;
+                    $possible[$card->id] = array_values($freeLocations);
                 }
             }
         }
