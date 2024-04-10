@@ -104,6 +104,7 @@ h3 {
 	}
 
 	.colored-token, .animal-cube {
+		pointer-events: none;
 		grid-row: 1;
 		grid-column: 1;
 		&.level-1{
