@@ -118,9 +118,7 @@ trait ColoredTokenDeckTrait {
         foreach ($board as $hex) {
             $existingTokens = $hex["tokens"];
             //self::dump('*******************hex', $hex);
-            $col = $hex['col'];
-            $row = $hex['row'];
-            $cellName = "${playerId}_cell_${col}_${row}";
+            $cellName = "{$playerId}_cell_{$hex['col']}_{$hex['row']}";
             $alreadyHasCube = in_array($cellName, $existingCubesLocs);
 
             if (
