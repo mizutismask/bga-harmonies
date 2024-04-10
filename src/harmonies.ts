@@ -83,7 +83,6 @@ class Harmonies implements HarmoniesGame {
 			// score or end
 			this.onEnteringEndScore()
 		}
-		this.setupNotifications()
 
 		Object.values(this.gamedatas.playerOrderWorkingWithSpectators).forEach((p) => {
 			this.setupPlayer(this.gamedatas.players[p])
@@ -103,6 +102,7 @@ class Harmonies implements HarmoniesGame {
 			this.gamedatas.winners.forEach((pId) => this.scoreBoard.highlightWinnerScore(pId))
 		}
 		removeClass('animatedScore')
+		this.setupNotifications()
 		console.log('Ending game setup')
 	}
 
@@ -1117,7 +1117,9 @@ class Harmonies implements HarmoniesGame {
 						this.river.addCard(card)
 						break
 					case 'SPIRITS':
-						this.playerTables[notif.args.toArg].addSpiritCard(card)
+						if (notif.args.toArg == this.getPlayerId()) {
+							this.playerTables[notif.args.toArg].addSpiritCard(card)
+						}
 						break
 
 					default:

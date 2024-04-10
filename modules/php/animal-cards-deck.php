@@ -33,7 +33,8 @@ trait AnimalCardDeckTrait {
                     'type' => MATERIAL_TYPE_CARD,
                     'from' => MATERIAL_LOCATION_DECK,
                     'to' => MATERIAL_LOCATION_SPIRITS,
-                    'material' => [$card],
+                    'toArg' => $playerId,
+                    'material' => [$this->getAnimalCardFromDb($card)],
                 ]);
             }
         }
