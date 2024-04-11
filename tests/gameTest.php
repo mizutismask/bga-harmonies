@@ -27,6 +27,9 @@ class GameTest extends GameTestBase { // this is your game class defined in ggg.
         $this->displayResult(__FUNCTION__, $this->isColorAllowedOnTopOfOtherColor(YELLOW, YELLOW) == false, $this->isColorAllowedOnTopOfOtherColor(YELLOW, YELLOW));
         $this->displayResult(__FUNCTION__, $this->isColorAllowedOnTopOfOtherColor(GREEN, GRAY) == false, $this->isColorAllowedOnTopOfOtherColor(GREEN, GRAY));
         $this->displayResult(__FUNCTION__, $this->isColorAllowedOnTopOfOtherColor(GREEN, RED) == false, $this->isColorAllowedOnTopOfOtherColor(GREEN, RED));
+        $this->displayResult(__FUNCTION__, $this->isColorAllowedOnTopOfOtherColor(YELLOW, BROWN) == false, $this->isColorAllowedOnTopOfOtherColor(YELLOW, BROWN));
+        $this->displayResult(__FUNCTION__, $this->isColorAllowedOnTopOfOtherColor(BLUE, BROWN) == false, $this->isColorAllowedOnTopOfOtherColor(BLUE, BROWN));
+        $this->displayResult(__FUNCTION__, $this->isColorAllowedOnTopOfOtherColor(GRAY, BROWN) == false, $this->isColorAllowedOnTopOfOtherColor(GRAY, BROWN));
 
         $this->displayResult(__FUNCTION__, $this->isColorAllowedOnTopOfOtherColor(GREEN, BROWN) == true, $this->isColorAllowedOnTopOfOtherColor(GREEN, BROWN));
         $this->displayResult(__FUNCTION__, $this->isColorAllowedOnTopOfOtherColor(GRAY, GRAY) == true, $this->isColorAllowedOnTopOfOtherColor(GRAY, GRAY));
