@@ -41,7 +41,7 @@ trait DebugUtilTrait {
         self::DbQuery("UPDATE `animalCube` set `card_location` = 'deck'");
     }
 
-    /*public function debugReplacePlayersIds() {
+   /* public function debugReplacePlayersIds() {
         if (!$this->isStudio() ) {
             return;
         }
@@ -84,7 +84,7 @@ trait DebugUtilTrait {
    * loadBug: in studio, type loadBug(20762) into the table chat to load a bug report from production
    * client side JavaScript will fetch each URL below in sequence, then refresh the page
    */
-    /* public function loadBug($reportId) {
+    public function loadBug($reportId) {
         $db = explode('_', self::getUniqueValueFromDB("SELECT SUBSTRING_INDEX(DATABASE(), '_', -2)"));
         $game = $db[0];
         $tableId = $db[1];
@@ -105,11 +105,11 @@ trait DebugUtilTrait {
             ]
         ]);
     }
-*/
+
     /*
     * loadBugSQL: in studio, this is one of the URLs triggered by loadBug() above
     */
-    /* public function loadBugSQL($reportId) {
+    public function loadBugSQL($reportId) {
         $studioPlayer = self::getCurrentPlayerId();
         $players = self::getObjectListFromDb("SELECT player_id FROM player", true);
 
@@ -128,11 +128,10 @@ trait DebugUtilTrait {
             $sql[] = "UPDATE gamelog SET gamelog_notification=REPLACE(gamelog_notification, $pId, $studioPlayer)";
 
             // TODO Add game-specific SQL updates for the tables, everywhere players ids are used in your game 
-            $sql[] = "UPDATE deck SET card_location_arg=$studioPlayer WHERE card_location_arg=$pId";
-            $sql[] = "UPDATE card SET card_location_arg=$studioPlayer WHERE card_location_arg=$pId";
-            $sql[] = "UPDATE piece SET player_id=$studioPlayer WHERE player_id=$pId";
-            $sql[] = "UPDATE log SET player_id=$studioPlayer WHERE player_id=$pId";
-            $sql[] = "UPDATE log SET action_arg=REPLACE(action_arg, $pId, $studioPlayer)";
+            $sql[] = "UPDATE animalCard SET card_location=REPLACE(card_location, $pId, $studioPlayer)";
+            $sql[] = "UPDATE animalCube SET card_location=REPLACE(card_location, $pId, $studioPlayer)";
+            $sql[] = "UPDATE coloredToken SET card_location=REPLACE(card_location, $pId, $studioPlayer)";
+            $sql[] = "UPDATE global_variables SET name=REPLACE(name, $pId, $studioPlayer)";
 
             // This could be improved, it assumes you had sequential studio accounts before loading
             // e.g., quietmint0, quietmint1, quietmint2, etc. are at the table
@@ -147,5 +146,5 @@ trait DebugUtilTrait {
         }
         self::reloadPlayersBasicInfos();
         $this->gamestate->reloadState();
-    }*/
+    }
 }
