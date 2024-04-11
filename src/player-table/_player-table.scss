@@ -121,4 +121,16 @@ h3 {
 			z-index: 7;
 		}
 	}
+
+	.animal-cube{
+		&.pile-height-1{
+			margin-top:1px;
+		}
+		&.pile-height-2{
+			margin-top:-20px;
+		}
+		&.pile-height-3{
+			margin-top:-38px;
+		}
+	}
 }
