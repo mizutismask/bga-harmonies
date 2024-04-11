@@ -107,6 +107,7 @@ h3 {
 		pointer-events: none;
 		grid-row: 1;
 		grid-column: 1;
+		justify-self: center;
 		&.level-1{
 			margin-top: 72%;
 			z-index: 5;
