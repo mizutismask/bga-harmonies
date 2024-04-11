@@ -19,3 +19,7 @@ function isReadOnly() {
 function isValueInRange(value: number, minValue: number, maxValue: number): boolean {
 	return value >= minValue && value <= maxValue
 }
+
+function getCubeClasses(cube: AnimalCube) {
+	return `animal-cube ${cube.type_arg === 2 ? 'cubespirit' : 'cube'}`
+}

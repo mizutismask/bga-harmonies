@@ -136,10 +136,7 @@ class Harmonies implements HarmoniesGame {
 
 	private displayCubesOnAnimalCards(cubes: Array<AnimalCube>) {
 		cubes.forEach((c) => {
-			dojo.addClass(
-				`${c.location}-score-${c.location_arg}`,
-				`animal-cube ${c.type_arg === 2 ? 'cubespirit' : 'cube'}`
-			)
+			dojo.addClass(`${c.location}-score-${c.location_arg}`, getCubeClasses(c))
 		})
 	}
 

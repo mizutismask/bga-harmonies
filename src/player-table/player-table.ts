@@ -166,7 +166,7 @@ class PlayerTable {
 
 	public createCubeOnBoard(cube: AnimalCube) {
 		let html = `
-			<div class="animal-cube ${cube.type_arg === 2 ? 'cubespirit' : 'cube'}"></div>
+			<div class="animal-cube ${getCubeClasses(cube)}"></div>
         `
 		dojo.place(html, cube.location, 'first')
 	}
