@@ -11,40 +11,35 @@ trait DebugUtilTrait {
             return;
         }
 
-        //$this->debugSetDestinationInHand(7, 2343492);
-        //$this->gamestate->changeActivePlayer(2343492);
+        $this->gamestate->changeActivePlayer(2333092);
+        $this->fill();
     }
 
-    /*function cd() {
-        $this->debugCompleteDestinations();
-    }*/
+    /**
+     * Fills the current players board with random piles of tokens and add a cube on each.
+     */
+    function fill() {
+        $hexes = $this->getHexesCoordinates();
+        $playerId = $this->getCurrentPlayerId();
+        foreach ($hexes as $hex) {
+            $hexId = $this->convertHexCoordsToName($hex, $playerId);
+            $number = bga_rand(1, 3);
+            $tokens = array_slice($this->coloredTokens->getCardsInLocation("deck"), 0, $number);
+            foreach ($tokens as $token) {
+                $this->moveColoredTokenToBoard($token["id"], $hexId);
+            }
 
-    /*function debugCompleteDestinations() {
-        $players = $this->getPlayersIds();
-        $restriction = " limit " . ($this->getInitialSpiritCardNumber() - 1);
-        foreach ($players as $playerId) {
-            self::DbQuery("UPDATE `destination` set `completed` = true WHERE `card_location_arg`= $playerId" . $restriction);
+            $this->animalCubes->pickCardsForLocation(1, 'deck', $hexId, "4");
         }
-        $this->gamestate->jumpToState(ST_PLAYER_CHOOSE_ACTION);
-    }*/
+    }
 
-    /*function debugEmptyDestinationDeck() {
-        $this->coloredTokens->moveAllCardsInLocation('deck', 'void');
-    }*/
-
-    /*function debugAlmostEmptyDestinationDeck() {
-        $moveNumber = $this->getRemainingDestinationCardsInDeck() - 1;
-        $this->coloredTokens->pickCardsForLocation($moveNumber, 'deck', 'discard');
-    }*/
-
-
-    /*function clear() {
-        self::DbQuery("DELETE FROM `claimed_routes`");
-        $this->setGlobalVariable(LAST_BLUE_ROUTES, [null, null, null]);
-        $this->setGameStateValue(BLUEPOINT_ACTIONS_REMAINING, 0);
-        $this->debugResetArrowsLeft();
-        self::DbQuery("UPDATE `destination` set `completed` = false");
-    }*/
+    /**
+     * Removes everything from the current players board.
+     */
+    function clear() {
+        self::DbQuery("UPDATE `coloredToken` set `card_location` = 'deck'");
+        self::DbQuery("UPDATE `animalCube` set `card_location` = 'deck'");
+    }
 
     /*public function debugReplacePlayersIds() {
         if (!$this->isStudio() ) {
@@ -89,7 +84,7 @@ trait DebugUtilTrait {
    * loadBug: in studio, type loadBug(20762) into the table chat to load a bug report from production
    * client side JavaScript will fetch each URL below in sequence, then refresh the page
    */
-   /* public function loadBug($reportId) {
+    /* public function loadBug($reportId) {
         $db = explode('_', self::getUniqueValueFromDB("SELECT SUBSTRING_INDEX(DATABASE(), '_', -2)"));
         $game = $db[0];
         $tableId = $db[1];
@@ -114,7 +109,7 @@ trait DebugUtilTrait {
     /*
     * loadBugSQL: in studio, this is one of the URLs triggered by loadBug() above
     */
-   /* public function loadBugSQL($reportId) {
+    /* public function loadBugSQL($reportId) {
         $studioPlayer = self::getCurrentPlayerId();
         $players = self::getObjectListFromDb("SELECT player_id FROM player", true);
 

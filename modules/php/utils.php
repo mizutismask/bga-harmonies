@@ -126,12 +126,14 @@ trait UtilTrait {
 
     function updateChosenToken(string $placedTokenId, bool $done) {
         $gvar = $this->getGlobalVariable(TOKENS_IN_HOLE, true);
-        foreach ($gvar as &$token) {
-            if ($token["id"] == $placedTokenId) {
-                $token["done"] = $done;
+        if ($gvar) {
+            foreach ($gvar as &$token) {
+                if ($token["id"] == $placedTokenId) {
+                    $token["done"] = $done;
+                }
             }
+            $this->setGlobalVariable(TOKENS_IN_HOLE, $gvar);
         }
-        $this->setGlobalVariable(TOKENS_IN_HOLE, $gvar);
     }
 
     /**
