@@ -34,7 +34,7 @@ class PlayerTable {
 
 		for (let row = 0; row < boardSize.height; row++) {
 			for (let col = 0; col < boardSize.width; col++) {
-				const cellName = `${player.id}_cell_${col}_${row}`
+				const cellName = getCellNameFromCoords(player.id, col, row)
 				let html = `
 						<div class="hex invisible" id="${cellName}">
 						</div>
@@ -42,8 +42,7 @@ class PlayerTable {
 				dojo.place(html, `hex-grid-container-${player.id}`)
 			}
 		}
-		hexes.forEach((h) => $(`${player.id}_cell_${h.col}_${h.row}`).classList.remove('invisible'))
-
+		hexes.forEach((h) => $(getCellNameFromCoords(player.id, h.col, h.row)).classList.remove('invisible'))
 		if (isMyTable) {
 			dojo.connect($(`grid-container-${player.id}`), 'click', (evt) => {
 				log(
@@ -53,15 +52,7 @@ class PlayerTable {
 					`${player.id}_cell_`,
 					evt.target.id.startsWith(`${player.id}_cell_`)
 				)
-				if (
-					!evt.target.id.startsWith(`${player.id}_cell_container`) &&
-					evt.target.id.startsWith(`${player.id}_cell_`)
-				) {
-					this.game.onHexClick(evt.target.id)
-				} else {
-					evt.preventDefault()
-					evt.stopPropagation()
-				}
+				this.game.onHexClick(evt.target.id)
 			})
 		}
 

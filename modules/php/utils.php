@@ -576,4 +576,8 @@ trait UtilTrait {
     function isValueInRange(int $value, int $minValue, int $maxValue): bool {
         return $value >= $minValue && $value <= $maxValue;
     }
+
+    function getCellName($hex, $playerId) {
+        return "cell_{$playerId}_{$hex['col']}_{$hex['row']}";
+    }
 }

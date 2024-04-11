@@ -22,7 +22,7 @@ trait DebugUtilTrait {
         $hexes = $this->getHexesCoordinates();
         $playerId = $this->getCurrentPlayerId();
         foreach ($hexes as $hex) {
-            $hexId = $this->convertHexCoordsToName($hex, $playerId);
+            $hexId = $this->getCellName($hex, $playerId);
             $number = bga_rand(1, 3);
             $tokens = array_slice($this->coloredTokens->getCardsInLocation("deck"), 0, $number);
             foreach ($tokens as $token) {

@@ -21,7 +21,7 @@ trait HoneycombTrait {
         $coords = $this->getHexesCoordinates();
         $existingTokens = $this->getTokensForCompleteBoardByHex($playerId);
         foreach ($coords as &$hex) {
-            $cellName = $this->convertHexCoordsToName($hex, $playerId);
+            $cellName = $this->getCellName($hex, $playerId);
             if (isset($existingTokens[$cellName])) {
                 $hex["tokens"] = $existingTokens[$cellName];
                 $hex["topToken"] = isset($existingTokens[$cellName][0]) ? $existingTokens[$cellName][0] : null;
@@ -99,7 +99,7 @@ trait HoneycombTrait {
                 }
                 if ($allHexesValid) {
                     $cubeHex = $this->getCubeCoordinate($patternRotation, $hex);
-                    $possible[] = $convertNames ? $this->convertHexCoordsToName($cubeHex, $playerId) : $cubeHex;//todo check if unique necessary when not converting names
+                    $possible[] = $convertNames ? $this->getCellName($cubeHex, $playerId) : $cubeHex;//todo check if unique necessary when not converting names
                 }
             }
         }

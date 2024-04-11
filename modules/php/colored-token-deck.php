@@ -86,9 +86,9 @@ trait ColoredTokenDeckTrait {
     }
 
     /* Called by zombie */
-    public function discardChosenTokens(){
+    public function discardChosenTokens() {
         $tokens = $this->getColoredTokensChosen();
-        foreach($tokens as $token){
+        foreach ($tokens as $token) {
             $this->coloredTokens->moveCard($token->id, "discard");
             $this->updateChosenToken($token->id, true);
         }
@@ -107,7 +107,7 @@ trait ColoredTokenDeckTrait {
     }
 
     public function getTokensForCompleteBoardByHex($playerId) {
-        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM coloredToken where card_location like '$playerId%' order by card_location_arg desc";
+        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM coloredToken where card_location like 'cell_$playerId%' order by card_location_arg desc";
         $tokens = $this->getColoredTokensFromDb(self::getCollectionFromDb($sql));
         $byCell = [];
         foreach (array_values($tokens) as $token) {
@@ -127,7 +127,7 @@ trait ColoredTokenDeckTrait {
         foreach ($board as $hex) {
             $existingTokens = $hex["tokens"];
             //self::dump('*******************hex', $hex);
-            $cellName = "{$playerId}_cell_{$hex['col']}_{$hex['row']}";
+            $cellName = $this->getCellName($hex, $playerId);
             $alreadyHasCube = in_array($cellName, $existingCubesLocs);
 
             if (
@@ -146,22 +146,22 @@ trait ColoredTokenDeckTrait {
     public function convertHexesCoordsToName($hexes, $playerId) {
         $hexesNames = [];
         foreach ($hexes as $hex) {
-            $hexesNames[] = $this->convertHexCoordsToName($hex, $playerId);
+            $hexesNames[] = $this->getCellName($hex, $playerId);
         }
         return $hexesNames;
     }
 
-    public function convertHexCoordsToName($hex, $playerId) {
-        return  $playerId . "_cell_" . $hex["col"] . "_" . $hex["row"];
-    }
-
     public function isColorAllowedOnTopOfOtherColor($topColor, $bottomColor) {
         $allowed = true;
-        if ($bottomColor === BLUE || $bottomColor === YELLOW || $bottomColor === GREEN) {
+        if ($topColor === BLUE || $topColor === YELLOW) {
+            $allowed = false;
+        } else if ($bottomColor === BLUE || $bottomColor === YELLOW || $bottomColor === GREEN) {
             $allowed = false;
         } else if ($bottomColor === GRAY && $topColor !== GRAY && $topColor !== RED) {
             $allowed = false;
         } else if ($bottomColor === RED && $topColor !== $bottomColor) {
+            $allowed = false;
+        } else if ($topColor === GRAY && $topColor !== $bottomColor) {
             $allowed = false;
         }
         return $allowed;

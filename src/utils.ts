@@ -23,3 +23,11 @@ function isValueInRange(value: number, minValue: number, maxValue: number): bool
 function getCubeClasses(cube: AnimalCube) {
 	return `animal-cube ${cube.type_arg === 2 ? 'cubespirit' : 'cube'}`
 }
+
+function getCellName(playerId, hex) {
+	return getCellNameFromCoords(playerId, hex['col'], hex['row'])
+}
+
+function getCellNameFromCoords(playerId, col: number, row: number) {
+	return `cell_${playerId}_${col}_${row}`
+}

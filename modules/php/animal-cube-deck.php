@@ -80,7 +80,7 @@ trait AnimalCubeDeckTrait {
     }
 
     public function getAnimalCubesOnPlayerBoard($playerId) {
-        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM animalCube where card_location like '$playerId%'";
+        $sql = "SELECT card_id id, card_type type, card_type_arg type_arg, card_location location, card_location_arg location_arg FROM animalCube where card_location like 'cell_$playerId%'";
         $tokens = $this->getAnimalCubesFromDb(self::getCollectionFromDb($sql));
         $byCell = [];
         foreach (array_values($tokens) as $token) {
