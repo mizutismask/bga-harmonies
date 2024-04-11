@@ -165,8 +165,10 @@ class PlayerTable {
 	}
 
 	public createCubeOnBoard(cube: AnimalCube) {
+		const pileHeight = dojo.query(`#${cube.location} .colored-token`).length
+		//log(`#${cube.location} .colored-token`)
 		let html = `
-			<div class="animal-cube ${getCubeClasses(cube)}"></div>
+			<div class="animal-cube ${getCubeClasses(cube)} pile-height-${pileHeight}"></div>
         `
 		dojo.place(html, cube.location, 'first')
 	}
