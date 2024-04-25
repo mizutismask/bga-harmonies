@@ -12,7 +12,11 @@
 
 <div class="shared-elements">
     <div id="river"></div>
-    <div id="central-board" class="central-board"></div>
+    <div id="central-board" class="central-board">
+        <div id="central-board-counter-wrapper" class="central-board-counter-wrapper">
+            <span>x</span><span id="central-board-counter"></span>
+        </div>
+    </div>
 </div>
 <div id="player-tables"></div>
 {OVERALL_GAME_FOOTER}

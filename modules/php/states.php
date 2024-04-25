@@ -59,9 +59,9 @@ trait StateTrait {
             $this->gamestate->nextState('endScore');
         } else {
             //finishing round or playing normally
+            $this->activateNextPlayerCustom();
             $this->refillCentralBoard();
             $this->refillAnimalCards();
-            $this->activateNextPlayerCustom();
             $this->gamestate->nextState('nextPlayer');
         }
     }

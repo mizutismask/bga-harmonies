@@ -193,6 +193,7 @@ class Harmonies extends Table {
         $result['tokensOnCentralBoard'] = $this->getColoredTokensOnCentralBoard();
         $result['cubesOnAnimalCards'] = $this->getAnimalCubesOnCards();
         $result['spiritsCards'] = $this->getSpiritCardsToChoose($currentPlayerId);
+        $result['remainingTokens'] = $this->getDisplayedRemainingTokensInDeck();
 
         if ($isEnd) {
             $maxScore = max(array_map(fn ($player) => intval($player['score']), $result['players']));

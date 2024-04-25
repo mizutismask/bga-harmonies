@@ -63,6 +63,7 @@ interface HarmoniesGamedatas {
 	tokensOnCentralBoard: { [hole: number]: Array<ColoredToken> }
 	expansion: number
 	spiritsCards: AnimalCard[]
+	remainingTokens:number
 }
 
 interface HarmoniesGame extends Game {
@@ -108,7 +109,7 @@ interface NotifScoreArgs {
 interface NotifCounter {
 	counterName: string
 	counterValue: number
-	playerId: number
+	playerId?: number
 }
 
 interface NotifWinnerArgs {

@@ -68,6 +68,10 @@ trait ColoredTokenDeckTrait {
                 }
             }
         }
+        $this->notifyAllPlayers('counter', "", [
+            'counterName' => "remainingTokens",
+            'counterValue' => $this->getDisplayedRemainingTokensInDeck(),
+        ]);
     }
 
     public function moveColoredTokenToBoard($tokenId, $hexId) {
@@ -233,16 +237,11 @@ trait ColoredTokenDeckTrait {
     }
 
     /**
-     * get remaining destination cards in deck.
+     * Get remaining tokens in theory. Tokens picked are moved only when placed on player board.
      */
-    public function getRemainingDestinationCardsInDeck() {
-        $remaining = intval($this->coloredTokens->countCardInLocation('deck'));
-
-        if ($remaining == 0) {
-            $remaining = intval($this->coloredTokens->countCardInLocation('discard'));
-        }
-
-        return $remaining;
+    public function getDisplayedRemainingTokensInDeck() {
+        $remaining = $this->getRemainingTokensInDeck();
+        return $remaining - count($this->getColoredTokensChosen());
     }
 
     /**
@@ -303,7 +302,7 @@ trait ColoredTokenDeckTrait {
             'player_name' => $this->getPlayerName($playerId),
             'count' => intval($traded),
             'number' => 0, //1-1 or 0-0
-            'remainingDestinationsInDeck' => $this->getRemainingDestinationCardsInDeck(),
+            'remainingDestinationsInDeck' => $this->getRemainingTokensInDeck(),
             '_private' => [
                 $playerId => [
                     'tokens' => $this->getColoredTokensFromDb([$this->coloredTokens->getCard($keptDestinationsId)]),
@@ -323,7 +322,7 @@ trait ColoredTokenDeckTrait {
             'player_name' => $this->getPlayerName($playerId),
             'count' => count($ids),
             'number' => count($ids),
-            'remainingDestinationsInDeck' => $this->getRemainingDestinationCardsInDeck(),
+            'remainingDestinationsInDeck' => $this->getRemainingTokensInDeck(),
             '_private' => [
                 $playerId => [
                     'tokens' => $this->getColoredTokensFromDb($this->coloredTokens->getCards($ids)),

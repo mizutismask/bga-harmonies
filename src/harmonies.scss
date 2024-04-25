@@ -110,6 +110,14 @@ html {
 	background-size: 100%;
 	margin: 0 0px 12px 15px;
 
+	.central-board-counter-wrapper{
+		position: absolute;
+		bottom: 9%;
+		right: 14%;
+		font-size: smaller;
+		font-weight: bold;
+	}
+
 	&.canTakeTokens {
 		.central-board-hole {
 			cursor: pointer;
@@ -390,6 +398,11 @@ html {
 	display: flex;
 	column-gap: 10px;
 	margin: 12px 0px 12px 15px;
+
+	.central-board-counter-wrapper{
+		position: unset;
+		align-self: center;
+	}
 
 	.central-board-hole {
 		box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);

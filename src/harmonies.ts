@@ -34,6 +34,7 @@ class Harmonies implements HarmoniesGame {
 
 	private scoreBoard: ScoreBoard
 	private emptyHexesCounters: Counter[] = []
+	private remainingTokensCounter: Counter
 
 	private animations: HarmoniesAnimation[] = []
 	public animationManager: AnimationManager
@@ -118,7 +119,7 @@ class Harmonies implements HarmoniesGame {
 						<div id="hole-${i}-token-3" class="colored-token hole-token hole-token-3"></div>
 					</div>
 					`,
-				`central-board`
+				`central-board-counter-wrapper`,"before"
 			)
 			if (this.isNotSpectator()) {
 				dojo.connect($('hole-' + i), 'onclick', (evt) => {
@@ -132,6 +133,10 @@ class Harmonies implements HarmoniesGame {
 			}
 		}
 		this.displayColoredTokensOnCentralBoard(this.gamedatas.tokensOnCentralBoard)
+		
+		this.remainingTokensCounter = new ebg.counter()
+		this.remainingTokensCounter.create(`central-board-counter`)
+		this.remainingTokensCounter.setValue(this.gamedatas.remainingTokens)
 	}
 
 	private displayCubesOnAnimalCards(cubes: Array<AnimalCube>) {
@@ -1043,6 +1048,9 @@ class Harmonies implements HarmoniesGame {
 	notif_counter(notif: Notif<NotifCounter>) {
 		if (notif.args.counterName == 'empty-hexes') {
 			this.emptyHexesCounters[notif.args.playerId].setValue(notif.args.counterValue)
+		}
+		else if (notif.args.counterName == 'remainingTokens') {
+			this.remainingTokensCounter.setValue(notif.args.counterValue)
 		}
 	}
 
