@@ -67,6 +67,30 @@
 	}
 }
 
+#player-help-visible-wrapper {
+	display: flex;
+	justify-content: center;
+	margin-bottom:10px;
+
+	.player-help-visible {
+		background-size: cover;
+		border: 2px solid #ededed;
+		border-radius: 3%;
+		$helpVisibleSideAModifier: 0.5;
+		&.help-sideA {
+			width: calc(300px * $helpVisibleSideAModifier);
+			height: calc(516px * $helpVisibleSideAModifier);
+			background-image: url('img/helpSideA.jpg');
+		}
+
+		&.help-sideB {
+			width: calc(289px * $helpVisibleSideAModifier);
+			height: calc(485px * $helpVisibleSideAModifier);
+			background-image: url('img/helpSideB.jpg');
+		}
+	}
+}
+
 .counters {
 	display: flex;
 	align-items: center;

@@ -67,6 +67,10 @@ class Harmonies implements HarmoniesGame {
 
 	public setup(gamedatas: any) {
 		log('Starting game setup')
+		if (!$("player-help-visible-wrapper")) {
+			dojo.place(`<div id="player-help-visible-wrapper"><div id="player-help-visible" class="player-help-visible help-${this.gamedatas.boardSide}"></div></div>`, `player_boards`, "first")
+		}
+
 		this.gameFeatures = new GameFeatureConfig()
 		this.gamedatas = gamedatas
 		log('gamedatas', gamedatas)
@@ -267,7 +271,7 @@ class Harmonies implements HarmoniesGame {
 				`,
 			`player_board_${player.id}`
 		)
-
+		
 		/* const revealedTokensBackCounter = new ebg.counter();
 			revealedTokensBackCounter.create(`revealed-tokens-back-counter-${player.id}`);
 			revealedTokensBackCounter.setValue(player.revealedTokensBackCount);
@@ -305,6 +309,12 @@ class Harmonies implements HarmoniesGame {
 				`additional-icons-${player.id}`
 			)
 		}
+	}
+
+	/* @Override */
+	public updatePlayerOrdering() {
+		(this as any).inherited(arguments);
+		dojo.place('player-help-visible-wrapper', 'player_boards', 'first');
 	}
 
 	public setupPlayerOrderHints(player: HarmoniesPlayer) {
