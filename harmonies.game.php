@@ -178,6 +178,7 @@ class Harmonies extends Table {
             $player['boardAnimalCards'] = $this->getAnimalCardsOnPlayerBoard($playerId);
             $player['tokensOnBoard'] = $this->getTokensForCompleteBoardByHex($playerId);
             $player['animalCubesOnBoard'] = $this->getAnimalCubesOnPlayerBoard($playerId);
+            $player['emptyHexes'] = $this->getEmptyHexesCount($playerId);
             if ($isEnd) {
                 $player['scores'] = $this->getPlayerScoreBoard($playerId, $player);
             }

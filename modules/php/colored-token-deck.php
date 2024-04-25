@@ -83,6 +83,13 @@ trait ColoredTokenDeckTrait {
             'toArg' => $playerId,
             'material' => [$this->getColoredTokenFromDb($this->coloredTokens->getCard($tokenId))],
         ]);
+
+        $this->notifyAllPlayers('counter', "", [
+            //'counterName' => "empty-hexes-counter-${playerId}",
+            'counterName' => "empty-hexes",
+            'counterValue' => $this->getEmptyHexesCount($playerId),
+            'playerId' => $playerId,
+        ]);
     }
 
     /* Called by zombie */

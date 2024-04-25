@@ -33,7 +33,7 @@ class Harmonies implements HarmoniesGame {
 	private originalTextChooseAction: string
 
 	private scoreBoard: ScoreBoard
-	private ticketsCounters: Counter[] = []
+	private emptyHexesCounters: Counter[] = []
 
 	private animations: HarmoniesAnimation[] = []
 	public animationManager: AnimationManager
@@ -52,17 +52,17 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	/*
-            setup:
-            
-            This method must set up the game user interface according to current game situation specified
-            in parameters.
-            
-            The method is called each time the game interface is displayed to a player, ie:
-            _ when the game starts
-            _ when a player refreshes the game page (F5)
-            
-            "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
-        */
+			setup:
+		    
+			This method must set up the game user interface according to current game situation specified
+			in parameters.
+		    
+			The method is called each time the game interface is displayed to a player, ie:
+			_ when the game starts
+			_ when a player refreshes the game page (F5)
+		    
+			"gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
+		*/
 
 	public setup(gamedatas: any) {
 		log('Starting game setup')
@@ -219,7 +219,7 @@ class Harmonies implements HarmoniesGame {
 	private setupTooltips() {
 		//todo change counter names
 		//this.setTooltipToClass('revealed-tokens-back-counter', _('counter1 tooltip'))
-		//this.setTooltipToClass('tickets-counter', _('counter2 tooltip'))
+		this.setTooltipToClass('empty-hexes-counter', _('Empty hexes'))
 
 		this.setTooltipToClass('xpd-help-icon', `<div class="help-card help-${this.gamedatas.boardSide}"></div>`)
 		this.setTooltipToClass('player-turn-order', _('First player'))
@@ -250,22 +250,28 @@ class Harmonies implements HarmoniesGame {
 		const playerId = Number(player.id)
 		dojo.place(
 			`
+				
 				<div id="additional-info-${player.id}" class="counters additional-info">
-					<div id="additional-icons-${player.id}" class="additional-icons"></div> 
+					<div id="additional-icons-${player.id}" class="additional-icons">
+						<div id="empty-hexes-counter-${player.id}-wrapper" class="counter empty-hexes-counter">
+							<div class="icon empty-hex"></div> 
+							<span id="empty-hexes-counter-${player.id}"></span>
+						</div>
+					</div> 
 				</div>
 				`,
 			`player_board_${player.id}`
 		)
 
 		/* const revealedTokensBackCounter = new ebg.counter();
-            revealedTokensBackCounter.create(`revealed-tokens-back-counter-${player.id}`);
-            revealedTokensBackCounter.setValue(player.revealedTokensBackCount);
-            this.revealedTokensBackCounters[playerId] = revealedTokensBackCounter;
-
-            const ticketsCounter = new ebg.counter();
-            ticketsCounter.create(`tickets-counter-${player.id}`);
-            ticketsCounter.setValue(player.ticketsCount);
-            this.ticketsCounters[playerId] = ticketsCounter;*/
+			revealedTokensBackCounter.create(`revealed-tokens-back-counter-${player.id}`);
+			revealedTokensBackCounter.setValue(player.revealedTokensBackCount);
+			this.revealedTokensBackCounters[playerId] = revealedTokensBackCounter;
+*/
+		const emptyHexesCounter = new ebg.counter()
+		emptyHexesCounter.create(`empty-hexes-counter-${player.id}`)
+		emptyHexesCounter.setValue(player.emptyHexes)
+		this.emptyHexesCounters[playerId] = emptyHexesCounter
 
 		if (this.gameFeatures.showPlayerHelp && this.getPlayerId() === playerId) {
 			//help
@@ -408,14 +414,14 @@ class Harmonies implements HarmoniesGame {
 
 		switch (stateName) {
 			/* Example:
-        
-        case 'myGameState':
-        
-            // Hide the HTML block we are displaying only during this game state
-            dojo.style( 'my_html_block_id', 'display', 'none' );
-            
-            break;
-        */
+	    
+		case 'myGameState':
+	    
+			// Hide the HTML block we are displaying only during this game state
+			dojo.style( 'my_html_block_id', 'display', 'none' );
+		    
+			break;
+		*/
 
 			case 'dummmy':
 				break
@@ -464,11 +470,11 @@ class Harmonies implements HarmoniesGame {
 	private setActionBarChooseAction(fromCancel: boolean) {
 		document.getElementById(`generalactions`).innerHTML = ''
 		/* if (fromCancel) {
-            this.setChooseActionGamestateDescription();
-        }
-        if (this.actionTimerId) {
-            window.clearInterval(this.actionTimerId);
-        }*/
+			this.setChooseActionGamestateDescription();
+		}
+		if (this.actionTimerId) {
+			window.clearInterval(this.actionTimerId);
+		}*/
 
 		const chooseActionArgs = this.gamedatas.gamestate.args as EnteringChooseActionArgs
 
@@ -927,14 +933,14 @@ class Harmonies implements HarmoniesGame {
 
 	/*
     
-        Here, you are defining methods to handle player's action (ex: results of mouse click on 
-        game objects).
-        
-        Most of the time, these methods:
-        _ check the action is possible at this game state.
-        _ make a call to the game server
+		Here, you are defining methods to handle player's action (ex: results of mouse click on 
+		game objects).
+	    
+		Most of the time, these methods:
+		_ check the action is possible at this game state.
+		_ make a call to the game server
     
-    */
+	*/
 
 	/**
 	 * Pass (in case of no possible action).
@@ -965,14 +971,14 @@ class Harmonies implements HarmoniesGame {
 	//// Reaction to cometD notifications
 
 	/*
-        setupNotifications:
-        
-        In this method, you associate each of your game notifications with your local method to handle it.
-        
-        Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" calls in
-                your harmonies.game.php file.
+		setupNotifications:
+	    
+		In this method, you associate each of your game notifications with your local method to handle it.
+	    
+		Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" calls in
+				your harmonies.game.php file.
     
-    */
+	*/
 	setupNotifications() {
 		console.log('notifications subscriptions setup')
 
@@ -995,6 +1001,7 @@ class Harmonies implements HarmoniesGame {
 			['highlightWinnerScore', ANIMATION_MS],
 			['materialMove', ANIMATION_MS],
 			['holeEmptied', ANIMATION_MS],
+			['counter', 1],
 			['lastTurn', 1]
 		]
 
@@ -1031,6 +1038,12 @@ class Harmonies implements HarmoniesGame {
 	notif_score(notif: Notif<NotifScoreArgs>) {
 		console.log('notif_score', notif)
 		this.scoreBoard.updateScore(notif.args.playerId, notif.args.scoreType, notif.args.score)
+	}
+
+	notif_counter(notif: Notif<NotifCounter>) {
+		if (notif.args.counterName == 'empty-hexes') {
+			this.emptyHexesCounters[notif.args.playerId].setValue(notif.args.counterValue)
+		}
 	}
 
 	notif_materialMove(notif: Notif<NotifMaterialMove>) {

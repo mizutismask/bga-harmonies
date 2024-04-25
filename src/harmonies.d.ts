@@ -31,6 +31,7 @@ interface HarmoniesPlayer extends Player {
 	animalCubesOnBoard: { [hexId: string]: Array<AnimalCube> }
 	doneAnimalCards: Array<AnimalCard>
 	scores?: { [scoreType: string]: number }
+	emptyHexes: number
 }
 
 type Coordinates = { col: number; row: number }
@@ -102,6 +103,12 @@ interface NotifScoreArgs {
 	playerId: number
 	score: number
 	scoreType: string
+}
+
+interface NotifCounter {
+	counterName: string
+	counterValue: number
+	playerId: number
 }
 
 interface NotifWinnerArgs {

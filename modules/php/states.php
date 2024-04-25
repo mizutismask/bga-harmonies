@@ -35,9 +35,12 @@ trait StateTrait {
     }
 
     function has2OrLessEmptyHexes($playerId): bool {
+        return $this->getEmptyHexesCount($playerId) <= 2;
+    }
+
+    function getEmptyHexesCount($playerId):int{
         $hexes = count($this->getHexesCoordinates());
-        $hexesWithTokens = count(array_keys($this->getTokensForCompleteBoardByHex($playerId)));
-        return $hexes - $hexesWithTokens <= 2;
+        return $hexes - count(array_keys($this->getTokensForCompleteBoardByHex($playerId)));
     }
 
     function stNextPlayer() {
