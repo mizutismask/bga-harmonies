@@ -101,6 +101,7 @@ class Harmonies implements HarmoniesGame {
 		$('overall-content').classList.add(`player-count-${this.getPlayersCount()}`, gamedatas.boardSide)
 		if (this.getPlayersCount() == 1) {
 			replaceStarScoreIcon('sun-icon')
+			dojo.query('.sun-icon').attr('title', _('In solo mode, points are converted into suns'))
 		}
 
 		this.displayCubesOnAnimalCards(this.gamedatas.cubesOnAnimalCards)
