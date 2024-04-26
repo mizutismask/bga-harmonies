@@ -10,9 +10,13 @@
 	margin-bottom: 15px;
 	//background: rgb(232, 204, 160);
 	padding: 5px;
-    //border: 4px solid sandybrown;
-    border-radius: 1%;
+	//border: 4px solid sandybrown;
+	border-radius: 1%;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
+
+	.hrm-player-spirits {
+		margin-bottom: 8px;
+	}
 
 	.player-name {
 		justify-self: center;
@@ -21,7 +25,7 @@
 		text-shadow: 0px 0px 1px white, 0px 0px 2px white, 0px 0px 3px white;
 	}
 
-	.hrm-player-done{
+	.hrm-player-done {
 		margin-top: 8px;
 	}
 }
@@ -45,9 +49,9 @@ h3 {
 }
 
 .hrm-player-board {
-	$boardSizeModifier:.6;
-	$BOARD_WIDTH: calc(800px*$boardSizeModifier);
-	$BOARD_HEIGHT:  calc(643px*$boardSizeModifier);
+	$boardSizeModifier: 0.6;
+	$BOARD_WIDTH: calc(800px * $boardSizeModifier);
+	$BOARD_HEIGHT: calc(643px * $boardSizeModifier);
 	width: $BOARD_WIDTH;
 	height: $BOARD_HEIGHT;
 	background-size: 100%;
@@ -107,39 +111,40 @@ h3 {
 		visibility: hidden;
 	}
 
-	&.selected-element{
+	&.selected-element {
 		background-color: rgb(208 239 121);
-		transition: background-color .2s;
+		transition: background-color 0.2s;
 	}
 
-	.colored-token, .animal-cube {
+	.colored-token,
+	.animal-cube {
 		pointer-events: none;
 		grid-row: 1;
 		grid-column: 1;
 		justify-self: center;
-		&.level-1{
+		&.level-1 {
 			margin-top: 72%;
 			z-index: 5;
 		}
-		&.level-2{
+		&.level-2 {
 			margin-top: 7%;
 			z-index: 6;
 		}
-		&.level-3{
+		&.level-3 {
 			margin-top: -66%;
 			z-index: 7;
 		}
 	}
 
-	.animal-cube{
-		&.pile-height-1{
-			margin-top:1px;
+	.animal-cube {
+		&.pile-height-1 {
+			margin-top: 1px;
 		}
-		&.pile-height-2{
-			margin-top:-20px;
+		&.pile-height-2 {
+			margin-top: -20px;
 		}
-		&.pile-height-3{
-			margin-top:-38px;
+		&.pile-height-3 {
+			margin-top: -38px;
 		}
 	}
 }
