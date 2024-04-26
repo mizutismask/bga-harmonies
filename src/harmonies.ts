@@ -188,11 +188,13 @@ class Harmonies implements HarmoniesGame {
 		if ((this as any).isCurrentPlayerActive()) {
 			switch (this.gamedatas.gamestate.name) {
 				case 'chooseAction':
-					let selected = this.toggleHexAndUnselectOthers(hexId)
-					dojo.toggleClass('confirm_placeToken_button', 'disabled', !selected)
+					if (!this.gamedatas.gamestate.args.canChooseSpirit && this.clientActionData.tokenToPlace != undefined) {
+						let selected = this.toggleHexAndUnselectOthers(hexId)
+						dojo.toggleClass('confirm_placeToken_button', 'disabled', !selected)
+					}
 					break
 				case 'client_place_animal_cube':
-					selected = this.toggleHexAndUnselectOthers(hexId)
+					let selected = this.toggleHexAndUnselectOthers(hexId)
 					dojo.toggleClass('place_cube_confirm_button', 'disabled', !selected)
 
 					break
@@ -406,23 +408,24 @@ class Harmonies implements HarmoniesGame {
 			this.resetClientActionData()
 			if (args.canChooseSpirit) {
 				this.river.setSelectionMode('none')
-			}
-			if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
-				const cardId = parseInt(Object.keys(args.placeAnimalCubeArgs)[0])
-				this.playerTables[this.getPlayerId()].setSelectionMode('single')
-				this.playerTables[this.getPlayerId()].selectCardFromId(cardId)
 			} else {
-				this.playerTables[this.getPlayerId()].unselectAll()
-			}
+				if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
+					const cardId = parseInt(Object.keys(args.placeAnimalCubeArgs)[0])
+					this.playerTables[this.getPlayerId()].setSelectionMode('single')
+					this.playerTables[this.getPlayerId()].selectCardFromId(cardId)
+				} else {
+					this.playerTables[this.getPlayerId()].unselectAll()
+				}
 
-			if (args.canTakeAnimalCard) {
-				this.river.setSelectionMode('single')
-				this.river.setSelectableCards(this.river.getCards())
-			} else {
-				this.river.setSelectionMode('none')
-			}
+				if (args.canTakeAnimalCard) {
+					this.river.setSelectionMode('single')
+					this.river.setSelectableCards(this.river.getCards())
+				} else {
+					this.river.setSelectionMode('none')
+				}
 
-			$('central-board').classList.toggle('canTakeTokens', args.canTakeTokens)
+				$('central-board').classList.toggle('canTakeTokens', args.canTakeTokens)
+			}
 		} else {
 			this.river.setSelectionMode('none')
 			$('central-board').classList.remove('canTakeTokens')
