@@ -22,7 +22,7 @@ class RiverDeck {
 		this.setCards(cards)
 		stock.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
 			if ($('take_card_button')) dojo.toggleClass('take_card_button', 'disabled', !(selection.length === 1))
-			else dojo.toggleClass('pass_button', 'disabled', !(selection.length === 1))
+			else dojo.toggleClass('discard_card_button', 'disabled', !(selection.length === 1))
 		}
 	}
 

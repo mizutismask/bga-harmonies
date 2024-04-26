@@ -189,7 +189,7 @@ class Harmonies implements HarmoniesGame {
 			switch (this.gamedatas.gamestate.name) {
 				case 'chooseAction':
 					dojo.toggleClass(hexId, 'selected-element')
-					const selected = dojo.hasClass(hexId,'selected-element' )
+					const selected = dojo.hasClass(hexId, 'selected-element')
 					dojo.query(`.hex:not(#${hexId})`).toggleClass('selected-element', false)
 					dojo.toggleClass('confirm_placeToken_button', 'disabled', !selected)
 					break
@@ -473,9 +473,18 @@ class Harmonies implements HarmoniesGame {
 					)
 					break
 				case 'discardFromRiver':
-					//;(this as any).addActionButton('discard_card_button', _('Discard from river'), () => {})
-					//dojo.toggleClass('discard_card_button', 'disabled', true)
-					;(this as any).addActionButton('pass_button', _('Decline'), () => this.declineDiscard())
+					;(this as any).addActionButton('discard_card_button', _('Discard from river'), () => {
+						this.takeCard(this.river.getSelection()[0])
+					})
+					dojo.toggleClass('discard_card_button', 'disabled', true)
+					;(this as any).addActionButton(
+						'pass_button',
+						_('Decline'),
+						() => this.declineDiscard(),
+						null,
+						null,
+						'red'
+					)
 					this.river.setSelectionMode('single')
 					break
 			}
@@ -530,7 +539,7 @@ class Harmonies implements HarmoniesGame {
 					if (this.clientActionData.tokenToPlace) {
 						this.takeAction('placeColoredToken', {
 							'tokenId': this.clientActionData.tokenToPlace.id,
-							'hexId': document.querySelector(".hex.selected-element").id
+							'hexId': document.querySelector('.hex.selected-element').id
 						})
 					}
 				})
