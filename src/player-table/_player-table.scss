@@ -109,6 +109,7 @@ h3 {
 
 	&.selected-element{
 		background-color: rgb(208 239 121);
+		transition: background-color .2s;
 	}
 
 	.colored-token, .animal-cube {
