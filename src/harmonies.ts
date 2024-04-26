@@ -99,6 +99,9 @@ class Harmonies implements HarmoniesGame {
 		})
 
 		$('overall-content').classList.add(`player-count-${this.getPlayersCount()}`, gamedatas.boardSide)
+		if (this.getPlayersCount() == 1) {
+			replaceStarScoreIcon('sun-icon')
+		}
 
 		this.displayCubesOnAnimalCards(this.gamedatas.cubesOnAnimalCards)
 

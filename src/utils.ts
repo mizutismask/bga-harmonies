@@ -31,3 +31,10 @@ function getCellName(playerId, hex) {
 function getCellNameFromCoords(playerId, col: number, row: number) {
 	return `cell_${playerId}_${col}_${row}`
 }
+
+function replaceStarScoreIcon(newClass: string) {
+	dojo.query('.fa-star')
+		.removeClass('fa fa-star')
+		.addClass(newClass)
+		.style({ 'vertical-align': 'middle', 'display': 'inline-block' })
+}

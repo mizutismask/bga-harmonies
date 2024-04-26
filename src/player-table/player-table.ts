@@ -64,7 +64,7 @@ class PlayerTable {
 
 		if (animalCubesOnBoard) {
 			Object.keys(animalCubesOnBoard).forEach((cell) => {
-				animalCubesOnBoard[cell].forEach((cube) => this.createCubeOnBoard(cube))
+				animalCubesOnBoard[cell].forEach((cube) => this.createCubeOnBoard(cube,undefined, false))
 			})
 		}
 
