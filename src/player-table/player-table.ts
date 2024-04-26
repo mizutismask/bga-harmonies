@@ -111,12 +111,7 @@ class PlayerTable {
 		this.spiritsStock.addCards(spiritsCards)
 
 		this.spiritsStock.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
-			if (selection.length === 1) {
-				this.game.takeAction('chooseSpirit', {
-					'cardId': this.spiritsStock.getSelection()[0].id
-				})
-				this.unselectAll()
-			}
+			dojo.toggleClass("take_spirit_button", "disabled",!(selection.length === 1))
 		}
 	}
 
@@ -178,5 +173,8 @@ class PlayerTable {
 
 	public getAnimalCardSelection() {
 		return this.handStock.getSelection()
+	}
+	public getSpiritCardSelection() {
+		return this.spiritsStock.getSelection()
 	}
 }
