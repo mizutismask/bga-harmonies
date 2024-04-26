@@ -188,21 +188,25 @@ class Harmonies implements HarmoniesGame {
 		if ((this as any).isCurrentPlayerActive()) {
 			switch (this.gamedatas.gamestate.name) {
 				case 'chooseAction':
-					dojo.toggleClass(hexId, 'selected-element')
-					const selected = dojo.hasClass(hexId, 'selected-element')
-					dojo.query(`.hex:not(#${hexId})`).toggleClass('selected-element', false)
+					let selected = this.toggleHexAndUnselectOthers(hexId)
 					dojo.toggleClass('confirm_placeToken_button', 'disabled', !selected)
 					break
 				case 'client_place_animal_cube':
-					const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop()
-					if (card) {
-						this.takeAction('placeAnimalCube', { 'cardId': card.id, 'hexId': hexId })
-					}
+					selected = this.toggleHexAndUnselectOthers(hexId)
+					dojo.toggleClass('place_cube_confirm_button', 'disabled', !selected)
+
 					break
 				default:
 					break
 			}
 		}
+	}
+
+	private toggleHexAndUnselectOthers(hexId: string) {
+		dojo.toggleClass(hexId, 'selected-element')
+		const selected = dojo.hasClass(hexId, 'selected-element')
+		dojo.query(`.hex:not(#${hexId})`).toggleClass('selected-element', false)
+		return selected
 	}
 
 	/**
@@ -463,6 +467,13 @@ class Harmonies implements HarmoniesGame {
 					this.setActionBarChooseAction(false)
 					break
 				case 'client_place_animal_cube':
+					;(this as any).addActionButton('place_cube_confirm_button', _('Confirm'), () => {
+						const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop()
+						this.takeAction('placeAnimalCube', {
+							'cardId': card.id,
+							'hexId': document.querySelector('.hex.selected-element').id
+						})
+					})
 					;(this as any).addActionButton(
 						'button_cancel',
 						_('Cancel'),
@@ -578,20 +589,24 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	private onPlaceAnimalCubeButton(args: EnteringChooseActionArgs) {
-		if (
+		let singlePossibility =
 			Object.keys(args.placeAnimalCubeArgs).length === 1 &&
 			args.placeAnimalCubeArgs[Object.keys(args.placeAnimalCubeArgs)[0]].length === 1
-		) {
+
+		const stateMessage = singlePossibility
+			? _('Confirm or cancel the cube placement')
+			: _('Select one card and then the corresponding pattern on your board where you want to place the cube')
+
+		;(this as any).setClientState('client_place_animal_cube', {
+			descriptionmyturn: stateMessage
+		})
+		this.playerTables[this.getPlayerId()].setSelectionMode('single')
+
+		if (singlePossibility) {
 			const cardId = Object.keys(args.placeAnimalCubeArgs)[0]
-			const hexId = Object.values(args.placeAnimalCubeArgs)[0]
-			this.takeAction('placeAnimalCube', { 'cardId': cardId, 'hexId': hexId })
-		} else {
-			;(this as any).setClientState('client_place_animal_cube', {
-				descriptionmyturn: _(
-					'Select one card and then the corresponding pattern on your board where you want to place the cube'
-				)
-			})
-			this.playerTables[this.getPlayerId()].setSelectionMode('single')
+			const hexId = args.placeAnimalCubeArgs[Object.keys(args.placeAnimalCubeArgs)[0]][0]
+			dojo.addClass(hexId, 'selected-element')
+			this.playerTables[this.getPlayerId()].selectCardFromId(parseInt(cardId))
 		}
 	}
 
