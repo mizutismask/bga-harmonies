@@ -32,7 +32,9 @@ class ScoreBoard {
 			//second column
 			for (let index = 1; index <= 8; index++) {
 				dojo.place(
-					`<div id="score-card-${index}-${player.id}" class="score-number"></div>`,
+					`<div id="score-card-${index}-${player.id}" class="${
+						index == this.game.isSpiritCardsOn() && index == 1 ? 'spirit-score' : ''
+					} score-number"></div>`,
 					`cards-container-${player.id}`
 				)
 			}
@@ -65,7 +67,7 @@ class ScoreBoard {
 	}
 
 	public updateScore(playerId: number, scoreType: string, score: number, animate: boolean = true) {
-        const elt = dojo.byId(scoreType)
+		const elt = dojo.byId(scoreType)
 		if (!elt) {
 			console.error('updateScore : this element can not be displayed', scoreType)
 		} else {

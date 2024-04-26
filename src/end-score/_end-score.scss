@@ -95,9 +95,13 @@
 		aspect-ratio: 1;
 		//border: 2px solid orange;
 
-		&.animatedScore {
-			color: red !important;
-			/*animation:  grow-then-shrink-animation 3s ;*/
+	}
+
+	.cards-container{
+		color: rgb(166 100 10);
+		
+		.spirit-score{
+			color: rgb(248, 233, 214);
 		}
 	}
 }

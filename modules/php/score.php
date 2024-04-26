@@ -219,7 +219,7 @@ trait ScoreTrait {
             $points[] = $cardScore;
         }
         $spiritPoints = $this->calculateSpiritCardsPoints($playerId, $board);
-        return array_merge($points, $spiritPoints);
+        return array_merge($spiritPoints, $points);
     }
 
     public function calculateSpiritCardsPoints($playerId, $board) {
