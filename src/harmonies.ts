@@ -306,7 +306,7 @@ class Harmonies implements HarmoniesGame {
 
 		if (this.gameFeatures.showFirstPlayer && player.playerNo === 1) {
 			dojo.place(
-				`<div id="firstPlayerIcon" class="css-icon player-turn-order">1</div>`,
+				`<div id="firstPlayerIcon" class="css-icon player-turn-order">1<span class="exponent">st<span></div>`,
 				`additional-icons-${player.id}`,
 				`last`
 			)
