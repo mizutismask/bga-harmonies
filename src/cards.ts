@@ -104,7 +104,7 @@ class CardsManager extends CardManager<AnimalCard> {
 			case 37:
 				return _('Gain 4 points for each group of 1 building or more')
 			case 38:
-				return _('Gain 4 points for each group of 2 buildings or more')
+				return _('Gain 6 points for each group of 2 buildings or more')
 			case 39:
 				return _('Gain 4 points for each moutain of height 2 or 3')
 			case 40:

@@ -301,7 +301,7 @@ trait ScoreTrait {
             case 37:
                 return 4;
             case 38:
-                return $length >= 2 ? 4 : 0;
+                return $length >= 2 ? 6 : 0;
             case 41:
                 return $length >= 2 ? 7 : 0;
 
