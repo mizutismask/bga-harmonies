@@ -31,7 +31,7 @@ interface Dojo {
 	hasClass: (nodeId: string, className: string) => boolean;
 	addClass: (nodeId: string | HTMLElement, className: string) => void;
 	removeClass: (nodeId: string | HTMLElement, className?: string) => void;
-	toggleClass: (nodeId: string | HTMLElement, className: string, forceValue?: boolean) => void;
+	toggleClass: (nodeId: string | HTMLElement, className: string, forceValue?: boolean) => boolean;
 	connect: Function;
 	disconnect: Function;
 	query: Function;

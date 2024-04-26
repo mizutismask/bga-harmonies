@@ -131,12 +131,16 @@ class Harmonies implements HarmoniesGame {
 				'before'
 			)
 			if (this.isNotSpectator()) {
-				dojo.connect($('hole-' + i), 'onclick', (evt) => {
+				const holeId = 'hole-' + i
+				dojo.connect($(holeId), 'onclick', (evt) => {
 					if (
 						(this as any).isCurrentPlayerActive() &&
 						$('central-board').classList.contains('canTakeTokens')
 					) {
-						this.takeAction('takeTokens', { hole: evt.currentTarget.dataset.hole })
+						const wasSelected = dojo.hasClass(holeId, 'selected-element')
+						removeClass('selected-element')
+						const selected = dojo.toggleClass(holeId, 'selected-element', !wasSelected)
+						dojo.toggleClass('take_tokens_button', 'disabled', !selected)
 					}
 				})
 			}
@@ -431,6 +435,7 @@ class Harmonies implements HarmoniesGame {
 	//
 	public onLeavingState(stateName: string) {
 		console.log('Leaving state: ' + stateName)
+		removeClass('selected-element')
 
 		switch (stateName) {
 			/* Example:
@@ -508,8 +513,13 @@ class Harmonies implements HarmoniesGame {
 			})
 			dojo.addClass('take_spirit_button', 'disabled')
 		} else {
-			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {})
-			dojo.toggleClass('take_tokens_button', 'disabled', !chooseActionArgs.canTakeTokens)
+			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {
+				this.takeAction('takeTokens', {
+					hole: (document.querySelector('.selected-element') as HTMLElement).dataset.hole
+				})
+			})
+			dojo.addClass('take_tokens_button', 'disabled')
+				
 			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => {})
 			dojo.toggleClass('take_card_button', 'disabled', !chooseActionArgs.canTakeAnimalCard)
 			this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
