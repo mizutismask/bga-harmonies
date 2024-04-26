@@ -20,7 +20,8 @@ class RiverDeck {
 		stock.setSelectionMode('single')
 		this.riverStock = stock
 		this.setCards(cards)
-		stock.onCardClick = (card: AnimalCard) => this.game.takeCard(card)
+		stock.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) =>
+			dojo.toggleClass('take_card_button', 'disabled', !(selection.length === 1))!
 	}
 
 	/**
@@ -48,5 +49,8 @@ class RiverDeck {
 
 	public getCards() {
 		return this.riverStock.getCards()
+	}
+	public getSelection() {
+		return this.riverStock.getSelection()
 	}
 }
