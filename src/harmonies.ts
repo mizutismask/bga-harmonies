@@ -188,12 +188,10 @@ class Harmonies implements HarmoniesGame {
 		if ((this as any).isCurrentPlayerActive()) {
 			switch (this.gamedatas.gamestate.name) {
 				case 'chooseAction':
-					if (this.clientActionData.tokenToPlace) {
-						this.takeAction('placeColoredToken', {
-							'tokenId': this.clientActionData.tokenToPlace.id,
-							'hexId': hexId
-						})
-					}
+					dojo.toggleClass(hexId, 'selected-element')
+					const selected = dojo.hasClass(hexId,'selected-element' )
+					dojo.query(`.hex:not(#${hexId})`).toggleClass('selected-element', false)
+					dojo.toggleClass('confirm_placeToken_button', 'disabled', !selected)
 					break
 				case 'client_place_animal_cube':
 					const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop()
@@ -519,13 +517,24 @@ class Harmonies implements HarmoniesGame {
 				})
 			})
 			dojo.addClass('take_tokens_button', 'disabled')
-				
+
 			this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
-			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => { this.takeCard(this.river.getSelection()[0])})
+			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => {
+				this.takeCard(this.river.getSelection()[0])
+			})
 			dojo.addClass('take_card_button', 'disabled')
 
 			if (chooseActionArgs.canPlaceToken) {
 				this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace)
+				;(this as any).addActionButton('confirm_placeToken_button', _('Confirm'), () => {
+					if (this.clientActionData.tokenToPlace) {
+						this.takeAction('placeColoredToken', {
+							'tokenId': this.clientActionData.tokenToPlace.id,
+							'hexId': document.querySelector(".hex.selected-element").id
+						})
+					}
+				})
+				dojo.addClass('confirm_placeToken_button', 'disabled')
 			}
 
 			this.addImageActionButton(
