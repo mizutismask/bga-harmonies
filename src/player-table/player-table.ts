@@ -8,7 +8,7 @@ class PlayerTable {
 
 	constructor(
 		private game: HarmoniesGame,
-		player: HarmoniesPlayer,
+		private player: HarmoniesPlayer,
 		boardSize: { width: number; height: number },
 		hexes: Array<Coordinates>,
 		cards: Array<AnimalCard>,
@@ -111,7 +111,7 @@ class PlayerTable {
 		this.spiritsStock.addCards(spiritsCards)
 
 		this.spiritsStock.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
-			dojo.toggleClass("take_spirit_button", "disabled",!(selection.length === 1))
+			dojo.toggleClass('take_spirit_button', 'disabled', !(selection.length === 1))
 		}
 	}
 
@@ -143,20 +143,48 @@ class PlayerTable {
 	 * Creates a new div inside an hex
 	 * @param args
 	 */
-	public createTokenOnBoard(token: ColoredToken) {
+	public createTokenOnBoard(token: ColoredToken, animate: boolean=false) {
+		const tokenId = this.game.getNextTokenId()
 		let html = `
-			<div class="colored-token color-${token.type_arg} level-${token.location_arg}"></div>
+			<div id="${tokenId}" class="colored-token color-${token.type_arg} level-${token.location_arg}"></div>
         `
-		dojo.place(html, token.location)
+		this.createElementOnBoard(html, tokenId, token.location, '', animate)
 	}
 
-	public createCubeOnBoard(cube: AnimalCube) {
+	public createCubeOnBoard(cube: AnimalCube, fromCardId: string, animate: boolean=false) {
+		const tokenId = this.game.getNextTokenId()
 		const pileHeight = dojo.query(`#${cube.location} .colored-token`).length
-		//log(`#${cube.location} .colored-token`)
 		let html = `
 			<div class="animal-cube ${getCubeClasses(cube)} pile-height-${pileHeight}"></div>
         `
-		dojo.place(html, cube.location, 'first')
+		//console.log("location", cube.location, "frorm",fromCardId);
+		this.createElementOnBoard(html, tokenId, cube.location, 'first', false)
+	}
+
+	private createElementOnBoard(
+		html: string,
+		htmlId: string,
+		location: string,
+		action: string,
+		animate: boolean=false,
+		animateFrom: string = undefined
+	) {
+		const destination = location
+		let creationLocation = animateFrom?? location
+		if (animate && !animateFrom) {
+			creationLocation = `overall_player_board_${this.player.id}`
+		}
+		dojo.place(html, creationLocation, action)
+
+		if (animate) {
+			//shows move only coming inside the hex because of hex overflow
+			this.game.animationManager.attachWithAnimation(
+				new BgaSlideAnimation({
+					element: $(htmlId)
+				}),
+				$(destination)
+			)
+		}
 	}
 
 	public setSelectionMode(mode: CardSelectionMode) {

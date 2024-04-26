@@ -43,6 +43,7 @@ class Harmonies implements HarmoniesGame {
 	private TOOLTIP_DELAY = document.body.classList.contains('touch-device') ? 1500 : undefined
 	private settings = [new Setting('customSounds', 'pref', 1)]
 	public clientActionData: ClientActionData
+	private tokenSequence = 0
 
 	constructor() {
 		console.log('harmonies constructor')
@@ -160,7 +161,7 @@ class Harmonies implements HarmoniesGame {
 
 	private moveCubeFromAnimalCardToHex(cube: AnimalCube, cardId: string, playerId: number | string) {
 		this.removeCubeFromCard(cardId)
-		this.playerTables[playerId].createCubeOnBoard(cube)
+		this.playerTables[playerId].createCubeOnBoard(cube, `card_${cardId}`, true)
 	}
 
 	private removeCubeFromCard(cardId: string) {
@@ -188,7 +189,10 @@ class Harmonies implements HarmoniesGame {
 		if ((this as any).isCurrentPlayerActive()) {
 			switch (this.gamedatas.gamestate.name) {
 				case 'chooseAction':
-					if (!this.gamedatas.gamestate.args.canChooseSpirit && this.clientActionData.tokenToPlace != undefined) {
+					if (
+						!this.gamedatas.gamestate.args.canChooseSpirit &&
+						this.clientActionData.tokenToPlace != undefined
+					) {
 						let selected = this.toggleHexAndUnselectOthers(hexId)
 						dojo.toggleClass('confirm_placeToken_button', 'disabled', !selected)
 					}
@@ -653,6 +657,12 @@ class Harmonies implements HarmoniesGame {
 
 	///////////////////////////////////////////////////
 	//// Utility methods
+
+	public getNextTokenId() {
+		this.tokenSequence++
+		return 'tokenOnBoard_' + this.tokenSequence
+	}
+
 	public resetClientActionData() {
 		this.clientActionData = {
 			tokenToPlace: undefined
@@ -1151,7 +1161,7 @@ class Harmonies implements HarmoniesGame {
 				switch (notif.args.to) {
 					case 'HEX':
 						//from deck to player hex
-						this.playerTables[notif.args.toArg].createTokenOnBoard(token)
+						this.playerTables[notif.args.toArg].createTokenOnBoard(token, true)
 						break
 					case 'HOLE':
 						//from deck to hole

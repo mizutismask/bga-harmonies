@@ -77,6 +77,7 @@ interface HarmoniesGame extends Game {
 	takeCard(card: AnimalCard): void
 	onHexClick(hexId: string): void
 	isSpiritCardsOn(): unknown
+	getNextTokenId(): string
 	takeAction(action: string, data?: any): void
 }
 
