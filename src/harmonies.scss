@@ -25,7 +25,7 @@ $CARD_HEIGHT: calc(258px * $cardSizeModifier);
 @import 'player-table/hextile-static.min.css';
 
 html {
-	background: linear-gradient(0deg, #379cb8 0%,#41b2bb 50%, #ecda6e 96%, #ecda6e 100%);
+	background: linear-gradient(0deg, #379cb8 0%, #41b2bb 50%, #ecda6e 96%, #ecda6e 100%);
 	background-repeat: no-repeat;
 	background-size: 100%;
 }
@@ -114,7 +114,7 @@ html {
 	background-size: 100%;
 	margin: 0 0px 12px 15px;
 
-	.central-board-counter-wrapper{
+	.central-board-counter-wrapper {
 		position: absolute;
 		bottom: 9%;
 		right: 14%;
@@ -134,7 +134,7 @@ html {
 		border-radius: 50%;
 		//border: 2px solid white;
 
-		&.selected-element{
+		&.selected-element {
 			//@include selected-element
 			scale: 1.3;
 		}
@@ -371,12 +371,12 @@ html {
 	}
 }
 
-.player-count-1{
-	.score-solo-suns-help{
+.player-count-1 {
+	.score-solo-suns-help {
 		display: inline-block;
 	}
 }
-.score-solo-suns-help{
+.score-solo-suns-help {
 	display: none;
 	background-size: 100%;
 	background-image: url('img/soloSunsHelp.jpg');
@@ -408,7 +408,7 @@ html {
 	column-gap: 10px;
 	margin: 12px 0px 12px 15px;
 
-	.central-board-counter-wrapper{
+	.central-board-counter-wrapper {
 		position: unset;
 		align-self: center;
 	}
@@ -419,6 +419,7 @@ html {
 		width: 80px;
 		aspect-ratio: 1 / 1;
 		border-radius: 50%;
+		align-self:center;
 
 		&.hole-1 {
 			@include reset-hole-position;
@@ -499,8 +500,20 @@ html {
 	}
 }
 @media only screen and (max-width: 1218px) {
-	.central-board {
-		@include small-central-board;
+	.player-count-2,
+	.player-count-3,
+	.player-count-4 {
+		.central-board {
+			@include small-central-board;
+		}
+	}
+}
+
+@media only screen and (max-width: 990px) {
+	.player-count-1 {
+		.central-board {
+			@include small-central-board;
+		}
 	}
 }
 /*.mobile_version {
