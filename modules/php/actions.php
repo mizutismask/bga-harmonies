@@ -163,7 +163,7 @@ trait ActionTrait {
         $possibleHexes = $this->getPossibleHexesForColoredToken($tokenId, $this->getMostlyActivePlayerId());
         //self::dump('*******************possibleHexes', $possibleHexes);
         if (!in_array($toHexId, $possibleHexes)) {
-            throw new BgaUserException(self::_("You are not allowed to place this color here, check the player help"));
+            throw new BgaUserException(self::_("You are not allowed to place this color here, check the rules below in the section How to play"));
         }
 
         $this->moveColoredTokenToBoard($tokenId, $toHexId);
