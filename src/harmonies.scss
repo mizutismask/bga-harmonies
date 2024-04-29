@@ -145,15 +145,15 @@ html {
 			left: 16%;
 
 			.hole-token-1 {
+				top: -6%;
+				right: 36%;
+			}
+			.hole-token-2 {
 				top: 9%;
 				left: 61%;
 			}
-			.hole-token-2 {
-				top: 5%;
-				right: 32%;
-			}
 			.hole-token-3 {
-				top: 44%;
+				top: 40%;
 				left: 3%;
 			}
 		}
@@ -164,15 +164,15 @@ html {
 
 			.hole-token-1 {
 				top: 4%;
-				right: 8%;
+				right: -12%;
 			}
 			.hole-token-2 {
 				top: 8%;
-				right: 60%;
+				right: 47%;
 			}
 			.hole-token-3 {
-				top: 40%;
-				left: -4%;
+				top: 47%;
+				left: 14%;
 			}
 		}
 		&.hole-3 {
@@ -181,12 +181,13 @@ html {
 			left: 4%;
 
 			.hole-token-1 {
-				top: 9%;
-				left: 61%;
-			}
-			.hole-token-2 {
+				
 				top: -4%;
 				right: 31%;
+			}
+			.hole-token-2 {
+				top: 13%;
+				left: 61%;
 			}
 			.hole-token-3 {
 				top: 44%;
@@ -199,12 +200,12 @@ html {
 			right: 4%;
 
 			.hole-token-1 {
-				top: 3%;
+				top: -5%;
 				left: 21%;
 			}
 			.hole-token-2 {
 				top: 35%;
-				right: 1%;
+				right: -12%;
 			}
 			.hole-token-3 {
 				top: 40%;
@@ -221,12 +222,12 @@ html {
 				left: 61%;
 			}
 			.hole-token-2 {
-				top: 40%;
-				right: 18%;
+				top: 0%;
+				left: 0%;
 			}
 			.hole-token-3 {
-				top: -4%;
-				left: 5%;
+				top: 40%;
+				right: 18%;
 			}
 		}
 
@@ -401,6 +402,13 @@ html {
 	bottom: unset;
 }
 
+@mixin reset-hole-token-position {
+	top: unset;
+	left: unset;
+	right: unset;
+	bottom: unset;
+}
+
 @mixin small-central-board {
 	background: none;
 	height: unset;
@@ -421,6 +429,10 @@ html {
 		aspect-ratio: 1 / 1;
 		border-radius: 50%;
 		align-self:center;
+
+		.hole-token{
+			@include reset-hole-token-position;
+		}
 
 		&.hole-1 {
 			@include reset-hole-position;
