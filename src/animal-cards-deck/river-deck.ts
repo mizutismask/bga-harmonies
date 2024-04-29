@@ -21,8 +21,18 @@ class RiverDeck {
 		this.riverStock = stock
 		this.setCards(cards)
 		stock.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
-			if ($('take_card_button')) dojo.toggleClass('take_card_button', 'disabled', !(selection.length === 1))
-			else dojo.toggleClass('discard_card_button', 'disabled', !(selection.length === 1))
+			const takeCardButtonId = 'take_card_button'
+			if ($(takeCardButtonId)) {
+				this.game.toggleActionButtonAbility(
+					takeCardButtonId,
+					selection.length === 1
+				)
+			} else {
+				this.game.toggleActionButtonAbility(
+					'discard_card_button',
+					selection.length === 1
+				)
+			}
 		}
 	}
 

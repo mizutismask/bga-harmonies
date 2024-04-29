@@ -7,5 +7,14 @@
 			"2": { "name": "No" }
 		},
 		"default": 1
+	},
+	"2": {
+		"name": "Confirm only on placing colored tokens",
+		"needReload": false,
+		"values": {
+			"1": { "name": "Yes" },
+			"2": { "name": "No" }
+		},
+		"default": 2
 	}
 }

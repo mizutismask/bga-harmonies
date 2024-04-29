@@ -84,6 +84,7 @@ class Harmonies implements HarmoniesGame {
 		this.river = new RiverDeck(this, this.gamedatas.river, this.getPlayersCount())
 		this.animationManager = new AnimationManager(this)
 
+		this.initPreferencesObserver()
 		this.initCentralBoard()
 
 		if (this.gamedatas.lastTurn) {
@@ -145,7 +146,11 @@ class Harmonies implements HarmoniesGame {
 						const wasSelected = dojo.hasClass(holeId, 'selected-element')
 						removeClass('selected-element')
 						const selected = dojo.toggleClass(holeId, 'selected-element', !wasSelected)
-						dojo.toggleClass('take_tokens_button', 'disabled', !selected)
+						this.toggleActionButtonAbility(
+							'take_tokens_button',
+							selected,
+							this.isConfirmOnlyOnPlacingTokensOn() && selected
+						)
 					}
 				})
 			}
@@ -203,8 +208,11 @@ class Harmonies implements HarmoniesGame {
 					break
 				case 'client_place_animal_cube':
 					let selected = this.toggleHexAndUnselectOthers(hexId)
-					dojo.toggleClass('place_cube_confirm_button', 'disabled', !selected)
-
+					this.toggleActionButtonAbility(
+						'place_cube_confirm_button',
+						selected,
+						this.isConfirmOnlyOnPlacingTokensOn() && selected
+					)
 					break
 				default:
 					break
@@ -619,23 +627,11 @@ class Harmonies implements HarmoniesGame {
 			const hexId = args.placeAnimalCubeArgs[Object.keys(args.placeAnimalCubeArgs)[0]][0]
 			dojo.addClass(hexId, 'selected-element')
 			this.playerTables[this.getPlayerId()].selectCardFromId(parseInt(cardId))
+			if (this.isConfirmOnlyOnPlacingTokensOn()) {
+				$('place_cube_confirm_button').click()
+			}
 		}
 	}
-
-	/*private addColoredTokensButtons(tokensByHole: { [holeId: number]: Array<ColoredToken> }) {
-		Object.keys(tokensByHole).forEach((hole) => {
-			let label = dojo.string.substitute(_('Take those tokens'), {})
-
-			;(this as any).addImageActionButton(
-				'takeTokens_button_' + hole,
-				this.createDiv('token1' + hole, ),
-				'toto',
-				label,
-				() => {},
-				'take-tokens-button'
-			)
-		})
-	}*/
 
 	private addPlaceTokenButtons(tokens: Array<ColoredToken>) {
 		tokens.forEach((token) => {
@@ -662,6 +658,30 @@ class Harmonies implements HarmoniesGame {
 
 	///////////////////////////////////////////////////
 	//// Utility methods
+
+	public toggleActionButtonAbility(buttonId: string, enable: boolean, autoClickIfEnabled: boolean=undefined) {
+		if (autoClickIfEnabled == undefined) {
+			autoClickIfEnabled= this.isConfirmOnlyOnPlacingTokensOn()
+		}
+		dojo.toggleClass(buttonId, 'disabled', !enable)
+		if (autoClickIfEnabled && !dojo.hasClass(buttonId, 'disabled')) {
+			$(buttonId).click()
+		}
+}
+	
+	public initPreferencesObserver() {
+		// Call onPreferenceChange() when any value changes
+		dojo.query('.preference_control').on('change', (e) => {
+			const match = e.target.id.match(/^preference_[cf]ontrol_(\d+)$/)
+			if (!match) {
+				return
+			}
+			const pref = match[1]
+			const newValue = e.target.value
+			;(this as any).prefs[pref].value = newValue
+			//this.onPreferenceChange(pref, newValue);
+		})
+	}
 
 	public getNextTokenId() {
 		this.tokenSequence++
@@ -722,9 +742,14 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
-	/** Tells if seasons custom sounds are active in user prefs. */
+	/** Tells if custom sounds are active in user prefs. */
 	public isCustomSoundsOn(): boolean {
 		return (this as any).prefs[1].value == 1
+	}
+
+	/** Tells if confirm is active in user prefs. */
+	public isConfirmOnlyOnPlacingTokensOn(): boolean {
+		return (this as any).prefs[2].value == 1
 	}
 
 	/*

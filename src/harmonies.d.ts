@@ -79,6 +79,8 @@ interface HarmoniesGame extends Game {
 	isSpiritCardsOn(): unknown
 	getNextTokenId(): string
 	takeAction(action: string, data?: any): void
+	isConfirmOnlyOnPlacingTokensOn(): boolean
+	toggleActionButtonAbility(buttonId: string, enable: boolean): void
 }
 
 interface EnteringChooseActionArgs {

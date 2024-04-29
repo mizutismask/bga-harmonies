@@ -64,7 +64,7 @@ class PlayerTable {
 
 		if (animalCubesOnBoard) {
 			Object.keys(animalCubesOnBoard).forEach((cell) => {
-				animalCubesOnBoard[cell].forEach((cube) => this.createCubeOnBoard(cube,undefined, false))
+				animalCubesOnBoard[cell].forEach((cube) => this.createCubeOnBoard(cube, undefined, false))
 			})
 		}
 
@@ -111,7 +111,10 @@ class PlayerTable {
 		this.spiritsStock.addCards(spiritsCards)
 
 		this.spiritsStock.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
-			dojo.toggleClass('take_spirit_button', 'disabled', !(selection.length === 1))
+			this.game.toggleActionButtonAbility(
+				'take_spirit_button',
+				selection.length === 1
+			)
 		}
 	}
 
@@ -143,7 +146,7 @@ class PlayerTable {
 	 * Creates a new div inside an hex
 	 * @param args
 	 */
-	public createTokenOnBoard(token: ColoredToken, animate: boolean=false) {
+	public createTokenOnBoard(token: ColoredToken, animate: boolean = false) {
 		const tokenId = this.game.getNextTokenId()
 		let html = `
 			<div id="${tokenId}" class="colored-token color-${token.type_arg} level-${token.location_arg}"></div>
@@ -151,7 +154,7 @@ class PlayerTable {
 		this.createElementOnBoard(html, tokenId, token.location, '', animate)
 	}
 
-	public createCubeOnBoard(cube: AnimalCube, fromCardId: string, animate: boolean=false) {
+	public createCubeOnBoard(cube: AnimalCube, fromCardId: string, animate: boolean = false) {
 		const tokenId = this.game.getNextTokenId()
 		const pileHeight = dojo.query(`#${cube.location} .colored-token`).length
 		let html = `
@@ -166,11 +169,11 @@ class PlayerTable {
 		htmlId: string,
 		location: string,
 		action: string,
-		animate: boolean=false,
+		animate: boolean = false,
 		animateFrom: string = undefined
 	) {
 		const destination = location
-		let creationLocation = animateFrom?? location
+		let creationLocation = animateFrom ?? location
 		if (animate && !animateFrom) {
 			creationLocation = `overall_player_board_${this.player.id}`
 		}
