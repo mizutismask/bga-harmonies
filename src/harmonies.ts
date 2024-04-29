@@ -75,6 +75,7 @@ class Harmonies implements HarmoniesGame {
 				'first'
 			)
 		}
+		this.dontPreloadUselessAssets()
 
 		this.gameFeatures = new GameFeatureConfig()
 		this.gamedatas = gamedatas
@@ -658,17 +659,33 @@ class Harmonies implements HarmoniesGame {
 
 	///////////////////////////////////////////////////
 	//// Utility methods
+	public dontPreloadUselessAssets() {
+		if (this.gamedatas.boardSide === 'sideA') {
+			;(this as any).dontPreloadImage('boardSideB.png')
+			;(this as any).dontPreloadImage('helpSideB.png')
+		} else {
+			;(this as any).dontPreloadImage('boardSideA.png')
+			;(this as any).dontPreloadImage('helpSideA.png')
+		}
+		if (this.getPlayersCount() == 1) {
+			;(this as any).dontPreloadImage('centralBoard.png')
+		} else {
+			;(this as any).dontPreloadImage('centralBoardSolo.png')
+			;(this as any).dontPreloadImage('sunIcon.png')
+			;(this as any).dontPreloadImage('soloSunsHelp.jpg')
+		}
+	}
 
-	public toggleActionButtonAbility(buttonId: string, enable: boolean, autoClickIfEnabled: boolean=undefined) {
+	public toggleActionButtonAbility(buttonId: string, enable: boolean, autoClickIfEnabled: boolean = undefined) {
 		if (autoClickIfEnabled == undefined) {
-			autoClickIfEnabled= this.isConfirmOnlyOnPlacingTokensOn()
+			autoClickIfEnabled = this.isConfirmOnlyOnPlacingTokensOn()
 		}
 		dojo.toggleClass(buttonId, 'disabled', !enable)
 		if (autoClickIfEnabled && !dojo.hasClass(buttonId, 'disabled')) {
 			$(buttonId).click()
 		}
-}
-	
+	}
+
 	public initPreferencesObserver() {
 		// Call onPreferenceChange() when any value changes
 		dojo.query('.preference_control').on('change', (e) => {
