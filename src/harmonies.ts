@@ -416,6 +416,7 @@ class Harmonies implements HarmoniesGame {
 			this.resetClientActionData()
 			if (args.canChooseSpirit) {
 				this.river.setSelectionMode('none')
+				this.playerTables[this.getPlayerId()].setSpiritSelectionMode('single')
 			} else {
 				if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
 					const cardId = parseInt(Object.keys(args.placeAnimalCubeArgs)[0])
