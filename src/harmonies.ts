@@ -41,7 +41,7 @@ class Harmonies implements HarmoniesGame {
 	private actionTimerId = null
 	private isTouch = window.matchMedia('(hover: none)').matches
 	private TOOLTIP_DELAY = document.body.classList.contains('touch-device') ? 1500 : undefined
-	private settings = [new Setting('customSounds', 'pref', 1)]
+	private settings = [new Setting('customSounds', 'pref', 1), new Setting('confirmOnlyOnPlaceColoredToken', 'pref', 2)]
 	public clientActionData: ClientActionData
 	private tokenSequence = 0
 
@@ -85,7 +85,6 @@ class Harmonies implements HarmoniesGame {
 		this.river = new RiverDeck(this, this.gamedatas.river, this.getPlayersCount())
 		this.animationManager = new AnimationManager(this)
 
-		this.initPreferencesObserver()
 		this.initCentralBoard()
 
 		if (this.gamedatas.lastTurn) {
@@ -887,6 +886,7 @@ class Harmonies implements HarmoniesGame {
 	 * Handle user preferences changes.
 	 */
 	private onPreferenceChange(prefId: number, prefValue: number) {
+		log("isConfirmOnlyOnPlacingTokensOn", this.isConfirmOnlyOnPlacingTokensOn())
 		switch (prefId) {
 		}
 	}
