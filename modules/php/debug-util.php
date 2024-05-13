@@ -34,6 +34,28 @@ trait DebugUtilTrait {
     }
 
     /**
+     * Fills the current players board with random piles of tokens and add a cube on each but leaves 3 spaces empty.
+     */
+    function almostFill() {
+        $hexes = $this->getHexesCoordinates();
+        $playerId = $this->getCurrentPlayerId();
+        $i = 0;
+        foreach ($hexes as $hex) {
+            if ($i < count($hexes) - 3) {
+                $hexId = $this->getCellName($hex, $playerId);
+                $number = bga_rand(1, 3);
+                $tokens = array_slice($this->coloredTokens->getCardsInLocation("deck"), 0, $number);
+                foreach ($tokens as $token) {
+                    $this->moveColoredTokenToBoard($token["id"], $hexId);
+                }
+
+                $this->animalCubes->pickCardsForLocation(1, 'deck', $hexId, "4");
+            }
+            $i++;
+        }
+    }
+
+    /**
      * Removes everything from the current players board.
      */
     function clear() {
@@ -41,7 +63,7 @@ trait DebugUtilTrait {
         self::DbQuery("UPDATE `animalCube` set `card_location` = 'deck'");
     }
 
-   /* public function debugReplacePlayersIds() {
+    /* public function debugReplacePlayersIds() {
         if (!$this->isStudio() ) {
             return;
         }
