@@ -11,24 +11,34 @@ class CardsManager extends CardManager<AnimalCard> {
 				div.style.position = 'relative'
 			},
 			setupFrontDiv: (card: AnimalCard, div: HTMLElement) => {
+				const scoreId = `${super.getId(card)}-front-score`
+				const creation = !$(scoreId)
+
 				this.setFrontBackground(div as HTMLDivElement, card.type_arg)
 				//this.setDivAsCard(div as HTMLDivElement, card.type);
 				div.id = `${super.getId(card)}-front`
 
 				//add help
 				const helpId = `${super.getId(card)}-front-info`
-				if (!$(helpId)) {
-					const info: HTMLDivElement = document.createElement('div')
-					info.id = helpId
-					info.innerText = '?'
-					info.classList.add('css-icon', 'card-info')
-					div.appendChild(info)
-					const cardTypeId = card.type * 100 + card.type_arg
-					;(this.game as any).addTooltipHtml(info.id, this.getTooltip(card, cardTypeId))
+				const cardTypeId = card.type * 100 + card.type_arg
+
+				if (
+					game.getHelpOnCardConfig() === HELP_CONF_ALWAYS ||
+					(game.getHelpOnCardConfig() === HELP_CONF_ON_SPIRITS && card.isSpirit)
+				) {
+					if (!$(helpId)) {
+						const info: HTMLDivElement = document.createElement('div')
+						info.id = helpId
+						info.innerText = '?'
+						info.classList.add('css-icon', 'card-info')
+						div.appendChild(info)
+						;(this.game as any).addTooltipHtml(info.id, this.getTooltip(card, cardTypeId))
+					}
+				} else if (creation) {
+					;(this.game as any).addTooltipHtml(div.id, this.getTooltip(card, cardTypeId))
 				}
 
 				//adds score locations
-				const scoreId = `${super.getId(card)}-front-score`
 				if (!$(scoreId)) {
 					const container: HTMLDivElement = document.createElement('div')
 					container.id = scoreId

@@ -81,6 +81,7 @@ interface HarmoniesGame extends Game {
 	takeAction(action: string, data?: any): void
 	isConfirmOnlyOnPlacingTokensOn(): boolean
 	toggleActionButtonAbility(buttonId: string, enable: boolean): void
+	getHelpOnCardConfig(): number
 }
 
 interface EnteringChooseActionArgs {

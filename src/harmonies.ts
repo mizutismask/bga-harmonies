@@ -17,6 +17,9 @@
 const ANIMATION_MS = 500
 const SCORE_MS = 1500
 const IMAGE_ITEMS_PER_ROW = 10
+const HELP_CONF_ALWAYS = 1
+const HELP_CONF_ON_SPIRITS = 2
+const HELP_CONF_NEVER = 3
 
 const isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1
 const log = isDebug ? console.log.bind(window.console) : function () {}
@@ -44,7 +47,8 @@ class Harmonies implements HarmoniesGame {
 	private settings = [
 		new Setting('customSounds', 'pref', 1),
 		new Setting('confirmOnlyOnPlaceColoredToken', 'pref', 2),
-		new Setting('alwaysDisplayHelpCard', 'pref', 3)
+		new Setting('alwaysDisplayHelpCard', 'pref', 3),
+		new Setting('helpButtonOnCards', 'pref', 4)
 	]
 	public clientActionData: ClientActionData
 	private tokenSequence = 0
@@ -781,9 +785,12 @@ class Harmonies implements HarmoniesGame {
 		return (this as any).prefs[2].value == 1
 	}
 
-	/** Tells if confirm is active in user prefs. */
 	public isAlwaysShowHelpCardOn(): boolean {
 		return (this as any).prefs[3].value == 1
+	}
+
+	public getHelpOnCardConfig(): number {
+		return parseInt((this as any).prefs[4].value)
 	}
 
 	/*

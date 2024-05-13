@@ -15,7 +15,7 @@
 			"1": { "name": "Yes" },
 			"2": { "name": "No" }
 		},
-		"default": 2
+		"default": 1
 	},
 	"3": {
 		"name": "Always display help card",
@@ -25,5 +25,15 @@
 			"2": { "name": "No", "cssPref": "help-card-hidden" }
 		},
 		"default": 1
+	},
+	"4": {
+		"name": "Help button on cards",
+		"needReload": true,
+		"values": {
+			"1": { "name": "Always" },
+			"2": { "name": "Only on spirits"},
+			"3": { "name": "Never" }
+		},
+		"default": 3
 	}
 }
