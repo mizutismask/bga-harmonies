@@ -16,5 +16,14 @@
 			"2": { "name": "No" }
 		},
 		"default": 2
+	},
+	"3": {
+		"name": "Always display help card",
+		"needReload": true,
+		"values": {
+			"1": { "name": "Yes" },
+			"2": { "name": "No", "cssPref": "help-card-hidden" }
+		},
+		"default": 1
 	}
 }

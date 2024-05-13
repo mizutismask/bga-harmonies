@@ -106,6 +106,10 @@ html {
 	height: 34px;
 }
 
+.custom-hidden{
+	display: none !important;
+}
+
 .central-board {
 	background: url('img/centralBoard.png') no-repeat;
 	height: $CARD_HEIGHT;

@@ -72,6 +72,12 @@
 	}
 }
 
+.help-card-hidden{
+	#player-help-visible-wrapper{
+		display: none;
+	}
+}
+
 #player-help-visible-wrapper {
 	display: flex;
 	justify-content: center;

@@ -41,7 +41,11 @@ class Harmonies implements HarmoniesGame {
 	private actionTimerId = null
 	private isTouch = window.matchMedia('(hover: none)').matches
 	private TOOLTIP_DELAY = document.body.classList.contains('touch-device') ? 1500 : undefined
-	private settings = [new Setting('customSounds', 'pref', 1), new Setting('confirmOnlyOnPlaceColoredToken', 'pref', 2)]
+	private settings = [
+		new Setting('customSounds', 'pref', 1),
+		new Setting('confirmOnlyOnPlaceColoredToken', 'pref', 2),
+		new Setting('alwaysDisplayHelpCard', 'pref', 3)
+	]
 	public clientActionData: ClientActionData
 	private tokenSequence = 0
 
@@ -75,6 +79,7 @@ class Harmonies implements HarmoniesGame {
 				'first'
 			)
 		}
+		
 		this.dontPreloadUselessAssets()
 
 		this.gameFeatures = new GameFeatureConfig()
@@ -316,6 +321,7 @@ class Harmonies implements HarmoniesGame {
 			//help
 			dojo.place(`<div id="player-help" class="css-icon xpd-help-icon">?</div>`, `additional-icons-${player.id}`)
 		}
+		dojo.toggleClass("player-help", "custom-hidden", this.isAlwaysShowHelpCardOn())
 
 		if (this.gameFeatures.showFirstPlayer && player.playerNo === 1) {
 			dojo.place(
@@ -769,6 +775,11 @@ class Harmonies implements HarmoniesGame {
 		return (this as any).prefs[2].value == 1
 	}
 
+	/** Tells if confirm is active in user prefs. */
+	public isAlwaysShowHelpCardOn(): boolean {
+		return (this as any).prefs[3].value == 1
+	}
+
 	/*
 	 * Play a given sound that should be first added in the tpl file
 	 */
@@ -887,8 +898,11 @@ class Harmonies implements HarmoniesGame {
 	 * Handle user preferences changes.
 	 */
 	private onPreferenceChange(prefId: number, prefValue: number) {
-		log("isConfirmOnlyOnPlacingTokensOn", this.isConfirmOnlyOnPlacingTokensOn())
+		log('isConfirmOnlyOnPlacingTokensOn', this.isConfirmOnlyOnPlacingTokensOn())
 		switch (prefId) {
+			/*case 3:
+				dojo.toggleClass("player-help","hidden", prefValue===2)
+				break*/
 		}
 	}
 
