@@ -79,7 +79,7 @@ class Harmonies implements HarmoniesGame {
 				'first'
 			)
 		}
-		
+
 		this.dontPreloadUselessAssets()
 
 		this.gameFeatures = new GameFeatureConfig()
@@ -321,7 +321,7 @@ class Harmonies implements HarmoniesGame {
 			//help
 			dojo.place(`<div id="player-help" class="css-icon xpd-help-icon">?</div>`, `additional-icons-${player.id}`)
 		}
-		dojo.toggleClass("player-help", "custom-hidden", this.isAlwaysShowHelpCardOn())
+		dojo.toggleClass('player-help', 'custom-hidden', this.isAlwaysShowHelpCardOn())
 
 		if (this.gameFeatures.showFirstPlayer && player.playerNo === 1) {
 			dojo.place(
@@ -406,7 +406,9 @@ class Harmonies implements HarmoniesGame {
 				break
 			case 'endScore':
 				this.onEnteringEndScore()
-				break
+			//case 'gameEnd':
+			//	this.onEnteringGameEnd()
+			//	break
 		}
 
 		if (this.gameFeatures.spyOnActivePlayerInGeneralActions) {
@@ -424,6 +426,10 @@ class Harmonies implements HarmoniesGame {
 		}
 
 		document.getElementById('score').style.display = 'flex'
+	}
+
+	private onEnteringGameEnd() {
+		replaceStarScoreIcon('sun-icon')
 	}
 
 	private onEnteringChooseAction(args: EnteringChooseActionArgs) {
@@ -899,10 +905,12 @@ class Harmonies implements HarmoniesGame {
 	 */
 	private onPreferenceChange(prefId: number, prefValue: number) {
 		log('isConfirmOnlyOnPlacingTokensOn', this.isConfirmOnlyOnPlacingTokensOn())
-		switch (prefId) {
+		switch (
+			prefId
 			/*case 3:
 				dojo.toggleClass("player-help","hidden", prefValue===2)
 				break*/
+		) {
 		}
 	}
 
