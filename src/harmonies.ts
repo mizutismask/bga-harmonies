@@ -260,6 +260,7 @@ class Harmonies implements HarmoniesGame {
 		this.setTooltipToClass('empty-hexes-counter', _('Empty hexes'))
 
 		this.setTooltipToClass('xpd-help-icon', `<div class="help-card help-${this.gamedatas.boardSide}"></div>`)
+		this.setTooltipToClass('player-help-visible', `<div class="help-card help-${this.gamedatas.boardSide}"></div>`)
 		this.setTooltipToClass('player-turn-order', _('First player'))
 	}
 
