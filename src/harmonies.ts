@@ -45,7 +45,6 @@ class Harmonies implements HarmoniesGame {
 	private isTouch = window.matchMedia('(hover: none)').matches
 	private TOOLTIP_DELAY = document.body.classList.contains('touch-device') ? 1500 : undefined
 	private settings = [
-		new Setting('customSounds', 'pref', 1),
 		new Setting('confirmOnlyOnPlaceColoredToken', 'pref', 2),
 		new Setting('alwaysDisplayHelpCard', 'pref', 3),
 		new Setting('helpButtonOnCards', 'pref', 4)
@@ -452,7 +451,9 @@ class Harmonies implements HarmoniesGame {
 					this.playerTables[this.getPlayerId()].unselectAll()
 				}
 				if (args.canPlaceAnimalCube && args.placeAnimalCubeArgs) {
-					Object.values(args.placeAnimalCubeArgs).forEach(hexes=>hexes.forEach(h=>$(h).classList.add("selectable-element")))
+					Object.values(args.placeAnimalCubeArgs).forEach((hexes) =>
+						hexes.forEach((h) => $(h).classList.add('selectable-element'))
+					)
 				}
 
 				if (args.canTakeAnimalCard) {
@@ -637,7 +638,9 @@ class Harmonies implements HarmoniesGame {
 
 		const stateMessage = singlePossibility
 			? _('Confirm or cancel the cube placement')
-			: singleCard? _('Select the hex where you want to place the cube'):_('Select one card and then the corresponding pattern on your board where you want to place the cube')
+			: singleCard
+			? _('Select the hex where you want to place the cube')
+			: _('Select one card and then the corresponding pattern on your board where you want to place the cube')
 
 		;(this as any).setClientState('client_place_animal_cube', {
 			descriptionmyturn: stateMessage
@@ -780,11 +783,6 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
-	/** Tells if custom sounds are active in user prefs. */
-	public isCustomSoundsOn(): boolean {
-		return (this as any).prefs[1].value == 1
-	}
-
 	/** Tells if confirm is active in user prefs. */
 	public isConfirmOnlyOnPlacingTokensOn(): boolean {
 		return (this as any).prefs[2].value == 1
@@ -802,10 +800,8 @@ class Harmonies implements HarmoniesGame {
 	 * Play a given sound that should be first added in the tpl file
 	 */
 	public playCustomSound(sound: string, playNextMoveSound = true) {
-		if (this.isCustomSoundsOn()) {
-			playSound(sound)
-			playNextMoveSound && (this as any).disableNextMoveSound()
-		}
+		playSound(sound)
+		playNextMoveSound && (this as any).disableNextMoveSound()
 	}
 
 	/**
