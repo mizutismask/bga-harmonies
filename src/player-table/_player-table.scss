@@ -116,6 +116,15 @@ h3 {
 		transition: background-color 0.2s;
 	}
 
+	&.selectable-element {
+		background-color: rgb(241 243 196);
+		transition: background-color 0.2s;
+	}
+
+	&.selected-element.selectable-element{
+		background-color: rgb(208 239 121);
+	}
+
 	.colored-token,
 	.animal-cube {
 		pointer-events: none;

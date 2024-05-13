@@ -410,6 +410,7 @@ class Harmonies implements HarmoniesGame {
 				break
 			case 'endScore':
 				this.onEnteringEndScore()
+				break
 			//case 'gameEnd':
 			//	this.onEnteringGameEnd()
 			//	break
@@ -449,6 +450,9 @@ class Harmonies implements HarmoniesGame {
 					this.playerTables[this.getPlayerId()].selectCardFromId(cardId)
 				} else {
 					this.playerTables[this.getPlayerId()].unselectAll()
+				}
+				if (args.canPlaceAnimalCube && args.placeAnimalCubeArgs) {
+					Object.values(args.placeAnimalCubeArgs).forEach(hexes=>hexes.forEach(h=>$(h).classList.add("selectable-element")))
 				}
 
 				if (args.canTakeAnimalCard) {
@@ -510,6 +514,7 @@ class Harmonies implements HarmoniesGame {
 							'cardId': card.id,
 							'hexId': document.querySelector('.hex.selected-element').id
 						})
+						removeClass('selectable-element')
 					})
 					;(this as any).addActionButton(
 						'button_cancel',
@@ -626,13 +631,13 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	private onPlaceAnimalCubeButton(args: EnteringChooseActionArgs) {
+		const singleCard = Object.keys(args.placeAnimalCubeArgs).length === 1
 		let singlePossibility =
-			Object.keys(args.placeAnimalCubeArgs).length === 1 &&
-			args.placeAnimalCubeArgs[Object.keys(args.placeAnimalCubeArgs)[0]].length === 1
+			singleCard && args.placeAnimalCubeArgs[Object.keys(args.placeAnimalCubeArgs)[0]].length === 1
 
 		const stateMessage = singlePossibility
 			? _('Confirm or cancel the cube placement')
-			: _('Select one card and then the corresponding pattern on your board where you want to place the cube')
+			: singleCard? _('Select the hex where you want to place the cube'):_('Select one card and then the corresponding pattern on your board where you want to place the cube')
 
 		;(this as any).setClientState('client_place_animal_cube', {
 			descriptionmyturn: stateMessage
