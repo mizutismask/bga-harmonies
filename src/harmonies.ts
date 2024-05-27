@@ -447,7 +447,7 @@ class Harmonies implements HarmoniesGame {
 			if (args.canChooseSpirit) {
 				this.river.setSelectionMode('none')
 				this.playerTables[this.getPlayerId()].setSpiritSelectionMode('single')
-				$(`spirits-${this.getPlayerId()}`).classList.add("active-zone")
+				$(`spirits-zone-${this.getPlayerId()}`).classList.add("active-zone")
 			} else {
 				if (args.canPlaceAnimalCube && Object.keys(args.placeAnimalCubeArgs).length == 1) {
 					const cardId = parseInt(Object.keys(args.placeAnimalCubeArgs)[0])
@@ -465,7 +465,7 @@ class Harmonies implements HarmoniesGame {
 				if (args.canTakeAnimalCard) {
 					this.river.setSelectionMode('single')
 					this.river.setSelectableCards(this.river.getCards())
-					$("river").classList.add("active-zone")
+					$("river-zone").classList.add("active-zone")
 				} else {
 					this.river.setSelectionMode('none')
 				}

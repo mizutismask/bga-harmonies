@@ -98,7 +98,9 @@ class PlayerTable {
 
 	private initSpiritsStock(player: HarmoniesPlayer, spiritsCards: Array<AnimalCard>) {
 		const container = `
-			<div id="spirits-${player.id}" class="hrm-player-spirits"></div>
+			<div id="spirits-zone-${player.id}">
+				<div id="spirits-${player.id}" class="hrm-player-spirits"></div>
+			</div>
 		`
 		dojo.place(container, `player-table-${player.id}`, 'first')
 		this.spiritsStock = new LineStock<AnimalCard>(this.game.cardsManager, $('spirits-' + player.id), {
