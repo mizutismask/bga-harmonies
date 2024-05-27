@@ -68,23 +68,23 @@ class CardsManager extends CardManager<AnimalCard> {
 		if (card.isSpirit) {
 			const desc = this.getSpiritDescription(card)
 			tooltip = `
-			<div class="xpd-city-zoom-wrapper">
-				<div class="xpd-city-zoom-desc-wrapper">
-					<div class="xpd-city">${desc}</div>
-				</div>
-			</div>`
+			<div id="card-${card.id}-zoom" class="card-zoom" style="${getBackgroundInlineStyleForAnimalCard(
+				card
+			)}"></div>
+			<div class="card-tooltip-element">${desc}</div>
+			`
 		} else {
 			tooltip = `
-			<div class="xpd-city-zoom-wrapper">
-				<div class="xpd-city-zoom-desc-wrapper">
-					<div class="xpd-city">${dojo.string.substitute(
-						_('Gain those points if you put a cube on this exact pattern several times: ${points}'),
-						{
-							points: card.pointLocations.reverse().join(', ')
-						}
-					)}</div>
-				</div>
-			</div>`
+				<div id="card-${card.id}-zoom" class="card-zoom" style="${getBackgroundInlineStyleForAnimalCard(
+					card
+				)}"></div>
+				<div class="card-tooltip-element">${dojo.string.substitute(
+					_('Gain those points if you put a cube on this exact pattern several times: ${points}'),
+					{
+						points: card.pointLocations.reverse().join(', ')
+					}
+				)}</div>
+			`
 		}
 		return tooltip
 	}

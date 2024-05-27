@@ -1,15 +1,15 @@
 const CARD_WIDTH = 150 //also change in scss
 const CARD_HEIGHT = 258
 
-function getBackgroundInlineStyleForHarmoniesCard(destination: AnimalCard) {
+function getBackgroundInlineStyleForAnimalCard(card: AnimalCard) {
 	let file
-	switch (destination.type) {
+	switch (card.type) {
 		case 1:
 			file = 'animalCards.jpg'
 			break
 	}
 
-	const imagePosition = destination.type_arg - 1
+	const imagePosition = card.type_arg - 1
 	const row = Math.floor(imagePosition / IMAGE_ITEMS_PER_ROW)
 	const xBackgroundPercent = (imagePosition - row * IMAGE_ITEMS_PER_ROW) * 100
 	const yBackgroundPercent = row * 100

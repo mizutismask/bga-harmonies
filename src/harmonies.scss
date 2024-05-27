@@ -340,6 +340,17 @@ html {
 		height: unset;
 	}
 }
+
+.card-zoom{
+	width: $CARD_WIDTH*1.8;
+	height: $CARD_HEIGHT*1.8;
+}
+.card-tooltip-element{
+	max-width: $CARD_WIDTH*1.8;
+	text-align: center;
+	margin-top: 3px;
+}
+
 .cubespirit,
 .cube {
 	max-width: 100%;
