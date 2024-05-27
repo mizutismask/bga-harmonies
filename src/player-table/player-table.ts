@@ -120,6 +120,13 @@ class PlayerTable {
 
 	private initHand(player: HarmoniesPlayer, cards: Array<AnimalCard>) {
 		this.handStock = new PlayerBoardDeck(this.game, player, cards)
+
+		this.handStock.boardDeck.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
+			this.game.toggleActionButtonAbility(
+				'place_cube_confirm_button',
+				selection.length === 1 && document.querySelector('.hex.selected-element')!=undefined
+			)
+		}
 	}
 
 	public addCard(card: AnimalCard) {

@@ -216,10 +216,11 @@ class Harmonies implements HarmoniesGame {
 					break
 				case 'client_place_animal_cube':
 					let selected = this.toggleHexAndUnselectOthers(hexId)
+					//log("this.playerTables[this.getPlayerId()].getAnimalCardSelection()",this.playerTables[this.getPlayerId()].getAnimalCardSelection())
+					//log("activate", this.isConfirmOnlyOnPlacingTokensOn() && selected && this.playerTables[this.getPlayerId()].getAnimalCardSelection().length === 1)
 					this.toggleActionButtonAbility(
-						'place_cube_confirm_button',
-						selected,
-						this.isConfirmOnlyOnPlacingTokensOn() && selected
+						'place_cube_confirm_button', selected && this.playerTables[this.getPlayerId()].getAnimalCardSelection().length === 1,
+						this.isConfirmOnlyOnPlacingTokensOn() && selected && this.playerTables[this.getPlayerId()].getAnimalCardSelection().length === 1
 					)
 					break
 				default:
@@ -515,11 +516,15 @@ class Harmonies implements HarmoniesGame {
 				case 'client_place_animal_cube':
 					;(this as any).addActionButton('place_cube_confirm_button', _('Confirm'), () => {
 						const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop()
-						this.takeAction('placeAnimalCube', {
-							'cardId': card.id,
-							'hexId': document.querySelector('.hex.selected-element').id
-						})
-						removeClass('selectable-element')
+						if (card) {
+							this.takeAction('placeAnimalCube', {
+								'cardId': card.id,
+								'hexId': document.querySelector('.hex.selected-element').id
+							})
+							removeClass('selectable-element')
+						} else {
+							;(this as any).showMessage(_('Select the corresponding card for this cube first'), 'error')
+						}
 					})
 					;(this as any).addActionButton(
 						'button_cancel',
@@ -551,7 +556,7 @@ class Harmonies implements HarmoniesGame {
 
 	public customRestoreServerGameState() {
 		;(this as any).restoreServerGameState()
-		//this.deselectAll(); to do
+		//this.playerTables[this.getPlayerId()].unselectAll();
 	}
 
 	/**
@@ -652,10 +657,10 @@ class Harmonies implements HarmoniesGame {
 			? _('Select the hex where you want to place the cube')
 			: _('Select one card and then the corresponding pattern on your board where you want to place the cube')
 
+			this.playerTables[this.getPlayerId()].setSelectionMode('single')
 		;(this as any).setClientState('client_place_animal_cube', {
 			descriptionmyturn: stateMessage
 		})
-		this.playerTables[this.getPlayerId()].setSelectionMode('single')
 
 		if (singlePossibility) {
 			const cardId = Object.keys(args.placeAnimalCubeArgs)[0]
@@ -718,6 +723,9 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	public toggleActionButtonAbility(buttonId: string, enable: boolean, autoClickIfEnabled: boolean = undefined) {
+		if (!$(buttonId)) return
+		//log("toggleActionButtonAbility", buttonId, enable)
+		
 		if (autoClickIfEnabled == undefined) {
 			autoClickIfEnabled = this.isConfirmOnlyOnPlacingTokensOn()
 		}
