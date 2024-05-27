@@ -35,7 +35,41 @@ html {
 }
 
 @mixin active-zone {
-	box-shadow: 0 0 5px 5px rgb(249 17 13);
+	//box-shadow: 0 0 5px 5px rgb(249 17 13);
+
+	--border-angle: 0turn; // For animation.
+	--main-bg: conic-gradient(from var(--border-angle), #213, #112 5%, #112 60%, #213 95%);
+
+	border: solid 5px transparent;
+	border-radius: 3px;
+	--gradient-border: conic-gradient(from var(--border-angle), transparent 25%, rgb(251, 255, 0), rgb(78, 224, 200) 99%, transparent);
+
+	background: 
+    // padding-box clip this background in to the overall element except the border.
+		var(--main-bg) padding-box,
+		// border-box extends this background to the border space
+		var(--gradient-border) border-box,
+		// Duplicate main background to fill in behind the gradient border. You can remove this if you want the border to extend "outside" the box background.
+		var(--main-bg) border-box;
+
+	background-position: center center;
+
+	animation: bg-spin 6s linear infinite;
+	@keyframes bg-spin {
+		to {
+			--border-angle: 1turn;
+		}
+	}
+
+	&:hover {
+		animation-play-state: paused;
+	}
+}
+
+@property --border-angle {
+	syntax: '<angle>';
+	inherits: true;
+	initial-value: 0turn;
 }
 
 .stockitem {
@@ -53,7 +87,7 @@ html {
 }
 
 .central-board {
-	&.canTakeTokens{
+	&.canTakeTokens {
 		border-radius: 25%;
 	}
 }
@@ -448,8 +482,8 @@ html {
 	display: flex;
 	column-gap: 10px;
 	margin: 12px 0px 12px 15px;
-	
-	&.canTakeTokens{
+
+	&.canTakeTokens {
 		box-shadow: none;
 
 		.central-board-hole {
