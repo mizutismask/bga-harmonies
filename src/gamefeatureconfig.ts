@@ -18,8 +18,15 @@ class GameFeatureConfig {
     private _showPlayerHelp: boolean = true;
 
     /** Shows a first player icon in the player miniboard */
-	private _showFirstPlayer: boolean = true;
+    private _showFirstPlayer: boolean = true;
+    
+	/** Shows settings in the player miniboard */
+	private _showSettings: boolean = true;
 	
+    public get showSettings(): boolean {
+        return this._showSettings;
+    }
+    
     public get showFirstPlayer(): boolean {
         return this._showFirstPlayer;
     }

@@ -1,5 +1,5 @@
 $color_1: grey;
-$color_2: black;
+$color_2: inherit;
 
 /*
  * Controls in the top bar
@@ -8,7 +8,7 @@ $color_2: black;
 	margin: 10px 0px;
 	#player_config_row {
 		display: flex;
-		justify-content: right;
+		justify-content: center;
 		align-items: center;
 	}
 	#player_info_row {
@@ -30,9 +30,9 @@ $color_2: black;
 			}
 		}
 		svg {
-			width: 23px;
-			height: 23px;
-			opacity: 0.5;
+			width: 33px;
+			height: 33px;
+			opacity: 1;
 		}
 		.fa-primary {
 			transform-origin: 216px 255px;
@@ -45,7 +45,7 @@ $color_2: black;
 	position: relative;
 	text-align: center;
 	margin-top: 10px;
-	background: linear-gradient(180deg, #f8f8f8, #e7e9e8);
+	background: inherit;
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	border-top: none;
 	box-shadow: 0 3px 8px rgb(0 0 0 / 30%);

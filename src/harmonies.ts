@@ -115,7 +115,7 @@ class Harmonies implements HarmoniesGame {
 
 		this.displayCubesOnAnimalCards(this.gamedatas.cubesOnAnimalCards)
 
-		this.setupSettingsIconInMainBar()
+		this.setupSettingsIconInPlayerPanel()
 		this.setupPreferences()
 		this.setupTooltips()
 
@@ -297,7 +297,7 @@ class Harmonies implements HarmoniesGame {
 		const playerId = Number(player.id)
 		dojo.place(
 			`
-				
+				<div id="counters-${player.id}" class="counters"</div>
 				<div id="additional-info-${player.id}" class="counters additional-info">
 					<div id="additional-icons-${player.id}" class="additional-icons">
 						<div id="empty-hexes-counter-${player.id}-wrapper" class="counter empty-hexes-counter">
@@ -325,6 +325,10 @@ class Harmonies implements HarmoniesGame {
 			dojo.place(`<div id="player-help" class="css-icon xpd-help-icon">?</div>`, `additional-icons-${player.id}`)
 		}
 		dojo.toggleClass('player-help', 'custom-hidden', this.isAlwaysShowHelpCardOn())
+
+		if (this.gameFeatures.showSettings && this.getPlayerId() === playerId) {
+			dojo.place(`<div id="player-settings" class="player-settings"></div>`, `counters-${player.id}`, 'before')
+		}
 
 		if (this.gameFeatures.showFirstPlayer && player.playerNo === 1) {
 			dojo.place(
@@ -922,10 +926,10 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
-	private setupSettingsIconInMainBar() {
+	private setupSettingsIconInPlayerPanel() {
 		dojo.place(
 			`
-            <div class='upperrightmenu_item' id="player_board_config">
+            <div class='settings-wrapper' id="player_board_config">
                 <div id="player_config">
                     <div id="player_config_row">
                     <div id="show-settings">
@@ -941,8 +945,8 @@ class Harmonies implements HarmoniesGame {
                 </div>
             </div>
         `,
-			'upperrightmenu',
-			'first'
+			`player-settings`,
+			'last'
 		)
 
 		dojo.connect($('show-settings'), 'onclick', () => this.toggleSettings())
