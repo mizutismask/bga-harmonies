@@ -126,7 +126,7 @@ $gameGameStates = [
 
     ST_NEXT_PLAYER => [
         "name" => "nextPlayer",
-        "description" => clienttranslate('End of turn actions'),
+        "description" => "",
         "type" => "game",
         "action" => "stNextPlayer",
         "updateGameProgression" => true,
