@@ -34,12 +34,27 @@ html {
 	box-shadow: 0 0 5px 5px rgb(200, 255, 47);
 }
 
+@mixin active-zone {
+	box-shadow: 0 0 5px 5px rgb(249 17 13);
+}
+
 .stockitem {
 	border-radius: 6px;
 	background-size: 1000%;
 	&.disabled {
 		filter: contrast(0.6);
 		cursor: not-allowed;
+	}
+}
+
+.active-zone,
+.canTakeTokens {
+	@include active-zone;
+}
+
+.central-board {
+	&.canTakeTokens{
+		border-radius: 25%;
 	}
 }
 
@@ -106,7 +121,7 @@ html {
 	height: 34px;
 }
 
-.custom-hidden{
+.custom-hidden {
 	display: none !important;
 }
 
@@ -185,7 +200,6 @@ html {
 			left: 4%;
 
 			.hole-token-1 {
-				
 				top: -4%;
 				right: 31%;
 			}
@@ -341,12 +355,12 @@ html {
 	}
 }
 
-.card-zoom{
-	width: $CARD_WIDTH*1.8;
-	height: $CARD_HEIGHT*1.8;
+.card-zoom {
+	width: $CARD_WIDTH * 1.8;
+	height: $CARD_HEIGHT * 1.8;
 }
-.card-tooltip-element{
-	max-width: $CARD_WIDTH*1.8;
+.card-tooltip-element {
+	max-width: $CARD_WIDTH * 1.8;
 	text-align: center;
 	margin-top: 3px;
 }
@@ -375,6 +389,8 @@ html {
 	justify-content: center;
 	flex-wrap: wrap;
 	margin-top: 8px;
+	align-items: center;
+	gap: 8px;
 	//position: sticky;
 	//top: 60px;
 }
@@ -432,6 +448,14 @@ html {
 	display: flex;
 	column-gap: 10px;
 	margin: 12px 0px 12px 15px;
+	
+	&.canTakeTokens{
+		box-shadow: none;
+
+		.central-board-hole {
+			@include active-zone;
+		}
+	}
 
 	.central-board-counter-wrapper {
 		position: unset;
@@ -444,9 +468,9 @@ html {
 		width: 80px;
 		aspect-ratio: 1 / 1;
 		border-radius: 50%;
-		align-self:center;
+		align-self: center;
 
-		.hole-token{
+		.hole-token {
 			@include reset-hole-token-position;
 		}
 
