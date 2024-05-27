@@ -63,7 +63,7 @@ interface HarmoniesGamedatas {
 	tokensOnCentralBoard: { [hole: number]: Array<ColoredToken> }
 	expansion: number
 	spiritsCards: AnimalCard[]
-	remainingTokens:number
+	remainingTokens: number
 }
 
 interface HarmoniesGame extends Game {
@@ -95,6 +95,7 @@ interface EnteringChooseActionArgs {
 	tokensOnCentralBoard: any
 	tokensToPlace: Array<ColoredToken>
 	placeAnimalCubeArgs: { [cardId: number]: Array<string> }
+	possibleHexesByToken: { [cardId: number]: Array<string> }
 }
 
 interface NotifPointsArgs {
@@ -141,4 +142,9 @@ interface NotifHoleEmptied {
 
 interface ClientActionData {
 	tokenToPlace: ColoredToken
+}
+
+interface ActionCallback {
+	valid: boolean
+	data: any
 }

@@ -35,6 +35,13 @@ trait ArgsTrait {
         $canPlaceToken =  !$canTakeTokens && $this->array_some($takenTokens, fn ($tok) => $tok->done == false);
         $canPass = !$canTakeTokens && !$canPlaceToken;
         $animalCubeArgs = $this->argPlaceAnimalCube()["hexByCardId"];
+        $tokensPossiblePlaces=[];
+        if($canPlaceToken){
+            $toPlace =array_filter($takenTokens, fn ($tok) => $tok->done == false);
+            foreach($toPlace as $token){
+                $tokensPossiblePlaces[$token->id]= $this->getPossibleHexesForColoredToken($token->id, $this->getMostlyActivePlayerId());
+            }
+        }
         return [
             'canTakeTokens' => $canTakeTokens,
             'canPlaceToken' => $canPlaceToken,
@@ -46,6 +53,7 @@ trait ArgsTrait {
             'tokensOnCentralBoard' => $canTakeTokens ? $this->getColoredTokensOnCentralBoard() : [],
             'tokensToPlace' => $canPlaceToken ? array_values(array_filter($this->getColoredTokensChosen(), fn ($token) => $token->done == false)) : [],
             'placeAnimalCubeArgs' => $animalCubeArgs,
+            'possibleHexesByToken' => $tokensPossiblePlaces,
         ];
     }
 

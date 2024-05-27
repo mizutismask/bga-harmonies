@@ -592,13 +592,19 @@ class Harmonies implements HarmoniesGame {
 			dojo.addClass('take_card_button', 'disabled')
 
 			if (chooseActionArgs.canPlaceToken) {
-				this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace)
+				this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace, chooseActionArgs.possibleHexesByToken)
 				;(this as any).addActionButton('confirm_placeToken_button', _('Confirm'), () => {
 					if (this.clientActionData.tokenToPlace) {
-						this.takeAction('placeColoredToken', {
-							'tokenId': this.clientActionData.tokenToPlace.id,
-							'hexId': document.querySelector('.hex.selected-element').id
-						})
+						this.takeAction(
+							'placeColoredToken',
+							{
+								'tokenId': this.clientActionData.tokenToPlace.id,
+								'hexId': document.querySelector('.hex.selected-element').id
+							},
+							(callback: ActionCallback) => {
+								if (callback.valid) removeClass('selectable-element')
+							}
+						)
 					}
 				})
 				dojo.addClass('confirm_placeToken_button', 'disabled')
@@ -662,7 +668,7 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
-	private addPlaceTokenButtons(tokens: Array<ColoredToken>) {
+	private addPlaceTokenButtons(tokens: Array<ColoredToken>, possibleHexesByToken: { [cardId: number]: string[] }) {
 		tokens.forEach((token) => {
 			let label = dojo.string.substitute(_('Place this token on your board'), {})
 			const buttonId = 'placeToken_button_' + token.id
@@ -673,10 +679,17 @@ class Harmonies implements HarmoniesGame {
 				label,
 				() => {
 					this.resetClientActionData()
+					//allow only 1 button to be selected
 					const selected = $(buttonId).classList.toggle('selected')
 					if (selected) {
 						this.clientActionData.tokenToPlace = token
 						dojo.query(`.place-token-button:not(#${buttonId})`).toggleClass('selected', false)
+					}
+
+					//show possible places for colored tokens
+					removeClass('selectable-element')
+					if (possibleHexesByToken) {
+						possibleHexesByToken[token.id].forEach((h) => $(h).classList.add('selectable-element'))
 					}
 				},
 				'place-token-button'
@@ -1125,11 +1138,14 @@ class Harmonies implements HarmoniesGame {
 		this.takeAction('declineDiscard')
 	}
 
-	public takeAction(action: string, data?: any) {
+	public takeAction(action: string, data?: any, errorHandler?: (callback: ActionCallback) => void) {
 		data = data || {}
 		data.lock = true
 		data.version = this.gamedatas.version
-		;(this as any).ajaxcall(`/harmonies/harmonies/${action}.html`, data, this, () => {})
+		if (!errorHandler) {
+			errorHandler = () => {}
+		}
+		;(this as any).ajaxcall(`/harmonies/harmonies/${action}.html`, data, this, errorHandler)
 	}
 	///////////////////////////////////////////////////
 	//// Reaction to cometD notifications
