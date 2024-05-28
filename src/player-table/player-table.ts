@@ -69,7 +69,10 @@ class PlayerTable {
 		}
 
 		const handHtml = `
-			<div id="hand-${player.id}" class="hrm-player-hand"></div>
+			<div id="hand-zone-${player.id}" class="hand-zone">
+				<div class="border"></div>
+				<div id="hand-${player.id}" class="hrm-player-hand"></div>
+			</div>
         `
 		dojo.place(handHtml, `player-table-${player.id}`, 'first')
 		this.initHand(player, cards)
@@ -98,8 +101,9 @@ class PlayerTable {
 
 	private initSpiritsStock(player: HarmoniesPlayer, spiritsCards: Array<AnimalCard>) {
 		const container = `
-			<div id="spirits-zone-${player.id}">
-				<div id="spirits-${player.id}" class="hrm-player-spirits"></div>
+			<div id="spirits-zone-${player.id}" class="hrm-player-spirits">
+				<div class="border"></div>
+				<div id="spirits-${player.id}"></div>
 			</div>
 		`
 		dojo.place(container, `player-table-${player.id}`, 'first')

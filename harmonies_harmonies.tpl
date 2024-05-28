@@ -9,9 +9,11 @@
 
 <div class="shared-elements">
     <div id="river-zone">
+        <div class="border"></div>
         <div id="river"></div>
     </div>
     <div id="central-board-zone">
+        <div class="border"></div>
         <div id="central-board" class="central-board">
             <div id="central-board-counter-wrapper" class="central-board-counter-wrapper">
                 <span>x</span><span id="central-board-counter"></span>

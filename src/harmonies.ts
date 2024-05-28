@@ -460,6 +460,9 @@ class Harmonies implements HarmoniesGame {
 					Object.values(args.placeAnimalCubeArgs).forEach((hexes) =>
 						hexes.forEach((h) => $(h).classList.add('selectable-element'))
 					)
+					if (this.playerTables[this.getPlayerId()].getAnimalCardSelection().length == 0) {
+						$(`hand-zone-${this.getPlayerId()}`).classList.add("active-zone")
+					}
 				}
 
 				if (args.canTakeAnimalCard) {
@@ -471,6 +474,7 @@ class Harmonies implements HarmoniesGame {
 				}
 
 				$('central-board').classList.toggle('canTakeTokens', args.canTakeTokens)
+				$('central-board-zone').classList.toggle('active-zone', args.canTakeTokens)
 			}
 		} else {
 			this.river.setSelectionMode('none')

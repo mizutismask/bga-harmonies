@@ -36,40 +36,35 @@ html {
 
 @mixin active-zone {
 	//box-shadow: 0 0 5px 5px rgb(249 17 13);
+	padding: 5px;
+	//margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+	border-radius: 5px;
 
-	--border-angle: 0turn; // For animation.
-	--main-bg: conic-gradient(from var(--border-angle), #213, #112 5%, #112 60%, #213 95%);
+	.border {
+		position: absolute;
+		display: block;
+		top: -50%;
+		left: -50%;
+		z-index: -9;
+		display: block;
+		height: 200%;
+		width: 200%;
+		transform: rotate(-45deg);
+		overflow: hidden;
+		background: linear-gradient(to right, #ecd08c 20%, #ecd08c 40%, #fff 50%, #fff 55%, #ecd08c 70%, #ecd08c 100%);
+		background-size: 200% auto;
+		animation: shine 2.5s linear infinite;
+	}
 
-	border: solid 5px transparent;
-	border-radius: 3px;
-	--gradient-border: conic-gradient(from var(--border-angle), transparent 25%, rgb(251, 255, 0), rgb(78, 224, 200) 99%, transparent);
+	/*Begin shimmer code*/
 
-	background: 
-    // padding-box clip this background in to the overall element except the border.
-		var(--main-bg) padding-box,
-		// border-box extends this background to the border space
-		var(--gradient-border) border-box,
-		// Duplicate main background to fill in behind the gradient border. You can remove this if you want the border to extend "outside" the box background.
-		var(--main-bg) border-box;
-
-	background-position: center center;
-
-	animation: bg-spin 6s linear infinite;
-	@keyframes bg-spin {
+	@keyframes shine {
 		to {
-			--border-angle: 1turn;
+			background-position: 200% center;
 		}
 	}
-
-	&:hover {
-		animation-play-state: paused;
-	}
-}
-
-@property --border-angle {
-	syntax: '<angle>';
-	inherits: true;
-	initial-value: 0turn;
 }
 
 .stockitem {
@@ -81,9 +76,20 @@ html {
 	}
 }
 
-.active-zone,
-.canTakeTokens {
+.active-zone {
 	@include active-zone;
+
+	&.hand-zone {
+		.border {
+			height: 235%;
+			left: -57%;
+		}
+	}
+}
+
+#central-board-zone {
+	clip-path: circle(50% at 50% 50%);
+	padding: 3px;
 }
 
 .central-board {
@@ -165,12 +171,11 @@ html {
 	aspect-ratio: 700/710;
 	position: relative;
 	background-size: 100%;
-	margin: 0 0px 12px 15px;
 
 	.central-board-counter-wrapper {
 		position: absolute;
 		bottom: 9%;
-		right: 14%;
+		right: 19%;
 		font-size: smaller;
 		font-weight: bold;
 	}
@@ -422,7 +427,7 @@ html {
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
-	margin-top: 8px;
+	margin: 8px;
 	align-items: center;
 	gap: 8px;
 	//position: sticky;
@@ -476,112 +481,112 @@ html {
 }
 
 @mixin small-central-board {
-	background: none;
-	height: unset;
-	aspect-ratio: unset;
-	display: flex;
-	column-gap: 10px;
-	margin: 12px 0px 12px 15px;
+	clip-path: none;
+	.border {
+		height: 305%;
+		left: -60%;
+	}
 
-	&.canTakeTokens {
-		box-shadow: none;
+	.central-board {
+		background: none;
+		height: unset;
+		aspect-ratio: unset;
+		display: flex;
+		column-gap: 10px;
+		margin: 12px 0px 12px 15px;
+
+		.central-board-counter-wrapper {
+			position: unset;
+			align-self: center;
+		}
 
 		.central-board-hole {
-			@include active-zone;
-		}
-	}
+			box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
+			background-color: rgb(181, 150, 109);
+			width: 80px;
+			aspect-ratio: 1 / 1;
+			border-radius: 50%;
+			align-self: center;
 
-	.central-board-counter-wrapper {
-		position: unset;
-		align-self: center;
-	}
+			.hole-token {
+				@include reset-hole-token-position;
+			}
 
-	.central-board-hole {
-		box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
-		background-color: rgb(181, 150, 109);
-		width: 80px;
-		aspect-ratio: 1 / 1;
-		border-radius: 50%;
-		align-self: center;
+			&.hole-1 {
+				@include reset-hole-position;
 
-		.hole-token {
-			@include reset-hole-token-position;
-		}
-
-		&.hole-1 {
-			@include reset-hole-position;
-
-			.hole-token-1 {
-				top: 39%;
-				left: 46%;
+				.hole-token-1 {
+					top: 39%;
+					left: 46%;
+				}
+				.hole-token-2 {
+					top: 5%;
+					right: 32%;
+				}
+				.hole-token-3 {
+					top: 44%;
+					left: 3%;
+				}
 			}
-			.hole-token-2 {
-				top: 5%;
-				right: 32%;
+			&.hole-2 {
+				@include reset-hole-position;
+				.hole-token-1 {
+					top: 13%;
+					right: 8%;
+				}
+				.hole-token-2 {
+					top: 10%;
+					right: 49%;
+				}
+				.hole-token-3 {
+					top: 51%;
+					left: 26%;
+				}
 			}
-			.hole-token-3 {
-				top: 44%;
-				left: 3%;
+			&.hole-3 {
+				@include reset-hole-position;
+				.hole-token-1 {
+					top: 9%;
+					left: 48%;
+				}
+				.hole-token-2 {
+					top: 26%;
+					right: 52%;
+				}
+				.hole-token-3 {
+					top: 44%;
+					left: 43%;
+				}
 			}
-		}
-		&.hole-2 {
-			@include reset-hole-position;
-			.hole-token-1 {
-				top: 13%;
-				right: 8%;
+			&.hole-4 {
+				@include reset-hole-position;
+				.hole-token-1 {
+					top: 3%;
+					left: 21%;
+				}
+				.hole-token-2 {
+					top: 35%;
+					right: 1%;
+				}
+				.hole-token-3 {
+					top: 40%;
+					left: 2%;
+				}
 			}
-			.hole-token-2 {
-				top: 10%;
-				right: 49%;
-			}
-			.hole-token-3 {
-				top: 51%;
-				left: 26%;
-			}
-		}
-		&.hole-3 {
-			@include reset-hole-position;
-			.hole-token-1 {
-				top: 9%;
-				left: 48%;
-			}
-			.hole-token-2 {
-				top: 26%;
-				right: 52%;
-			}
-			.hole-token-3 {
-				top: 44%;
-				left: 43%;
-			}
-		}
-		&.hole-4 {
-			@include reset-hole-position;
-			.hole-token-1 {
-				top: 3%;
-				left: 21%;
-			}
-			.hole-token-2 {
-				top: 35%;
-				right: 1%;
-			}
-			.hole-token-3 {
-				top: 40%;
-				left: 2%;
-			}
-		}
-		&.hole-5 {
-			@include reset-hole-position;
-			.hole-token-1 {
-				top: 9%;
-				left: 49%;
-			}
-			.hole-token-2 {
-				top: 48%;
-				right: 18%;
-			}
-			.hole-token-3 {
-				top: 12%;
-				left: 5%;
+			&.hole-5 {
+				@include reset-hole-position;
+				.hole-token-1 {
+					top: 9%;
+					left: 49%;
+				}
+				.hole-token-2 {
+					top: 48%;
+					right: 18%;
+				}
+				.hole-token-3 {
+					top: 12%;
+					left: 5%;
+				}
 			}
 		}
 	}
@@ -590,7 +595,7 @@ html {
 	.player-count-2,
 	.player-count-3,
 	.player-count-4 {
-		.central-board {
+		#central-board-zone {
 			@include small-central-board;
 		}
 	}
@@ -598,13 +603,8 @@ html {
 
 @media only screen and (max-width: 990px) {
 	.player-count-1 {
-		.central-board {
+		#central-board-zone {
 			@include small-central-board;
 		}
 	}
 }
-/*.mobile_version {
-	.central-board {
-		@include small-central-board;
-	}
-}*/
