@@ -93,7 +93,7 @@ trait ActionTrait {
         self::setGameStateValue(EMPTIED_RIVER_SLOT, $card->location_arg);
         self::setGameStateValue(TOOK_ANIMAL_CARD, 1); //to prevent discarding again
         $this->discardAndReplaceAnimalCard($cardId);
-        $this->continueOrEndTurn();
+        $this->gamestate->nextState('nextPlayer');
     }
 
     function chooseSpirit($cardId) {
