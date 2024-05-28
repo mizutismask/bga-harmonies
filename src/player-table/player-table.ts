@@ -5,6 +5,7 @@ class PlayerTable {
 	private handStock: PlayerBoardDeck
 	private doneStock: LineStock<AnimalCard>
 	private spiritsStock: LineStock<AnimalCard>
+	private tempHandlers:any[]=[]
 
 	constructor(
 		private game: HarmoniesGame,
@@ -77,6 +78,14 @@ class PlayerTable {
 		dojo.place(handHtml, `player-table-${player.id}`, 'first')
 		this.initHand(player, cards)
 
+		const takenTokensHtml = `
+			<div id="taken-tokens-zone-${player.id}" class="taken-tokens-zone">
+				<div class="border"></div>
+				<div id="taken-tokens-${player.id}" class="taken-tokens"></div>
+			</div>
+        `
+		dojo.place(takenTokensHtml, `board-${player.id}`, 'after')
+
 		if (isMyTable) {
 			if (this.game.isSpiritCardsOn()) {
 				this.initSpiritsStock(player, spiritCards)
@@ -117,10 +126,7 @@ class PlayerTable {
 		this.spiritsStock.addCards(spiritsCards)
 
 		this.spiritsStock.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
-			this.game.toggleActionButtonAbility(
-				'take_spirit_button',
-				selection.length === 1
-			)
+			this.game.toggleActionButtonAbility('take_spirit_button', selection.length === 1)
 		}
 	}
 
@@ -130,7 +136,7 @@ class PlayerTable {
 		this.handStock.boardDeck.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
 			this.game.toggleActionButtonAbility(
 				'place_cube_confirm_button',
-				selection.length === 1 && document.querySelector('.hex.selected-element')!=undefined
+				selection.length === 1 && document.querySelector('.hex.selected-element') != undefined
 			)
 		}
 	}
@@ -165,6 +171,47 @@ class PlayerTable {
 			<div id="${tokenId}" class="colored-token color-${token.type_arg} level-${token.location_arg}"></div>
         `
 		this.createElementOnBoard(html, tokenId, token.location, '', animate)
+	}
+
+	public disconnectTempHandlers() {
+		this.tempHandlers.forEach(h => dojo.disconnect(h))
+		this.tempHandlers=[]
+	}
+
+	public createTokensOnTakenTokensZone(
+		tokens: ColoredToken[],
+		possibleHexesByToken: { [cardId: number]: Array<string> },
+		animate: boolean = false
+	) {
+		this.disconnectTempHandlers()
+		dojo.empty(`taken-tokens-${this.player.id}`)
+		tokens.forEach((token, i) => {
+			const tokenId = "token-"+token.id
+			let html = `
+			<div id="${tokenId}" class="colored-token color-${token.type_arg} taken-token" level-${token.location_arg}"></div>
+        `
+			this.createElementOnBoard(html, tokenId, `taken-tokens-${this.player.id}`, '', animate)
+
+			this.tempHandlers.push(dojo.connect($(`${tokenId}`), 'onclick', (evt) => {
+				const buttonId = evt.target.id
+				log("click on", buttonId)
+				this.game.resetClientActionData()
+
+				//allow only 1 token to be selected
+				const selected = $(buttonId).classList.toggle('selected')
+				if (selected) {
+					this.game.clientActionData.tokenToPlace = token
+					dojo.query(`#taken-tokens-${this.player.id} .taken-token:not(#${buttonId})`).toggleClass('selected', false)
+				}
+
+				//show possible places for colored tokens
+				removeClass('selectable-element')
+				if (possibleHexesByToken) {
+					possibleHexesByToken[getPart(tokenId,-1)].forEach((h) => $(h).classList.add('selectable-element'))
+				}
+			}))
+			log(this.tempHandlers)
+		})
 	}
 
 	public createCubeOnBoard(cube: AnimalCube, fromCardId: string, animate: boolean = false) {

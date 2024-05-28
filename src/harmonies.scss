@@ -145,7 +145,7 @@ html {
 	//border: 2px solid red;
 }
 
-.place-token-button {
+.place-token-button,.taken-token {
 	&.selected {
 		box-shadow: 0 0 4px 4px greenyellow;
 	}

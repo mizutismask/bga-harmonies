@@ -604,6 +604,7 @@ class Harmonies implements HarmoniesGame {
 			dojo.addClass('take_card_button', 'disabled')
 
 			if (chooseActionArgs.canPlaceToken) {
+				this.playerTables[this.getPlayerId()].createTokensOnTakenTokensZone(chooseActionArgs.tokensToPlace, chooseActionArgs.possibleHexesByToken, false)
 				this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace, chooseActionArgs.possibleHexesByToken)
 				;(this as any).addActionButton('confirm_placeToken_button', _('Confirm'), () => {
 					if (this.clientActionData.tokenToPlace) {

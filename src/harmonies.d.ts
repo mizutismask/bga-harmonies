@@ -67,6 +67,7 @@ interface HarmoniesGamedatas {
 }
 
 interface HarmoniesGame extends Game {
+	clientActionData: ClientActionData
 	cardsManager: CardsManager
 	animationManager: AnimationManager
 	getCurrentPlayer(): HarmoniesPlayer
@@ -79,6 +80,7 @@ interface HarmoniesGame extends Game {
 	isSpiritCardsOn(): unknown
 	getNextTokenId(): string
 	takeAction(action: string, data?: any): void
+	resetClientActionData(): void
 	isConfirmOnlyOnPlacingTokensOn(): boolean
 	toggleActionButtonAbility(buttonId: string, enable: boolean): void
 	getHelpOnCardConfig(): number

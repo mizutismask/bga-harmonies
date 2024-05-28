@@ -16,6 +16,19 @@ function isReadOnly() {
 	return this.isSpectator || typeof (this as any).g_replayFrom != 'undefined' || (this as any).g_archive_mode
 }
 
+function getPart(haystack: string, i: number, noException: boolean = false, separator = '-'): string {
+	const parts: string[] = haystack.split(separator)
+	const len: number = parts.length
+
+	if (noException && i >= len) {
+		return ''
+	}
+	if (noException && len + i < 0) {
+		return ''
+	}
+	return parts[i >= 0 ? i : len + i]
+}
+
 function isValueInRange(value: number, minValue: number, maxValue: number): boolean {
 	return value >= minValue && value <= maxValue
 }

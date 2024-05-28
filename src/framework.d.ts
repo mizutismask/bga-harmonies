@@ -32,7 +32,7 @@ interface Dojo {
 	addClass: (nodeId: string | HTMLElement, className: string) => void;
 	removeClass: (nodeId: string | HTMLElement, className?: string) => void;
 	toggleClass: (nodeId: string | HTMLElement, className: string, forceValue?: boolean) => boolean;
-	connect: Function;
+	connect: (node: HTMLElement, eventType:string, callback:Function)=>any;//return handle
 	disconnect: Function;
 	query: Function;
 	subscribe: Function;

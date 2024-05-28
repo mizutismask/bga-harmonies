@@ -14,11 +14,15 @@
 	border-radius: 1%;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
 
+	> * {
+		grid-column: 1;
+	}
+
 	.hrm-player-spirits {
 		margin-bottom: 8px;
 	}
 
-	.hand-zone{
+	.hand-zone {
 		z-index: 1;
 	}
 
@@ -31,6 +35,17 @@
 
 	.hrm-player-done {
 		margin-top: 8px;
+	}
+
+	.taken-tokens-zone {
+		grid-column: 2;
+		align-self: center;
+
+		.taken-tokens {
+			gap: 7px;
+			display: flex;
+			flex-direction: column;
+		}
 	}
 }
 
@@ -125,7 +140,7 @@ h3 {
 		transition: background-color 0.2s;
 	}
 
-	&.selected-element.selectable-element{
+	&.selected-element.selectable-element {
 		background-color: rgb(208 239 121);
 	}
 
