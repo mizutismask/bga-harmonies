@@ -166,8 +166,9 @@ class PlayerTable {
 	 * @param args
 	 */
 	public createTokenOnBoard(token: ColoredToken, animate: boolean = false) {
-		if (animate) {
-			const div = $(`token-${token.id}`)
+		const divId = `token-${token.id}`
+		const div = $(divId)
+		if (animate && div) {
 			div.classList.remove("selected", "taken-token", "level-1", "level-2", "level-3")
 			div.classList.add(`level-${token.location_arg}`)
 			
@@ -263,12 +264,13 @@ class PlayerTable {
 
 		if (animate) {
 			//shows move only coming inside the hex because of hex overflow
-			this.game.animationManager.attachWithAnimation(
+			/*this.game.animationManager.attachWithAnimation(
 				new BgaSlideAnimation({
 					element: $(htmlId)
 				}),
 				$(destination)
-			)
+			)*/
+			this.game.slide(htmlId, destination, {phantom: false });
 		}
 	}
 
