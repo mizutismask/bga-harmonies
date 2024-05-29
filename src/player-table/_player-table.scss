@@ -154,17 +154,17 @@ h3 {
 		justify-self: center;
 	}
 
-	.animal-cube {
-		&.level-1 { //down
-			margin-top: 72%;
+	.colored-token {
+		width: 38px;
+		&.level-1 {
+			//down
 			z-index: 5;
 		}
 		&.level-2 {
-			margin-top: 7%;
 			z-index: 6;
 		}
-		&.level-3 {//top
-			margin-top: -66%;
+		&.level-3 {
+			//top
 			z-index: 7;
 		}
 	}
@@ -174,52 +174,55 @@ h3 {
 		justify-content: center;
 		align-items: center;
 
-		.colored-token {
-			&:first-child {
-				z-index: 5;
-				&:nth-last-child(1) {
-					//first element of a pile of 1 token
+		&:has(> :last-child:nth-child(1)) {
+			/* 1 element */
+			.colored-token {
+				&.level-1 {
+					//down
 					margin-top: -116%;
 				}
-				&:nth-last-child(2) {
-					//first element of a pile of 2 tokens
+			}
+		}
+		&:has(> :last-child:nth-child(2)) {
+			/* 2 element */
+			.colored-token {
+				&.level-1 {
+					//down
 					margin-top: 47%;
 				}
-				&:nth-last-child(3) {
-					//first element of a pile of 3 tokens
-					margin-top: 72%;
-				}
-			}
-			&:nth-child(2) {
-				z-index: 6;
-				&:nth-last-child(1) {
-					//second element of a pile of 2 tokens
+				&.level-2 {
 					margin-top: -21%;
 				}
-				&:nth-last-child(2) {
-					//second element of a pile of 3 tokens
-					margin-top: 7%;
-				}
 			}
-			&:nth-child(3) {
-				z-index: 7;
-				&:nth-last-child(1) {
-					//third element of a pile of 3 tokens
-					margin-top: -66%;
+		}
+		&:has(> :last-child:nth-child(3)) {
+			/* 3 element */
+			.colored-token {
+				&.level-1 {
+					//down
+					margin-top: 66%;
+				}
+				&.level-2 {
+					margin-top: 0%;
+				}
+				&.level-3 {//top
+					margin-top: -71%;
 				}
 			}
 		}
 	}
 
 	.animal-cube {
+		width: 21px;
+		height: 23px;
 		&.pile-height-1 {
-			margin-top: 1px;
+			margin-top: 7px;
 		}
 		&.pile-height-2 {
-			margin-top: -20px;
+			margin-bottom: -30px;
 		}
 		&.pile-height-3 {
-			margin-top: -38px;
+			margin-bottom: -22px;
 		}
 	}
 }
