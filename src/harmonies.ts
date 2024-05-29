@@ -120,7 +120,7 @@ class Harmonies implements HarmoniesGame {
 		this.setupPreferences()
 		this.setupTooltips()
 
-		this.scoreBoard = new ScoreBoard(this, Object.values(this.gamedatas.players))
+		this.scoreBoard = new ScoreBoard(this, this.getPlayersInOrder())
 		this.gamedatas.scores?.forEach((s) => this.scoreBoard.updateScore(s.playerId, s.scoreType, s.score))
 		if (this.gamedatas.winners) {
 			this.gamedatas.winners.forEach((pId) => this.scoreBoard.highlightWinnerScore(pId))
@@ -722,6 +722,13 @@ class Harmonies implements HarmoniesGame {
 
 	///////////////////////////////////////////////////
 	//// Utility methods
+
+	public getPlayersInOrder() {
+		return Object.values(this.gamedatas.playerOrderWorkingWithSpectators).map(
+			(p) => this.gamedatas.players[Number(p)]
+		)
+	}
+
 	public dontPreloadUselessAssets() {
 		if (this.gamedatas.boardSide === 'sideA') {
 			;(this as any).dontPreloadImage('boardSideB.png')
@@ -1511,7 +1518,14 @@ class Harmonies implements HarmoniesGame {
 			const animation =
 				config.pos == null
 					? (this as any).slideToObject(mobile, targetId, config.duration, config.delay)
-					: (this as any).slideToObjectPos(mobile, targetId, config.pos.x, config.pos.y, config.duration, config.delay)
+					: (this as any).slideToObjectPos(
+							mobile,
+							targetId,
+							config.pos.x,
+							config.pos.y,
+							config.duration,
+							config.delay
+					  )
 
 			dojo.connect(animation, 'onEnd', () => {
 				dojo.style(mobile, 'zIndex', null)
@@ -1572,12 +1586,12 @@ class Harmonies implements HarmoniesGame {
 
 	public positionObjectDirectly(mobileObj, x, y) {
 		// do not remove this "dead" code some-how it makes difference
-		dojo.style(mobileObj, 'left'); // bug? re-compute style
+		dojo.style(mobileObj, 'left') // bug? re-compute style
 		// console.log("place " + x + "," + y);
 		dojo.style(mobileObj, {
-		  left: x + 'px',
-		  top: y + 'px',
-		});
-		dojo.style(mobileObj, 'left'); // bug? re-compute style
-	  }
+			left: x + 'px',
+			top: y + 'px'
+		})
+		dojo.style(mobileObj, 'left') // bug? re-compute style
+	}
 }
