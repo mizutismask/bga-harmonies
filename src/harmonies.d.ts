@@ -84,6 +84,7 @@ interface HarmoniesGame extends Game {
 	isConfirmOnlyOnPlacingTokensOn(): boolean
 	toggleActionButtonAbility(buttonId: string, enable: boolean): void
 	getHelpOnCardConfig(): number
+	slide(mobileElt, targetElt, options)
 }
 
 interface EnteringChooseActionArgs {

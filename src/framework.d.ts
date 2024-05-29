@@ -39,12 +39,15 @@ interface Dojo {
 	string: any;
 	fx: any;
 	marginBox: Function;
+	position: Function;
+	contentBox: Function;
 	fadeIn: Function;
 	trim: Function;
 	stopEvent: (evt) => void;
 	destroy: (nodeId: string) => void;
     forEach: Function;
     xhrGet: Function;
+    clone: Function;
     empty: (nodeId: string) => void
 	byId: (nodeId: string | HTMLElement) => HTMLElement
 }

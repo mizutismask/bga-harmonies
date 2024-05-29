@@ -8,7 +8,7 @@
 </div>
 
 <div class="shared-elements">
-    <div id="river-zone">
+    <div id="river-zone" class="river-zone">
         <div class="border"></div>
         <div id="river"></div>
     </div>
