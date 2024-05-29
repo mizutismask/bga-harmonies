@@ -53,7 +53,7 @@ html {
 		width: 200%;
 		transform: rotate(-45deg);
 		overflow: hidden;
-		background: linear-gradient(to right, #ecd08c 20%, #ecd08c 40%, #fff 50%, #fff 55%, #ecd08c 70%, #ecd08c 100%);
+		background: linear-gradient(to right, rgb(224, 209, 122) 20%, rgb(224, 209, 122) 40%, #fff 50%, #fff 55%, rgb(224, 209, 122) 70%, rgb(224, 209, 122) 100%);
 		background-size: 200% auto;
 		animation: shine 2.5s linear infinite;
 	}
