@@ -1,4 +1,13 @@
 {
+	"1": {
+		"name": "Use glowing effect on active zones",
+		"needReload": true,
+		"values": {
+			"1": { "name": "Yes" },
+			"2": { "name": "No", "cssPref": "no-glowing-effect" }
+		},
+		"default": 1
+	},
 	"2": {
 		"name": "Confirm only on placing colored tokens",
 		"needReload": false,
@@ -15,7 +24,7 @@
 			"1": { "name": "Yes" },
 			"2": { "name": "No", "cssPref": "help-card-hidden" }
 		},
-		"default": 1
+		"default": 2
 	},
 	"4": {
 		"name": "Help button on cards",
@@ -25,6 +34,6 @@
 			"2": { "name": "Only on spirits"},
 			"3": { "name": "Never" }
 		},
-		"default": 3
+		"default": 2
 	}
 }

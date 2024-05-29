@@ -45,6 +45,7 @@ class Harmonies implements HarmoniesGame {
 	private isTouch = window.matchMedia('(hover: none)').matches
 	private TOOLTIP_DELAY = document.body.classList.contains('touch-device') ? 1500 : undefined
 	private settings = [
+		new Setting('glowingEffect', 'pref', 1),
 		new Setting('confirmOnlyOnPlaceColoredToken', 'pref', 2),
 		new Setting('alwaysDisplayHelpCard', 'pref', 3),
 		new Setting('helpButtonOnCards', 'pref', 4)
