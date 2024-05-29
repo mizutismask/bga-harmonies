@@ -2,6 +2,13 @@
 	box-shadow: 0 0 5px 5px rgb(200, 255, 47);
 }
 
+#player-tables {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
 .player-table {
 	display: grid;
 	z-index: 25; // so new animations are over the board
@@ -205,7 +212,8 @@ h3 {
 				&.level-2 {
 					margin-top: 0%;
 				}
-				&.level-3 {//top
+				&.level-3 {
+					//top
 					margin-top: -71%;
 				}
 			}
