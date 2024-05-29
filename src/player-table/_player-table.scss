@@ -46,7 +46,7 @@
 			display: flex;
 			flex-direction: column;
 			min-height: 116px;
-			min-width: 36px
+			min-width: 36px;
 		}
 	}
 }
@@ -152,7 +152,10 @@ h3 {
 		grid-row: 1;
 		grid-column: 1;
 		justify-self: center;
-		&.level-1 {
+	}
+
+	.animal-cube {
+		&.level-1 { //down
 			margin-top: 72%;
 			z-index: 5;
 		}
@@ -160,9 +163,51 @@ h3 {
 			margin-top: 7%;
 			z-index: 6;
 		}
-		&.level-3 {
+		&.level-3 {//top
 			margin-top: -66%;
 			z-index: 7;
+		}
+	}
+
+	.tokens-wrapper {
+		display: grid;
+		justify-content: center;
+		align-items: center;
+
+		.colored-token {
+			&:first-child {
+				z-index: 5;
+				&:nth-last-child(1) {
+					//first element of a pile of 1 token
+					margin-top: -116%;
+				}
+				&:nth-last-child(2) {
+					//first element of a pile of 2 tokens
+					margin-top: 47%;
+				}
+				&:nth-last-child(3) {
+					//first element of a pile of 3 tokens
+					margin-top: 72%;
+				}
+			}
+			&:nth-child(2) {
+				z-index: 6;
+				&:nth-last-child(1) {
+					//second element of a pile of 2 tokens
+					margin-top: -21%;
+				}
+				&:nth-last-child(2) {
+					//second element of a pile of 3 tokens
+					margin-top: 7%;
+				}
+			}
+			&:nth-child(3) {
+				z-index: 7;
+				&:nth-last-child(1) {
+					//third element of a pile of 3 tokens
+					margin-top: -66%;
+				}
+			}
 		}
 	}
 

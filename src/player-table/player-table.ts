@@ -38,6 +38,8 @@ class PlayerTable {
 				const cellName = getCellNameFromCoords(player.id, col, row)
 				let html = `
 						<div class="hex invisible" id="${cellName}">
+							<div class="tokens-wrapper" id="${cellName}-token-wrapper">
+							</div>
 						</div>
 					`
 				dojo.place(html, `hex-grid-container-${player.id}`)
@@ -179,13 +181,13 @@ class PlayerTable {
 				}),
 				$(token.location)
 			)*/
-			this.game.slide(div.id, token.location, {phantom: false });
+			this.game.slide(div.id, token.location+"-token-wrapper" , {phantom: false });
 		} else {
 			const tokenId = this.game.getNextTokenId()
 			let html = `
 			<div id="${tokenId}" class="colored-token color-${token.type_arg} level-${token.location_arg}"></div>
         `
-			this.createElementOnBoard(html, tokenId, token.location, '', animate)
+			this.createElementOnBoard(html, tokenId, token.location+"-token-wrapper", '', animate)
 		}
 	}
 
