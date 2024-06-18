@@ -146,20 +146,12 @@ class Harmonies implements HarmoniesGame {
 				'before'
 			)
 			if (this.isNotSpectator()) {
-				const holeId = 'hole-' + i
-				dojo.connect($(holeId), 'onclick', (evt) => {
+				dojo.connect($('hole-' + i), 'onclick', (evt) => {
 					if (
 						(this as any).isCurrentPlayerActive() &&
 						$('central-board').classList.contains('canTakeTokens')
 					) {
-						const wasSelected = dojo.hasClass(holeId, 'selected-element')
-						removeClass('selected-element')
-						const selected = dojo.toggleClass(holeId, 'selected-element', !wasSelected)
-						this.toggleActionButtonAbility(
-							'take_tokens_button',
-							selected,
-							this.isConfirmOnlyOnPlacingTokensOn() && selected
-						)
+						this.takeAction('takeTokens', { hole: evt.currentTarget.dataset.hole })
 					}
 				})
 			}
@@ -594,13 +586,8 @@ class Harmonies implements HarmoniesGame {
 			})
 			dojo.addClass('take_spirit_button', 'disabled')
 		} else {
-			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {
-				this.takeAction('takeTokens', {
-					hole: (document.querySelector('.selected-element') as HTMLElement).dataset.hole
-				})
-			})
-			dojo.addClass('take_tokens_button', 'disabled')
-				
+			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {})
+			dojo.toggleClass('take_tokens_button', 'disabled', !chooseActionArgs.canTakeTokens)
 			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => {})
 			dojo.toggleClass('take_card_button', 'disabled', !chooseActionArgs.canTakeAnimalCard)
 			this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
