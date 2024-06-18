@@ -535,7 +535,7 @@ class Harmonies implements HarmoniesGame {
 					break
 				case 'discardFromRiver':
 					;(this as any).addActionButton('discard_card_button', _('Discard from river'), () => {
-						this.takeCard(this.river.getSelection()[0])
+						this.takeCard(this.river.riverStock.getSelection()[0])
 					})
 					dojo.toggleClass('discard_card_button', 'disabled', true)
 					;(this as any).addActionButton(
@@ -587,22 +587,6 @@ class Harmonies implements HarmoniesGame {
 					chooseActionArgs.possibleHexesByToken,
 					false
 				)
-				this.addPlaceTokenButtons(chooseActionArgs.tokensToPlace, chooseActionArgs.possibleHexesByToken)
-				;(this as any).addActionButton('confirm_placeToken_button', _('Confirm'), () => {
-					if (this.clientActionData.tokenToPlace) {
-						this.takeAction(
-							'placeColoredToken',
-							{
-								'tokenId': this.clientActionData.tokenToPlace.id,
-								'hexId': document.querySelector('.hex.selected-element').id
-							},
-							(callback: ActionCallback) => {
-								if (callback.valid) removeClass('selectable-element')
-							}
-						)
-					}
-				})
-				dojo.addClass('confirm_placeToken_button', 'disabled')
 			}
 
 			this.addImageActionButton(
@@ -661,36 +645,6 @@ class Harmonies implements HarmoniesGame {
 				$('place_cube_confirm_button').click()
 			}
 		}
-	}
-
-	private addPlaceTokenButtons(tokens: Array<ColoredToken>, possibleHexesByToken: { [cardId: number]: string[] }) {
-		tokens.forEach((token) => {
-			let label = dojo.string.substitute(_('Place this token on your board'), {})
-			const buttonId = 'placeToken_button_' + token.id
-			;(this as any).addImageActionButton(
-				buttonId,
-				this.createDiv(`color-${token.type_arg} token-button`, `placeToken-${token.id}`),
-				'blue',
-				label,
-				() => {
-					this.resetClientActionData()
-					//allow only 1 button to be selected
-					const selected = $(buttonId).classList.toggle('selected')
-					if (selected) {
-						this.clientActionData.tokenToPlace = token
-						dojo.query(`.place-token-button:not(#${buttonId})`).toggleClass('selected', false)
-					}
-
-					//show possible places for colored tokens
-					removeClass('selectable-element')
-					if (possibleHexesByToken) {
-						possibleHexesByToken[token.id].forEach((h) => $(h).classList.add('selectable-element'))
-					}
-				},
-				'place-token-button'
-			)
-			$(buttonId).dataset.tokenId = token.id
-		})
 	}
 
 	///////////////////////////////////////////////////
