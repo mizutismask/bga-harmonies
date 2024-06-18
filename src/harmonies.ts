@@ -46,7 +46,6 @@ class Harmonies implements HarmoniesGame {
 	private TOOLTIP_DELAY = document.body.classList.contains('touch-device') ? 1500 : undefined
 	private settings = [
 		new Setting('glowingEffect', 'pref', 1),
-		new Setting('confirmOnlyOnPlaceColoredToken', 'pref', 2),
 		new Setting('alwaysDisplayHelpCard', 'pref', 3),
 		new Setting('helpButtonOnCards', 'pref', 4)
 	]
@@ -94,6 +93,7 @@ class Harmonies implements HarmoniesGame {
 		this.river = new RiverDeck(this, this.gamedatas.river, this.getPlayersCount())
 		this.animationManager = new AnimationManager(this)
 
+		this.initPreferencesObserver()
 		this.initCentralBoard()
 
 		if (this.gamedatas.lastTurn) {
@@ -961,13 +961,7 @@ class Harmonies implements HarmoniesGame {
 	 * Handle user preferences changes.
 	 */
 	private onPreferenceChange(prefId: number, prefValue: number) {
-		log('isConfirmOnlyOnPlacingTokensOn', this.isConfirmOnlyOnPlacingTokensOn())
-		switch (
-			prefId
-			/*case 3:
-				dojo.toggleClass("player-help","hidden", prefValue===2)
-				break*/
-		) {
+		switch (prefId) {
 		}
 	}
 
