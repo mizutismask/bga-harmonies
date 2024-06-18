@@ -75,8 +75,12 @@ class Harmonies implements HarmoniesGame {
 
 	public setup(gamedatas: any) {
 		log('Starting game setup')
-		if (!$("player-help-visible-wrapper")) {
-			dojo.place(`<div id="player-help-visible-wrapper"><div id="player-help-visible" class="player-help-visible help-${this.gamedatas.boardSide}"></div></div>`, `player_boards`, "first")
+		if (!$('player-help-visible-wrapper')) {
+			dojo.place(
+				`<div id="player-help-visible-wrapper"><div id="player-help-visible" class="player-help-visible help-${this.gamedatas.boardSide}"></div></div>`,
+				`player_boards`,
+				'first'
+			)
 		}
 
 		this.dontPreloadUselessAssets()
@@ -138,7 +142,8 @@ class Harmonies implements HarmoniesGame {
 						<div id="hole-${i}-token-3" class="colored-token hole-token hole-token-3"></div>
 					</div>
 					`,
-				`central-board-counter-wrapper`,"before"
+				`central-board-counter-wrapper`,
+				'before'
 			)
 			if (this.isNotSpectator()) {
 				dojo.connect($('hole-' + i), 'onclick', (evt) => {
@@ -152,7 +157,7 @@ class Harmonies implements HarmoniesGame {
 			}
 		}
 		this.displayColoredTokensOnCentralBoard(this.gamedatas.tokensOnCentralBoard)
-		
+
 		this.remainingTokensCounter = new ebg.counter()
 		this.remainingTokensCounter.create(`central-board-counter`)
 		this.remainingTokensCounter.setValue(this.gamedatas.remainingTokens)
@@ -300,7 +305,7 @@ class Harmonies implements HarmoniesGame {
 				`,
 			`player_board_${player.id}`
 		)
-		
+
 		/* const revealedTokensBackCounter = new ebg.counter();
 			revealedTokensBackCounter.create(`revealed-tokens-back-counter-${player.id}`);
 			revealedTokensBackCounter.setValue(player.revealedTokensBackCount);
@@ -347,8 +352,8 @@ class Harmonies implements HarmoniesGame {
 
 	/* @Override */
 	public updatePlayerOrdering() {
-		(this as any).inherited(arguments);
-		dojo.place('player-help-visible-wrapper', 'player_boards', 'first');
+		;(this as any).inherited(arguments)
+		dojo.place('player-help-visible-wrapper', 'player_boards', 'first')
 	}
 
 	public setupPlayerOrderHints(player: HarmoniesPlayer) {
@@ -434,6 +439,8 @@ class Harmonies implements HarmoniesGame {
 	private onEnteringChooseAction(args: EnteringChooseActionArgs) {
 		if ((this as any).isCurrentPlayerActive()) {
 			this.resetClientActionData()
+			const actions = this.getPossibleActions(args)
+			this.setChooseActionGamestateDescription(actions.join(' or '))
 			if (args.canChooseSpirit) {
 				this.river.setSelectionMode('none')
 				this.playerTables[this.getPlayerId()].setSpiritSelectionMode('single')
@@ -474,6 +481,21 @@ class Harmonies implements HarmoniesGame {
 				this.playerTables[this.getPlayerId()].setSpiritSelectionMode('none')
 			}
 		}
+	}
+
+	private getPossibleActions(args: EnteringChooseActionArgs) {
+		const actions = []
+		if (args.canChooseSpirit) actions.push(_('Choose one of the two spirit cards'))
+		else {
+			if (args.canTakeAnimalCard) actions.push(_('Take an animal card'))
+			if (args.canTakeTokens) actions.push(_('Choose colored tokens'))
+			if (args.canPlaceAnimalCube) actions.push(_('Place a cube'))
+			if (args.canPlaceToken) actions.push(_('Place a colored token'))
+		}
+		if (actions.length === 0) {
+			actions.push(_('No possible action left'))
+		}
+		return actions
 	}
 
 	// onLeavingState: this method is called each time we are leaving a game state.
@@ -571,52 +593,41 @@ class Harmonies implements HarmoniesGame {
 
 		const chooseActionArgs = this.gamedatas.gamestate.args as EnteringChooseActionArgs
 
-		if (chooseActionArgs.canChooseSpirit) {
-			//first thing to do
-			;(this as any).addActionButton('take_spirit_button', _('Choose one of the two spirit cards'), () => {})
-		} else {
-			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {})
-			dojo.toggleClass('take_tokens_button', 'disabled', !chooseActionArgs.canTakeTokens)
-			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => {})
-			dojo.toggleClass('take_card_button', 'disabled', !chooseActionArgs.canTakeAnimalCard)
-			this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
-
-			if (chooseActionArgs.canPlaceToken) {
-				this.playerTables[this.getPlayerId()].createTokensOnTakenTokensZone(
-					chooseActionArgs.tokensToPlace,
-					chooseActionArgs.possibleHexesByToken,
-					false
-				)
-			}
-
-			this.addImageActionButton(
-				'placeAnimalCube_button',
-				this.createDiv('hrm-button animal-cube cube', 'place-animal-cube-button'),
-				'blue',
-				_('Place a cube from one of your card to the corresponding pattern on your board'),
-				() => {
-					this.onPlaceAnimalCubeButton(chooseActionArgs)
-				}
+		if (chooseActionArgs.canPlaceToken) {
+			this.playerTables[this.getPlayerId()].createTokensOnTakenTokensZone(
+				chooseActionArgs.tokensToPlace,
+				chooseActionArgs.possibleHexesByToken,
+				false
 			)
-			dojo.toggleClass('placeAnimalCube_button', 'disabled', !chooseActionArgs.canPlaceAnimalCube)
+		}
 
-			if (chooseActionArgs.canPass) {
-				;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())
+		this.addImageActionButton(
+			'placeAnimalCube_button',
+			this.createDiv('hrm-button animal-cube cube', 'place-animal-cube-button'),
+			'blue',
+			_('Place a cube from one of your card to the corresponding pattern on your board'),
+			() => {
+				this.onPlaceAnimalCubeButton(chooseActionArgs)
 			}
+		)
+		dojo.toggleClass('placeAnimalCube_button', 'disabled', !chooseActionArgs.canPlaceAnimalCube)
 
-			if (chooseActionArgs.canResetTurn) {
-				;(this as any).addActionButton(
-					'reset_turn_button',
-					_('Reset my turn'),
-					() => {
-						this.takeAction('resetPlayerTurn')
-					},
-					undefined,
-					undefined,
-					'red'
-				)
-				//;(this as any).addTooltip('reset_turn_button', _('Reset your entire round'), '')
-			}
+		if (chooseActionArgs.canPass) {
+			;(this as any).addActionButton('pass_button', _('End my turn'), () => this.pass())
+		}
+
+		if (chooseActionArgs.canResetTurn) {
+			;(this as any).addActionButton(
+				'reset_turn_button',
+				_('Reset my turn'),
+				() => {
+					this.takeAction('resetPlayerTurn')
+				},
+				undefined,
+				undefined,
+				'red'
+			)
+			//;(this as any).addTooltip('reset_turn_button', _('Reset your entire round'), '')
 		}
 	}
 
@@ -1176,8 +1187,7 @@ class Harmonies implements HarmoniesGame {
 	notif_counter(notif: Notif<NotifCounter>) {
 		if (notif.args.counterName == 'empty-hexes') {
 			this.emptyHexesCounters[notif.args.playerId].setValue(notif.args.counterValue)
-		}
-		else if (notif.args.counterName == 'remainingTokens') {
+		} else if (notif.args.counterName == 'remainingTokens') {
 			this.remainingTokensCounter.setValue(notif.args.counterValue)
 		}
 	}
