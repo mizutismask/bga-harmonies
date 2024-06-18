@@ -75,12 +75,8 @@ class Harmonies implements HarmoniesGame {
 
 	public setup(gamedatas: any) {
 		log('Starting game setup')
-		if (!$('player-help-visible-wrapper')) {
-			dojo.place(
-				`<div id="player-help-visible-wrapper"><div id="player-help-visible" class="player-help-visible help-${this.gamedatas.boardSide}"></div></div>`,
-				`player_boards`,
-				'first'
-			)
+		if (!$("player-help-visible-wrapper")) {
+			dojo.place(`<div id="player-help-visible-wrapper"><div id="player-help-visible" class="player-help-visible help-${this.gamedatas.boardSide}"></div></div>`, `player_boards`, "first")
 		}
 
 		this.dontPreloadUselessAssets()
@@ -142,8 +138,7 @@ class Harmonies implements HarmoniesGame {
 						<div id="hole-${i}-token-3" class="colored-token hole-token hole-token-3"></div>
 					</div>
 					`,
-				`central-board-counter-wrapper`,
-				'before'
+				`central-board-counter-wrapper`,"before"
 			)
 			if (this.isNotSpectator()) {
 				dojo.connect($('hole-' + i), 'onclick', (evt) => {
@@ -157,7 +152,7 @@ class Harmonies implements HarmoniesGame {
 			}
 		}
 		this.displayColoredTokensOnCentralBoard(this.gamedatas.tokensOnCentralBoard)
-
+		
 		this.remainingTokensCounter = new ebg.counter()
 		this.remainingTokensCounter.create(`central-board-counter`)
 		this.remainingTokensCounter.setValue(this.gamedatas.remainingTokens)
@@ -305,7 +300,7 @@ class Harmonies implements HarmoniesGame {
 				`,
 			`player_board_${player.id}`
 		)
-
+		
 		/* const revealedTokensBackCounter = new ebg.counter();
 			revealedTokensBackCounter.create(`revealed-tokens-back-counter-${player.id}`);
 			revealedTokensBackCounter.setValue(player.revealedTokensBackCount);
@@ -352,8 +347,8 @@ class Harmonies implements HarmoniesGame {
 
 	/* @Override */
 	public updatePlayerOrdering() {
-		;(this as any).inherited(arguments)
-		dojo.place('player-help-visible-wrapper', 'player_boards', 'first')
+		(this as any).inherited(arguments);
+		dojo.place('player-help-visible-wrapper', 'player_boards', 'first');
 	}
 
 	public setupPlayerOrderHints(player: HarmoniesPlayer) {
@@ -578,13 +573,7 @@ class Harmonies implements HarmoniesGame {
 
 		if (chooseActionArgs.canChooseSpirit) {
 			//first thing to do
-			;(this as any).addActionButton('take_spirit_button', _('Choose one of the two spirit cards'), () => {
-				this.takeAction('chooseSpirit', {
-					'cardId': this.playerTables[this.getPlayerId()].getSpiritCardSelection()[0].id
-				})
-				this.playerTables[this.getPlayerId()].unselectAll()
-			})
-			dojo.addClass('take_spirit_button', 'disabled')
+			;(this as any).addActionButton('take_spirit_button', _('Choose one of the two spirit cards'), () => {})
 		} else {
 			;(this as any).addActionButton('take_tokens_button', _('Take colored tokens'), () => {})
 			dojo.toggleClass('take_tokens_button', 'disabled', !chooseActionArgs.canTakeTokens)
@@ -1233,7 +1222,8 @@ class Harmonies implements HarmoniesGame {
 	notif_counter(notif: Notif<NotifCounter>) {
 		if (notif.args.counterName == 'empty-hexes') {
 			this.emptyHexesCounters[notif.args.playerId].setValue(notif.args.counterValue)
-		} else if (notif.args.counterName == 'remainingTokens') {
+		}
+		else if (notif.args.counterName == 'remainingTokens') {
 			this.remainingTokensCounter.setValue(notif.args.counterValue)
 		}
 	}

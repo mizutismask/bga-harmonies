@@ -128,7 +128,12 @@ class PlayerTable {
 		this.spiritsStock.addCards(spiritsCards)
 
 		this.spiritsStock.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
-			this.game.toggleActionButtonAbility('take_spirit_button', selection.length === 1)
+			if (selection.length === 1) {
+				this.game.takeAction('chooseSpirit', {
+					'cardId': this.spiritsStock.getSelection()[0].id
+				})
+				this.unselectAll()
+			}
 		}
 	}
 
@@ -290,8 +295,5 @@ class PlayerTable {
 
 	public getAnimalCardSelection() {
 		return this.handStock.getSelection()
-	}
-	public getSpiritCardSelection() {
-		return this.spiritsStock.getSelection()
 	}
 }
