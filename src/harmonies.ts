@@ -207,12 +207,11 @@ class Harmonies implements HarmoniesGame {
 		if ((this as any).isCurrentPlayerActive()) {
 			switch (this.gamedatas.gamestate.name) {
 				case 'chooseAction':
-					if (
-						!this.gamedatas.gamestate.args.canChooseSpirit &&
-						this.clientActionData.tokenToPlace != undefined
-					) {
-						let selected = this.toggleHexAndUnselectOthers(hexId)
-						dojo.toggleClass('confirm_placeToken_button', 'disabled', !selected)
+					if (this.clientActionData.tokenToPlace) {
+						this.takeAction('placeColoredToken', {
+							'tokenId': this.clientActionData.tokenToPlace.id,
+							'hexId': hexId
+						})
 					}
 					break
 				case 'client_place_animal_cube':
@@ -601,11 +600,9 @@ class Harmonies implements HarmoniesGame {
 				})
 			})
 			dojo.addClass('take_tokens_button', 'disabled')
-
+				
 			this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
-			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => {
-				this.takeCard(this.river.getSelection()[0])
-			})
+			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => { this.takeCard(this.river.getSelection()[0])})
 			dojo.addClass('take_card_button', 'disabled')
 
 			if (chooseActionArgs.canPlaceToken) {
