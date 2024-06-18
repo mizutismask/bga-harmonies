@@ -601,9 +601,9 @@ class Harmonies implements HarmoniesGame {
 			})
 			dojo.addClass('take_tokens_button', 'disabled')
 				
+			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => {})
+			dojo.toggleClass('take_card_button', 'disabled', !chooseActionArgs.canTakeAnimalCard)
 			this.river.setSelectionMode(chooseActionArgs.canTakeAnimalCard ? 'single' : 'none')
-			;(this as any).addActionButton('take_card_button', _('Take an animal card'), () => { this.takeCard(this.river.getSelection()[0])})
-			dojo.addClass('take_card_button', 'disabled')
 
 			if (chooseActionArgs.canPlaceToken) {
 				this.playerTables[this.getPlayerId()].createTokensOnTakenTokensZone(
