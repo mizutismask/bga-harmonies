@@ -350,9 +350,11 @@ class Harmonies extends Table {
         $board["score-land-1-$playerId"] = intval(self::getStat("game_score_water", $playerId));
 
         $cardPoints = $this->getGlobalVariable(CARDS_POINTS_FOR_PLAYER . $playerId);
-        foreach ($cardPoints as $i => $points) {
-            $index = $i + 1;
-            $board["score-card-$index-$playerId"] =  $points;
+        if ($cardPoints) {
+            foreach ($cardPoints as $i => $points) {
+                $index = $i + 1;
+                $board["score-card-$index-$playerId"] =  $points;
+            }
         }
 
         $board["score-total-1-$playerId"] = $this->calculateLandTotalFromStats($playerId);
