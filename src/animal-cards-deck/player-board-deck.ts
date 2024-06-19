@@ -42,10 +42,13 @@ class PlayerBoardDeck {
 	}
 
 	public selectCardFromId(cardId: number) {
-		this.boardDeck.selectCard(this.boardDeck.getCards().find(c=>c.id==cardId))
+		const card = this.boardDeck.getCards().find((c) => c.id == cardId)
+		if (!this.boardDeck.isSelected(card)) {
+			this.boardDeck.selectCard(card)
+		}
 	}
 
-	public unselectAll() {
-		this.boardDeck.unselectAll()
+	public unselectAll(silent?: boolean) {
+		this.boardDeck.unselectAll(silent)
 	}
 }

@@ -141,10 +141,11 @@ class PlayerTable {
 		this.handStock = new PlayerBoardDeck(this.game, player, cards)
 
 		this.handStock.boardDeck.onSelectionChange = (selection: AnimalCard[], lastChange: AnimalCard) => {
-			this.game.toggleActionButtonAbility(
-				'place_cube_confirm_button',
-				selection.length === 1 && document.querySelector('.hex.selected-element') != undefined
-			)
+			dojo.query(`#taken-tokens-${this.player.id} .selected`).removeClass('selected')
+			this.game.resetClientActionData()
+			//remove possible places for colored tokens and show cube places for the selected card
+			removeClass('selectable-element')
+			this.game.handSelectionChange(selection, lastChange)
 		}
 	}
 
@@ -176,9 +177,9 @@ class PlayerTable {
 		const divId = `token-${token.id}`
 		const div = $(divId)
 		if (animate && div) {
-			div.classList.remove("selected", "taken-token", "level-1", "level-2", "level-3")
+			div.classList.remove('selected', 'taken-token', 'level-1', 'level-2', 'level-3')
 			div.classList.add(`level-${token.location_arg}`)
-			
+
 			//shows move only coming inside the hex because of hex overflow
 			/*this.game.animationManager.attachWithAnimation(
 				new BgaSlideAnimation({
@@ -186,13 +187,13 @@ class PlayerTable {
 				}),
 				$(token.location)
 			)*/
-			this.game.slide(div.id, token.location+"-token-wrapper" , {phantom: false });
+			this.game.slide(div.id, token.location + '-token-wrapper', { phantom: false })
 		} else {
 			const tokenId = this.game.getNextTokenId()
 			let html = `
 			<div id="${tokenId}" class="colored-token color-${token.type_arg} level-${token.location_arg}"></div>
         `
-			this.createElementOnBoard(html, tokenId, token.location+"-token-wrapper", '', animate)
+			this.createElementOnBoard(html, tokenId, token.location + '-token-wrapper', '', animate)
 		}
 	}
 
@@ -220,6 +221,7 @@ class PlayerTable {
 					const buttonId = evt.target.id
 					log('click on', buttonId)
 					this.game.resetClientActionData()
+					removeClass('selectable-element')
 
 					//allow only 1 token to be selected
 					const selected = $(buttonId).classList.toggle('selected')
@@ -229,14 +231,14 @@ class PlayerTable {
 							'selected',
 							false
 						)
-					}
+						this.handStock.unselectAll(true)
 
-					//show possible places for colored tokens
-					removeClass('selectable-element')
-					if (possibleHexesByToken) {
-						possibleHexesByToken[getPart(tokenId, -1)].forEach((h) =>
-							$(h).classList.add('selectable-element')
-						)
+						//show possible places for colored tokens
+						if (possibleHexesByToken) {
+							possibleHexesByToken[getPart(tokenId, -1)].forEach((h) =>
+								$(h).classList.add('selectable-element')
+							)
+						}
 					}
 				})
 			)
@@ -277,12 +279,16 @@ class PlayerTable {
 				}),
 				$(destination)
 			)*/
-			this.game.slide(htmlId, destination, {phantom: false });
+			this.game.slide(htmlId, destination, { phantom: false })
 		}
 	}
 
 	public setSelectionMode(mode: CardSelectionMode) {
 		this.handStock.setSelectionMode(mode)
+	}
+
+	public setSelectableCards(cards: AnimalCard[]) {
+		this.handStock.boardDeck.setSelectableCards(cards)
 	}
 
 	public setSpiritSelectionMode(mode: CardSelectionMode) {
@@ -291,6 +297,10 @@ class PlayerTable {
 
 	public unselectAll() {
 		this.handStock.unselectAll()
+	}
+
+	public getHandCards() {
+		return this.handStock.boardDeck.getCards()
 	}
 
 	public getAnimalCardSelection() {

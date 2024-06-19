@@ -53,7 +53,15 @@ html {
 		width: 200%;
 		transform: rotate(-45deg);
 		overflow: hidden;
-		background: linear-gradient(to right, rgb(224, 209, 122) 20%, rgb(224, 209, 122) 40%, #fff 50%, #fff 55%, rgb(224, 209, 122) 70%, rgb(224, 209, 122) 100%);
+		background: linear-gradient(
+			to right,
+			rgb(224, 209, 122) 20%,
+			rgb(224, 209, 122) 40%,
+			#fff 50%,
+			#fff 55%,
+			rgb(224, 209, 122) 70%,
+			rgb(224, 209, 122) 100%
+		);
 		background-size: 200% auto;
 		animation: shine 2.5s linear infinite;
 	}
@@ -77,16 +85,17 @@ html {
 }
 
 .no-glowing-effect {
-	.active-zone{
-	.border {
-		animation: none;
-		background: white;
-		width:100% !important;
-		height: 100% !important;
-		top: 0 !important;
-		left: 0 !important;
-		transform: none
-	}}
+	.active-zone {
+		.border {
+			animation: none;
+			background: white;
+			width: 100% !important;
+			height: 100% !important;
+			top: 0 !important;
+			left: 0 !important;
+			transform: none;
+		}
+	}
 }
 
 .active-zone {
@@ -155,7 +164,6 @@ html {
     width: $CARD_WIDTH;
     height: $CARD_HEIGHT;
 }*/
-
 .points-location-wrapper {
 	display: flex;
 	flex-direction: column;
@@ -168,6 +176,16 @@ html {
 .points-location {
 	aspect-ratio: 1/1.12;
 	//border: 2px solid red;
+}
+
+.gamestate_chooseAction {
+	.hrm-player-hand {
+		.bga-cards_selectable-card {
+			.animal-cube:last-of-type{
+				filter: drop-shadow(1px 4px 2px greenyellow) brightness(1.4);
+			}
+		}
+	}
 }
 
 .place-token-button,

@@ -67,6 +67,7 @@ interface HarmoniesGamedatas {
 }
 
 interface HarmoniesGame extends Game {
+	handSelectionChange(selection: AnimalCard[], lastChange: AnimalCard): void
 	clientActionData: ClientActionData
 	cardsManager: CardsManager
 	animationManager: AnimationManager
@@ -98,6 +99,7 @@ interface EnteringChooseActionArgs {
 	tokensOnCentralBoard: any
 	tokensToPlace: Array<ColoredToken>
 	placeAnimalCubeArgs: { [cardId: number]: Array<string> }
+	possibleCards: Array<AnimalCard>
 	possibleHexesByToken: { [cardId: number]: Array<string> }
 }
 
