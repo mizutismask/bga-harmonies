@@ -207,28 +207,15 @@ class Harmonies implements HarmoniesGame {
 					}
 					break
 				case 'client_place_animal_cube':
-					let selected = this.toggleHexAndUnselectOthers(hexId)
-					//log("this.playerTables[this.getPlayerId()].getAnimalCardSelection()",this.playerTables[this.getPlayerId()].getAnimalCardSelection())
-					//log("activate", this.isConfirmOnlyOnPlacingTokensOn() && selected && this.playerTables[this.getPlayerId()].getAnimalCardSelection().length === 1)
-					this.toggleActionButtonAbility(
-						'place_cube_confirm_button',
-						selected && this.playerTables[this.getPlayerId()].getAnimalCardSelection().length === 1,
-						this.isConfirmOnlyOnPlacingTokensOn() &&
-							selected &&
-							this.playerTables[this.getPlayerId()].getAnimalCardSelection().length === 1
-					)
+					const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop()
+					if (card) {
+						this.takeAction('placeAnimalCube', { 'cardId': card.id, 'hexId': hexId })
+					}
 					break
 				default:
 					break
 			}
 		}
-	}
-
-	private toggleHexAndUnselectOthers(hexId: string) {
-		dojo.toggleClass(hexId, 'selected-element')
-		const selected = dojo.hasClass(hexId, 'selected-element')
-		dojo.query(`.hex:not(#${hexId})`).toggleClass('selected-element', false)
-		return selected
 	}
 
 	/**
@@ -534,18 +521,6 @@ class Harmonies implements HarmoniesGame {
 					this.setActionBarChooseAction(false)
 					break
 				case 'client_place_animal_cube':
-					;(this as any).addActionButton('place_cube_confirm_button', _('Confirm'), () => {
-						const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop()
-						if (card) {
-							this.takeAction('placeAnimalCube', {
-								'cardId': card.id,
-								'hexId': document.querySelector('.hex.selected-element').id
-							})
-							removeClass('selectable-element')
-						} else {
-							;(this as any).showMessage(_('Select the corresponding card for this cube first'), 'error')
-						}
-					})
 					;(this as any).addActionButton(
 						'button_cancel',
 						_('Cancel'),
@@ -632,82 +607,63 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	private onPlaceAnimalCubeButton(args: EnteringChooseActionArgs) {
-		const singleCard = Object.keys(args.placeAnimalCubeArgs).length === 1
 		let singlePossibility =
-			singleCard && args.placeAnimalCubeArgs[Object.keys(args.placeAnimalCubeArgs)[0]].length === 1
+			Object.keys(args.placeAnimalCubeArgs).length === 1 &&
+			args.placeAnimalCubeArgs[Object.keys(args.placeAnimalCubeArgs)[0]].length === 1
 
 		const stateMessage = singlePossibility
 			? _('Confirm or cancel the cube placement')
-			: singleCard
-			? _('Select the hex where you want to place the cube')
 			: _('Select one card and then the corresponding pattern on your board where you want to place the cube')
 
-		this.playerTables[this.getPlayerId()].setSelectionMode('single')
 		;(this as any).setClientState('client_place_animal_cube', {
 			descriptionmyturn: stateMessage
 		})
+		this.playerTables[this.getPlayerId()].setSelectionMode('single')
 
 		if (singlePossibility) {
 			const cardId = Object.keys(args.placeAnimalCubeArgs)[0]
 			const hexId = args.placeAnimalCubeArgs[Object.keys(args.placeAnimalCubeArgs)[0]][0]
 			dojo.addClass(hexId, 'selected-element')
 			this.playerTables[this.getPlayerId()].selectCardFromId(parseInt(cardId))
-			if (this.isConfirmOnlyOnPlacingTokensOn()) {
-				$('place_cube_confirm_button').click()
-			}
+			this.takeAction('placeAnimalCube', { 'cardId': cardId, 'hexId': hexId })
 		}
 	}
 
-	///////////////////////////////////////////////////
-	//// Utility methods
+	/*private addColoredTokensButtons(tokensByHole: { [holeId: number]: Array<ColoredToken> }) {
+		Object.keys(tokensByHole).forEach((hole) => {
+			let label = dojo.string.substitute(_('Take those tokens'), {})
 
-	public getPlayersInOrder() {
-		return Object.values(this.gamedatas.playerOrderWorkingWithSpectators).map(
-			(p) => this.gamedatas.players[Number(p)]
-		)
-	}
+			;(this as any).addImageActionButton(
+				'takeTokens_button_' + hole,
+				this.createDiv('token1' + hole, ),
+				'toto',
+				label,
+				() => {},
+				'take-tokens-button'
+			)
+		})
+	}*/
 
-	public dontPreloadUselessAssets() {
-		if (this.gamedatas.boardSide === 'sideA') {
-			;(this as any).dontPreloadImage('boardSideB.png')
-			;(this as any).dontPreloadImage('helpSideB.png')
-		} else {
-			;(this as any).dontPreloadImage('boardSideA.png')
-			;(this as any).dontPreloadImage('helpSideA.png')
-		}
-		if (this.getPlayersCount() == 1) {
-			;(this as any).dontPreloadImage('centralBoard.png')
-		} else {
-			;(this as any).dontPreloadImage('centralBoardSolo.png')
-			;(this as any).dontPreloadImage('sunIcon.png')
-			;(this as any).dontPreloadImage('soloSunsHelp.jpg')
-		}
-	}
-
-	public toggleActionButtonAbility(buttonId: string, enable: boolean, autoClickIfEnabled: boolean = undefined) {
-		if (!$(buttonId)) return
-		//log("toggleActionButtonAbility", buttonId, enable)
-
-		if (autoClickIfEnabled == undefined) {
-			autoClickIfEnabled = this.isConfirmOnlyOnPlacingTokensOn()
-		}
-		dojo.toggleClass(buttonId, 'disabled', !enable)
-		if (autoClickIfEnabled && !dojo.hasClass(buttonId, 'disabled')) {
-			$(buttonId).click()
-		}
-	}
-
-	public initPreferencesObserver() {
-		// Call onPreferenceChange() when any value changes
-		dojo.query('.preference_control').on('change', (e) => {
-			const match = e.target.id.match(/^preference_[cf]ontrol_(\d+)$/)
-			if (!match) {
-				return
-			}
-			const pref = match[1]
-			const newValue = e.target.value
-			;(this as any).prefs[pref].value = newValue
-			//this.onPreferenceChange(pref, newValue);
+	private addPlaceTokenButtons(tokens: Array<ColoredToken>) {
+		tokens.forEach((token) => {
+			let label = dojo.string.substitute(_('Place this token on your board'), {})
+			const buttonId = 'placeToken_button_' + token.id
+			;(this as any).addImageActionButton(
+				buttonId,
+				this.createDiv(`color-${token.type_arg} token-button`, `placeToken-${token.id}`),
+				'blue',
+				label,
+				() => {
+					this.resetClientActionData()
+					const selected = $(buttonId).classList.toggle('selected')
+					if (selected) {
+						this.clientActionData.tokenToPlace = token
+						dojo.query(`.place-token-button:not(#${buttonId})`).toggleClass('selected', false)
+					}
+				},
+				'place-token-button'
+			)
+			$(buttonId).dataset.tokenId = token.id
 		})
 	}
 
