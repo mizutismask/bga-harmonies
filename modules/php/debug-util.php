@@ -29,7 +29,7 @@ trait DebugUtilTrait {
                 $this->moveColoredTokenToBoard($token["id"], $hexId);
             }
 
-            $this->animalCubes->pickCardsForLocation(1, 'deck', $hexId, "4");
+            $this->animalCubes->pickCardsForLocation(rand(0,1), 'deck', $hexId, "4");
         }
     }
 
