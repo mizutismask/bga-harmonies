@@ -76,7 +76,7 @@ $playerQuickNavColor: rgb(51, 44, 38);
 }
 
 //to override star icon everywhere in the result tab
-#pagesection_gameresult .fa-star {
+.player-count-1 #pagesection_gameresult .fa-star {
 	@include sunIcon;
 	&::before {
 		content: none;
