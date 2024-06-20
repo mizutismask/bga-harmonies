@@ -181,9 +181,12 @@ html {
 .gamestate_chooseAction {
 	.hrm-player-hand {
 		.bga-cards_selectable-card {
-			.animal-cube:last-of-type{
+			.animal-cube:nth-last-child(1 of .animal-cube){//every last cube on each selectable cards, ==last-of-class
 				filter: drop-shadow(1px 4px 2px greenyellow) brightness(1.4);
 			}
+		}
+		.card.bga-cards_disabled-card{
+			filter: contrast(.8);
 		}
 	}
 }
