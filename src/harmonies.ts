@@ -475,8 +475,9 @@ class Harmonies implements HarmoniesGame {
 						$(`hand-zone-${this.getPlayerId()}`).classList.add('active-zone')
 					}
 				} else {
-					this.playerTables[this.getPlayerId()].unselectAll()
-					this.playerTables[this.getPlayerId()].setSelectableCards(this.playerTables[this.getPlayerId()].getHandCards())
+					//this.playerTables[this.getPlayerId()].unselectAll()
+					//this.playerTables[this.getPlayerId()].setSelectableCards(this.playerTables[this.getPlayerId()].getHandCards())
+					this.playerTables[this.getPlayerId()].setSelectionMode("none")
 				}
 
 				if (args.canTakeAnimalCard) {
