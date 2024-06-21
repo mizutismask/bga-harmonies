@@ -241,7 +241,7 @@ class Harmonies extends Table {
 
     //////////////////////////////////////////////////////////////////////////////
     //////////// Utility functions
-    ////////////    
+    ////////////
     function getBoardWidth(): int {
         return $this->isBoardSideA() ? 5 : 7;
     }

@@ -82,8 +82,6 @@ interface HarmoniesGame extends Game {
 	getNextTokenId(): string
 	takeAction(action: string, data?: any): void
 	resetClientActionData(): void
-	isConfirmOnlyOnPlacingTokensOn(): boolean
-	toggleActionButtonAbility(buttonId: string, enable: boolean): void
 	getHelpOnCardConfig(): number
 	slide(mobileElt, targetElt, options)
 }

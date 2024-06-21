@@ -46,11 +46,12 @@ class Harmonies implements HarmoniesGame {
 	private TOOLTIP_DELAY = document.body.classList.contains('touch-device') ? 1500 : undefined
 	private settings = [
 		new Setting('glowingEffect', 'pref', 1),
-		new Setting('alwaysDisplayHelpCard', 'pref', 3),
-		new Setting('helpButtonOnCards', 'pref', 4)
+		new Setting('alwaysDisplayHelpCard', 'pref', 2),
+		new Setting('helpButtonOnCards', 'pref', 3)
 	]
 	public clientActionData: ClientActionData
 	private tokenSequence = 0
+	private bgaSettingsParent //container for settings from the hamburger menu, used to put things at their original place when resetting turn
 
 	constructor() {
 		console.log('harmonies constructor')
@@ -477,7 +478,7 @@ class Harmonies implements HarmoniesGame {
 				} else {
 					//this.playerTables[this.getPlayerId()].unselectAll()
 					//this.playerTables[this.getPlayerId()].setSelectableCards(this.playerTables[this.getPlayerId()].getHandCards())
-					this.playerTables[this.getPlayerId()].setSelectionMode("none")
+					this.playerTables[this.getPlayerId()].setSelectionMode('none')
 				}
 
 				if (args.canTakeAnimalCard) {
@@ -623,6 +624,8 @@ class Harmonies implements HarmoniesGame {
 				'reset_turn_button',
 				_('Reset my turn'),
 				() => {
+					this.toggleSettings()
+					this.resetSettingsInOriginalPlace()
 					this.takeAction('resetPlayerTurn')
 				},
 				undefined,
@@ -656,19 +659,6 @@ class Harmonies implements HarmoniesGame {
 			;(this as any).dontPreloadImage('centralBoardSolo.png')
 			;(this as any).dontPreloadImage('sunIcon.png')
 			;(this as any).dontPreloadImage('soloSunsHelp.jpg')
-		}
-	}
-
-	public toggleActionButtonAbility(buttonId: string, enable: boolean, autoClickIfEnabled: boolean = undefined) {
-		if (!$(buttonId)) return
-		//log("toggleActionButtonAbility", buttonId, enable)
-
-		if (autoClickIfEnabled == undefined) {
-			autoClickIfEnabled = this.isConfirmOnlyOnPlacingTokensOn()
-		}
-		dojo.toggleClass(buttonId, 'disabled', !enable)
-		if (autoClickIfEnabled && !dojo.hasClass(buttonId, 'disabled')) {
-			$(buttonId).click()
 		}
 	}
 
@@ -745,17 +735,12 @@ class Harmonies implements HarmoniesGame {
 		}
 	}
 
-	/** Tells if confirm is active in user prefs. */
-	public isConfirmOnlyOnPlacingTokensOn(): boolean {
+	public isAlwaysShowHelpCardOn(): boolean {
 		return (this as any).prefs[2].value == 1
 	}
 
-	public isAlwaysShowHelpCardOn(): boolean {
-		return (this as any).prefs[3].value == 1
-	}
-
 	public getHelpOnCardConfig(): number {
-		return parseInt((this as any).prefs[4].value)
+		return parseInt((this as any).prefs[3].value)
 	}
 
 	/*
@@ -907,8 +892,22 @@ class Harmonies implements HarmoniesGame {
 
 		this.settings.forEach((setting) => {
 			if (setting.type == 'pref') {
-				// Pref type => just move the user pref around
-				dojo.place($('preference_control_' + setting.prefId).parentNode.parentNode, container)
+				// Pref type => move user pref from hamburger menu to player panel settings
+				if ($('preference_control_' + setting.prefId)?.parentNode?.parentNode) {
+					if (!this.bgaSettingsParent)
+						this.bgaSettingsParent = $(
+							'preference_control_' + setting.prefId
+						)?.parentNode?.parentNode?.parentNode
+					dojo.place($('preference_control_' + setting.prefId)?.parentNode?.parentNode, container)
+				}
+			}
+		})
+	}
+
+	public resetSettingsInOriginalPlace() {
+		this.settings.forEach((setting) => {
+			if (setting.type == 'pref') {
+				dojo.place($('preference_control_' + setting.prefId)?.parentNode?.parentNode, this.bgaSettingsParent)
 			}
 		})
 	}
