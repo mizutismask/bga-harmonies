@@ -104,7 +104,7 @@ class PlayerTable {
 			center: true,
 			gap: '7px',
 			direction: 'row',
-			wrap: 'nowrap'
+			wrap: 'wrap'
 		})
 		this.doneStock.setSelectionMode('none')
 		this.doneStock.addCards(doneAnimalCards)

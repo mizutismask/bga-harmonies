@@ -7,7 +7,7 @@
 	gap: 10px;
 	flex-wrap: wrap;
 	justify-content: center;
-	align-items: flex-end;
+	align-items: flex-start;
 }
 
 .player-table {
@@ -43,6 +43,7 @@
 
 	.hrm-player-done {
 		margin-top: 8px;
+		max-width: 706px;
 	}
 
 	.taken-tokens-zone {
