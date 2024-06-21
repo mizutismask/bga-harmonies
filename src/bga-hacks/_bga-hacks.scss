@@ -82,3 +82,8 @@ $playerQuickNavColor: rgb(51, 44, 38);
 		content: none;
 	}
 }
+
+//if turn time is exhausted, timeToThink becomes red, and does not show on player red
+#player_board_inner_ff0000 .timeToThink{
+	color: white !important;
+}
