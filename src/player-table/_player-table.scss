@@ -44,11 +44,13 @@
 	.hrm-player-done {
 		margin-top: 8px;
 		max-width: 706px;
+		grid-column: 1 / span 2;
 	}
 
 	.taken-tokens-zone {
 		grid-column: 2;
 		align-self: center;
+		justify-self: left;
 
 		.taken-tokens {
 			gap: 7px;
