@@ -1187,8 +1187,8 @@ class Harmonies implements HarmoniesGame {
 				console.error('Material type move not handled', notif)
 				break
 		}
-		const cards = notif.args.material as Array<AnimalCard>
-		cards.forEach((c) => console.log('c', c.id))
+		/*const cards = notif.args.material as Array<AnimalCard>
+		cards.forEach((c) => console.log('c', c.id))*/
 	}
 
 	private notif_tokenMove(tokens: ColoredToken[], notif: Notif<NotifMaterialMove>) {
