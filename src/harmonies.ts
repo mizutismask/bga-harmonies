@@ -52,7 +52,7 @@ class Harmonies implements HarmoniesGame {
 	public clientActionData: ClientActionData
 	private tokenSequence = 0
 	private bgaSettingsParent //container for settings from the hamburger menu, used to put things at their original place when resetting turn
-	private lastTakenAction:string
+	private lastTakenAction: string
 
 	constructor() {
 		console.log('harmonies constructor')
@@ -467,12 +467,15 @@ class Harmonies implements HarmoniesGame {
 				if (args.canPlaceAnimalCube && args.placeAnimalCubeArgs) {
 					this.playerTables[this.getPlayerId()].setSelectionMode('single')
 					this.playerTables[this.getPlayerId()].setSelectableCards(args.possibleCards)
-					if (Object.keys(args.placeAnimalCubeArgs).length == 1 && this.lastTakenAction != "placeAnimalCube") {
+					if (
+						Object.keys(args.placeAnimalCubeArgs).length == 1 &&
+						this.lastTakenAction != 'placeAnimalCube'
+					) {
 						const cardId = parseInt(Object.keys(args.placeAnimalCubeArgs)[0])
 						this.playerTables[this.getPlayerId()].selectCardFromId(cardId)
 					}
+					this.handSelectionChange(this.playerTables[this.getPlayerId()].getAnimalCardSelection(), undefined)
 
-					this.showPossibleHexesForCubes(args)
 					if (this.playerTables[this.getPlayerId()].getAnimalCardSelection().length == 0) {
 						$(`hand-zone-${this.getPlayerId()}`).classList.add('active-zone')
 					}
@@ -1081,7 +1084,7 @@ class Harmonies implements HarmoniesGame {
 		data = data || {}
 		data.lock = true
 		data.version = this.gamedatas.version
-		this.lastTakenAction = action;
+		this.lastTakenAction = action
 		if (!errorHandler) {
 			errorHandler = () => {}
 		}
