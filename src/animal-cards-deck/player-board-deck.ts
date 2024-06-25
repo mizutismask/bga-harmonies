@@ -48,6 +48,11 @@ class PlayerBoardDeck {
 		}
 	}
 
+	public handContains(cardId: number):boolean {
+		const card = this.boardDeck.getCards().find((c) => c.id == cardId)
+		return card!= undefined
+	}
+
 	public unselectAll(silent?: boolean) {
 		this.boardDeck.unselectAll(silent)
 	}

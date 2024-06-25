@@ -242,7 +242,6 @@ class PlayerTable {
 					}
 				})
 			)
-			log(this.tempHandlers)
 		})
 	}
 
@@ -305,5 +304,9 @@ class PlayerTable {
 
 	public getAnimalCardSelection() {
 		return this.handStock.getSelection()
+	}
+
+	public handContains(cardId: number) {
+		return this.handStock.handContains(cardId)
 	}
 }

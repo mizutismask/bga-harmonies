@@ -215,8 +215,8 @@ class Harmonies implements HarmoniesGame {
 							'cardId': card.id,
 							'hexId': hexId
 						})
-						removeClass('selectable-element')
 					}
+					removeClass('selectable-element')
 					break
 				case 'client_place_animal_cube':
 					break
@@ -507,9 +507,12 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	private showPossibleHexesForCubes(args: EnteringChooseActionArgs) {
-		Object.values(args.placeAnimalCubeArgs).forEach((hexes) =>
-			hexes.forEach((h) => $(h).classList.add('selectable-element'))
-		)
+		//removeClass('selectable-element')
+		Object.entries(args.placeAnimalCubeArgs).forEach(([cardId, hexes]) => {
+			//log('showPossibleHexesForCubes', cardId, hexes)
+			if (this.playerTables[this.getPlayerId()].handContains(Number(cardId)))//if the card was just finished, don’t show its moves
+				hexes.forEach((h) => $(h).classList.add('selectable-element'))
+		})
 	}
 
 	private getPossibleActions(args: EnteringChooseActionArgs) {
