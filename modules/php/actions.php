@@ -192,5 +192,6 @@ trait ActionTrait {
         }
         $this->undoRestorePoint();
         $this->toggleResetTurn(false);
+        $this->gamestate->reloadState();
     }
 }
