@@ -44,11 +44,14 @@ abstract class GameTestBase extends Harmonies { // this is your game class defin
         return new ColoredToken(['type_arg' => $color, 'id' => self::$coloredTokenSequence]);
     }
 
+    /**
+     * From top to bottom
+     */
     function setTokensIn(&$grid, $col, $row, $colors) {
         $hexIndex = $this->getHexIndexInBoard($grid, $col, $row);
         $tokens = array_map(fn ($col) => $this->generateToken($col), $colors);
         $grid[$hexIndex]["tokens"] = $tokens;
-        $grid[$hexIndex]["topToken"] = $tokens[count($tokens) - 1];
+        $grid[$hexIndex]["topToken"] = $tokens[0];
     }
 
     function convertNumbersToGrid(string $textGrid) {

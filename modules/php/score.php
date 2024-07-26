@@ -48,21 +48,23 @@ trait ScoreTrait {
         return array_sum(array_map(fn ($zone) => count($zone) > 1 ? 5 : 0, $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken != null && $coloredToken->type_arg === YELLOW)));
     }
 
-    public function getZonesOfColor($board, $zonePredicate) {
+    public function getZonesOfColor($board, $topTokenPredicate, $hexPredicate=null) {
         $visited = []; // Array to keep track of visited tokens
         $exploredZones = []; // Array to store hexes of the explored zones
 
         foreach ($board as $hex) {
-            // Consider only the top token of the hex
-            $topToken = $hex['topToken'];
+            if (!$hexPredicate || $hexPredicate($hex)) {
+                // Consider only the top token of the hex
+                $topToken = $hex['topToken'];
 
-            if ($zonePredicate($topToken) && !isset($visited[$this->getTempHexId($hex)])) {
-                // If the top token matches the specified color and is not visited yet, explore its zone
-                $exploredZone = []; // Array to store hexes of the explored zone
-                $this->exploreZone($board, $hex, $visited, $exploredZone, $zonePredicate);
+                if ($topTokenPredicate($topToken) && !isset($visited[$this->getTempHexId($hex)])) {
+                    // If the top token matches the specified color and is not visited yet, explore its zone
+                    $exploredZone = []; // Array to store hexes of the explored zone
+                    $this->exploreZone($board, $hex, $visited, $exploredZone, $topTokenPredicate);
 
-                // Add the explored zone to the list of explored zones
-                $exploredZones[] = $exploredZone;
+                    // Add the explored zone to the list of explored zones
+                    $exploredZones[] = $exploredZone;
+                }
             }
         }
         //self::dump('*******************getZonesOfColor', $exploredZones);
@@ -250,7 +252,7 @@ trait ScoreTrait {
                 break;
             case 37:
             case 38:
-                $zones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == RED);
+                $zones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == RED, fn ($hex) => $this->isBuilding($hex["tokens"]));
                 $pointsPerZone = array_map(fn ($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn ($z) => count($z), $zones));
                 $points = array_sum($pointsPerZone);
                 break;
