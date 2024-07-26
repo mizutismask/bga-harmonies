@@ -510,7 +510,8 @@ class Harmonies implements HarmoniesGame {
 		//removeClass('selectable-element')
 		Object.entries(args.placeAnimalCubeArgs).forEach(([cardId, hexes]) => {
 			//log('showPossibleHexesForCubes', cardId, hexes)
-			if (this.playerTables[this.getPlayerId()].handContains(Number(cardId)))//if the card was just finished, don’t show its moves
+			if (this.playerTables[this.getPlayerId()].handContains(Number(cardId)))
+				//if the card was just finished, don’t show its moves
 				hexes.forEach((h) => $(h).classList.add('selectable-element'))
 		})
 	}
@@ -871,6 +872,7 @@ class Harmonies implements HarmoniesGame {
 	}
 
 	private setupSettingsIconInPlayerPanel() {
+		if (!this.isNotSpectator()) return
 		dojo.place(
 			`
             <div class='settings-wrapper' id="player_board_config">
