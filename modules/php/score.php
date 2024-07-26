@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/objects/animalCard.php');
 trait ScoreTrait {
     static $treePoints = [1, 3, 7];
-    static $riverPoints = [0, 2, 5, 8, 11, 15];
+    static $riverPoints = [0, 0, 2, 5, 8, 11, 15];
     public function calculateTreePoints($board) {
         $total = 0;
         foreach ($board as $hex) {
@@ -112,7 +112,7 @@ trait ScoreTrait {
                 }
                 //echo "longest" . $path[0]["col"] . "_" . $path[0]["row"]  . " to " . $path[1]["col"] . "_" . $path[1]["row"] . " = " . $path[2];
             }
-            $score = self::$riverPoints[min(6, $maxDistance) - 1];
+            $score = self::$riverPoints[min(6, $maxDistance)];
             for ($i = 6; $i < $maxDistance; $i++) {
                 $score += 4;
             }
