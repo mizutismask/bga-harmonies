@@ -48,14 +48,17 @@ class PlayerTable {
 		hexes.forEach((h) => $(getCellNameFromCoords(player.id, h.col, h.row)).classList.remove('invisible'))
 		if (isMyTable) {
 			dojo.connect($(`grid-container-${player.id}`), 'click', (evt) => {
+				const onCell = evt.target.id.startsWith(`cell_${player.id}_`) && !evt.target.classList.contains("invisible")
 				log(
 					'container click on :',
 					evt.target.id,
 					'starts with',
 					`${player.id}_cell_`,
-					evt.target.id.startsWith(`${player.id}_cell_`)
+					onCell
 				)
-				this.game.onHexClick(evt.target.id)
+				if (onCell) {
+					this.game.onHexClick(evt.target.id)
+				}
 			})
 		}
 
