@@ -10,7 +10,7 @@ trait AnimalCubeDeckTrait {
      */
     public function createAnimalCubes() {
         $tokens = array(
-            array('type' => 1, 'type_arg' => 1, 'nbr' => 66),
+            array('type' => 1, 'type_arg' => 1, 'nbr' => 90),
         );
         if ($this->isSpiritCardsOn()) {
             $tokens[] =  array('type' => 1, 'type_arg' => 2, 'nbr' => $this->getPlayerCount());
