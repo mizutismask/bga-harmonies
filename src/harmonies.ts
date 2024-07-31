@@ -51,7 +51,6 @@ class Harmonies implements HarmoniesGame {
 	]
 	public clientActionData: ClientActionData
 	private tokenSequence = 0
-	private bgaSettingsParent //container for settings from the hamburger menu, used to put things at their original place when resetting turn
 	private lastTakenAction: string
 
 	constructor() {
@@ -633,7 +632,6 @@ class Harmonies implements HarmoniesGame {
 				_('Reset my turn'),
 				() => {
 					this.toggleSettings()
-					this.resetSettingsInOriginalPlace()
 					this.takeAction('resetPlayerTurn')
 				},
 				undefined,
@@ -898,25 +896,24 @@ class Harmonies implements HarmoniesGame {
 		dojo.connect($('show-settings'), 'onclick', () => this.toggleSettings())
 		this.setTooltip('show-settings', _('Display some settings about the game.'))
 		let container = $('settings-controls-container')
-
 		this.settings.forEach((setting) => {
 			if (setting.type == 'pref') {
-				// Pref type => move user pref from hamburger menu to player panel settings
+				// Pref type => copy user pref from hamburger menu to player panel settings
 				if ($('preference_control_' + setting.prefId)?.parentNode?.parentNode) {
-					if (!this.bgaSettingsParent)
-						this.bgaSettingsParent = $(
-							'preference_control_' + setting.prefId
-						)?.parentNode?.parentNode?.parentNode
-					dojo.place($('preference_control_' + setting.prefId)?.parentNode?.parentNode, container)
-				}
-			}
-		})
-	}
+					
+					const clone = dojo.clone($('preference_control_' + setting.prefId)?.parentNode?.parentNode)
+					clone.id = 'clone_parent_preference_control_' + setting.prefId
+					dojo.place(clone, container)
+					
+					const select = clone.querySelector('select')
+					select.id = 'clone_preference_control_' + setting.prefId
 
-	public resetSettingsInOriginalPlace() {
-		this.settings.forEach((setting) => {
-			if (setting.type == 'pref') {
-				dojo.place($('preference_control_' + setting.prefId)?.parentNode?.parentNode, this.bgaSettingsParent)
+					select.onchange = (event) => {
+						if ((this as any).getGameUserPreference(setting.prefId) != select.value) {
+							;(this as any).setGameUserPreference(setting.prefId, select.value)
+						}
+					}
+				}
 			}
 		})
 	}
