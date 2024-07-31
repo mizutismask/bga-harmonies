@@ -12,13 +12,13 @@ trait DebugUtilTrait {
         }
 
         $this->gamestate->changeActivePlayer(2333092);
-        $this->fill();
+        $this->debug_fill();
     }
 
     /**
      * Fills the current players board with random piles of tokens and add a cube on each.
      */
-    function fill() {
+    function debug_fill() {
         $hexes = $this->getHexesCoordinates();
         $playerId = $this->getCurrentPlayerId();
         foreach ($hexes as $hex) {
@@ -36,7 +36,7 @@ trait DebugUtilTrait {
     /**
      * Fills the current players board with random piles of tokens and add a cube on each but leaves 3 spaces empty.
      */
-    function almostFill() {
+    function debug_almostFill() {
         $hexes = $this->getHexesCoordinates();
         $playerId = $this->getCurrentPlayerId();
         $i = 0;
@@ -58,7 +58,7 @@ trait DebugUtilTrait {
     /**
      * Removes everything from the current players board.
      */
-    function clear() {
+    function debug_clear() {
         self::DbQuery("UPDATE `coloredToken` set `card_location` = 'deck'");
         self::DbQuery("UPDATE `animalCube` set `card_location` = 'deck'");
     }
