@@ -200,20 +200,22 @@ class Harmonies implements HarmoniesGame {
 		if ((this as any).isCurrentPlayerActive()) {
 			switch (this.gamedatas.gamestate.name) {
 				case 'chooseAction':
+					const stateArgs = this.gamedatas.gamestate.args as EnteringChooseActionArgs
 					if (this.clientActionData.tokenToPlace) {
 						this.takeAction('placeColoredToken', {
 							'tokenId': this.clientActionData.tokenToPlace.id,
 							'hexId': hexId
 						})
-					} else if (
-						(this.gamedatas.gamestate.args as EnteringChooseActionArgs).canPlaceAnimalCube &&
-						this.playerTables[this.getPlayerId()].getAnimalCardSelection().length === 1
-					) {
-						const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop()
-						this.takeAction('placeAnimalCube', {
-							'cardId': card.id,
-							'hexId': hexId
-						})
+					} else if (stateArgs.canPlaceAnimalCube) {
+						if (this.playerTables[this.getPlayerId()].getAnimalCardSelection().length === 1) {
+							const card = this.playerTables[this.getPlayerId()].getAnimalCardSelection().pop()
+							this.takeAction('placeAnimalCube', {
+								'cardId': card.id,
+								'hexId': hexId
+							})
+						} else {
+							;(this as any).showMessage(_('Select the card you want to remove a cube from, then the hex'), 'error')
+						}
 					}
 					removeClass('selectable-element')
 					break
@@ -900,11 +902,10 @@ class Harmonies implements HarmoniesGame {
 			if (setting.type == 'pref') {
 				// Pref type => copy user pref from hamburger menu to player panel settings
 				if ($('preference_control_' + setting.prefId)?.parentNode?.parentNode) {
-					
 					const clone = dojo.clone($('preference_control_' + setting.prefId)?.parentNode?.parentNode)
 					clone.id = 'clone_parent_preference_control_' + setting.prefId
 					dojo.place(clone, container)
-					
+
 					const select = clone.querySelector('select')
 					select.id = 'clone_preference_control_' + setting.prefId
 
