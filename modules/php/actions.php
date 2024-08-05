@@ -177,7 +177,7 @@ trait ActionTrait {
     }
 
     function goToDiscardOrNextPlayer() {
-        if ($this->getPlayerCount() === 1 && intval(self::getGameStateValue(TOOK_ANIMAL_CARD)) == 0) {
+        if ($this->getPlayerCount() === 1 && intval(self::getGameStateValue(TOOK_ANIMAL_CARD)) == 0 && !$this->hasReachedEndOfGameRequirements($this->getMostlyActivePlayerId())) {
             $this->gamestate->nextState('discardFromRiver');
         } else {
             $this->gamestate->nextState('nextPlayer');
