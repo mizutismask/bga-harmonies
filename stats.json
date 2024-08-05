@@ -7,6 +7,11 @@
 		}
 	},
 	"player": {
+		"game_points": {
+			"id": 20,
+			"name": "Points",
+			"type": "int"
+		},
 		"turns_number": {
 			"id": 10,
 			"name": "Number of turns",

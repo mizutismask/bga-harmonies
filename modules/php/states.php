@@ -141,6 +141,7 @@ trait StateTrait {
         foreach ($players as $playerId => $playerDb) {
             $this->notifyPoints($playerId, $this->calculateLandTotalFromStats($playerId), "", ["scoreType" => "score-total-1-$playerId"]);
             $this->notifyPoints($playerId, $totalScore[$playerId], "", ["scoreType" => "score-total-3-$playerId"]);
+            self::setStat($totalScore[$playerId], "game_points", $playerId);
 
             $tie = $this->getUniqueIntValueFromDB("SELECT count(card_id) FROM animalCube where card_location like 'cell_$playerId%'");
             self::DbQuery("UPDATE player SET `player_score_aux` = $tie where `player_id` = $playerId");
