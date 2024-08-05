@@ -52,6 +52,7 @@ class Harmonies implements HarmoniesGame {
 	public clientActionData: ClientActionData
 	private tokenSequence = 0
 	private lastTakenAction: string
+	private displayedTooltip
 
 	constructor() {
 		console.log('harmonies constructor')
@@ -214,7 +215,10 @@ class Harmonies implements HarmoniesGame {
 								'hexId': hexId
 							})
 						} else {
-							;(this as any).showMessage(_('Select the card you want to remove a cube from, then the hex'), 'error')
+							;(this as any).showMessage(
+								_('Select the card you want to remove a cube from, then the hex'),
+								'error'
+							)
 						}
 					}
 					removeClass('selectable-element')
@@ -646,7 +650,37 @@ class Harmonies implements HarmoniesGame {
 
 	///////////////////////////////////////////////////
 	//// Utility methods
+	public closeCurrentTooltip() {
+		if (this.displayedTooltip == null) return
+		else {
+			this.displayedTooltip.close()
+			this.displayedTooltip = null
+		}
+	}
 
+	public addTooltipOnClickHelpButton(id, html, delay) {
+		let tooltip = new dijit.Tooltip({
+			label: html,
+			showDelay: delay
+		})
+
+		dojo.connect($(id), 'click', (evt) => {
+			evt.stopPropagation()
+
+			if (tooltip.state == 'SHOWING') {
+				this.closeCurrentTooltip()
+			} else {
+				this.closeCurrentTooltip()
+				tooltip.open($(id))
+				this.displayedTooltip = tooltip
+			}
+		})
+
+		dojo.connect($(id), 'mouseleave', () => {
+			tooltip.close()
+		})
+	}
+	
 	public getPlayersInOrder() {
 		return Object.values(this.gamedatas.playerOrderWorkingWithSpectators).map(
 			(p) => this.gamedatas.players[Number(p)]

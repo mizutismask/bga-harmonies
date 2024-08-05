@@ -84,6 +84,7 @@ interface HarmoniesGame extends Game {
 	resetClientActionData(): void
 	getHelpOnCardConfig(): number
 	slide(mobileElt, targetElt, options)
+	addTooltipOnClickHelpButton(idButton: string, tooltipContent: string, delay?: number): void
 }
 
 interface EnteringChooseActionArgs {

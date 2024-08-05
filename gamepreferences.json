@@ -21,7 +21,7 @@
 		"name": "Help button on cards",
 		"needReload": true,
 		"values": {
-			"1": { "name": "Always" },
+			"1": { "name": "Always (Recommended on mobile)" },
 			"2": { "name": "Only on spirits"},
 			"3": { "name": "Never" }
 		},

@@ -32,7 +32,9 @@ class CardsManager extends CardManager<AnimalCard> {
 						info.innerText = '?'
 						info.classList.add('css-icon', 'card-info')
 						div.appendChild(info)
-						;(this.game as any).addTooltipHtml(info.id, this.getTooltip(card, cardTypeId))
+						const tooltipContent = this.getTooltip(card, cardTypeId)
+						;(this.game as any).addTooltipHtml(info.id, tooltipContent)
+						this.game.addTooltipOnClickHelpButton(info.id, tooltipContent)
 					}
 				} else if (creation) {
 					;(this.game as any).addTooltipHtml(div.id, this.getTooltip(card, cardTypeId))
@@ -68,16 +70,12 @@ class CardsManager extends CardManager<AnimalCard> {
 		if (card.isSpirit) {
 			const desc = this.getSpiritDescription(card)
 			tooltip = `
-			<div id="card-${card.id}-zoom" class="card-zoom" style="${getBackgroundInlineStyleForAnimalCard(
-				card
-			)}"></div>
+			<div id="card-${card.id}-zoom" class="card-zoom" style="${getBackgroundInlineStyleForAnimalCard(card)}"></div>
 			<div class="card-tooltip-element">${desc}</div>
 			`
 		} else {
 			tooltip = `
-				<div id="card-${card.id}-zoom" class="card-zoom" style="${getBackgroundInlineStyleForAnimalCard(
-					card
-				)}"></div>
+				<div id="card-${card.id}-zoom" class="card-zoom" style="${getBackgroundInlineStyleForAnimalCard(card)}"></div>
 				<div class="card-tooltip-element">${dojo.string.substitute(
 					_('Gain those points if you put a cube on this exact pattern several times: ${points}'),
 					{
