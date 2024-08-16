@@ -15,4 +15,6 @@ montage `ls -v .` -tile 10 -geometry 300x516+0+0 animalCards.jpg
 
 mogrify -path ./resized -resize 650 \*.png
 montage `ls -v .` -tile 6 -geometry 784x756+0+0 coloredTokens.png
+montage `ls -v .` -tile 1 -geometry 131x126+0+0 -background none coloredTokens.png
+
 

@@ -141,6 +141,11 @@ trait ColoredTokenDeckTrait {
             $cellName = $this->getCellName($hex, $playerId);
             $alreadyHasCube = in_array($cellName, $existingCubesLocs);
 
+            
+            /*self::dump('*******************existingTokens', $existingTokens);
+            self::dump('*******************isColorAllowedOnTopOfOtherColor', $this->isColorAllowedOnTopOfOtherColor($token->type_arg, $existingTokens[0]->type_arg));
+            self::dump('*******************isColorAllowedAtPosition', $this->isColorAllowedAtPosition($token->type_arg, count($existingTokens) + 1));
+            self::dump('*******************alreadyHasCube', $alreadyHasCube);*/
             if (
                 !$existingTokens
                 || count($existingTokens) < 3
