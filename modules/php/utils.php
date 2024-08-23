@@ -137,7 +137,7 @@ trait UtilTrait {
     }
 
     /**
-     * Transforms a Destination Db object to Destination class.
+     * Transforms a Token Db object to ColoredToken class.
      */
     function getColoredTokenFromDb($dbObject) {
         if (!$dbObject || !array_key_exists('id', $dbObject)) {

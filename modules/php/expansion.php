@@ -60,24 +60,4 @@ trait ExpansionTrait {
                 return 2;
         }
     }
-
-    /**
-     * Return the minimum number of ANIMAL_CARDS cards to keep at the beginning.
-     */
-    function getInitialDestinationMinimumKept() {
-        switch ($this->getExpansion()) {
-            default:
-                return 2;
-        }
-    }
-
-    /**
-     * Return the number of ANIMAL_CARDS cards shown at pick destination action.
-     */
-    function getAdditionalDestinationCardNumber() {
-        switch ($this->getExpansion()) {
-            default:
-                return 2;
-        }
-    }
 }

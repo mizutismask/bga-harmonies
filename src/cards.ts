@@ -88,8 +88,8 @@ class CardsManager extends CardManager<AnimalCard> {
 	}
 
 	private setFrontBackground(cardDiv: HTMLDivElement, cardType: number) {
-		const destinationsUrl = `${g_gamethemeurl}img/animalCards.jpg`
-		cardDiv.style.backgroundImage = `url('${destinationsUrl}')`
+		const imageUrl = `${g_gamethemeurl}img/animalCards.jpg`
+		cardDiv.style.backgroundImage = `url('${imageUrl}')`
 		const imagePosition = cardType - 1
 		const row = Math.floor(imagePosition / IMAGE_ITEMS_PER_ROW)
 		const xBackgroundPercent = (imagePosition - row * IMAGE_ITEMS_PER_ROW) * 100

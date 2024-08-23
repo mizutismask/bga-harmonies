@@ -85,8 +85,6 @@ define('CAN_RESET_TURN', 'CAN_RESET_TURN');
 /*
     Stats
 */
-//define('STAT_POINTS_WITH_PLAYER_COMPLETED_DESTINATIONS', 'pointsWithPlayerCompletedDestinations');
-
 const TREES = GREEN;
 const MOUTAINS = GRAY;
 const FIELDS = YELLOW;
