@@ -463,7 +463,7 @@ class Harmonies implements HarmoniesGame {
 		if ((this as any).isCurrentPlayerActive()) {
 			this.resetClientActionData()
 			const actions = this.getPossibleActions(args)
-			this.setChooseActionGamestateDescription(actions.join(' or '))
+			this.setChooseActionGamestateDescription(actions.join(_(' or ')))
 			if (args.canChooseSpirit) {
 				this.river.setSelectionMode('none')
 				this.playerTables[this.getPlayerId()].setSpiritSelectionMode('single')
@@ -680,7 +680,7 @@ class Harmonies implements HarmoniesGame {
 			tooltip.close()
 		})
 	}
-	
+
 	public getPlayersInOrder() {
 		return Object.values(this.gamedatas.playerOrderWorkingWithSpectators).map(
 			(p) => this.gamedatas.players[Number(p)]
