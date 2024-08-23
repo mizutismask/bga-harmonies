@@ -38,7 +38,7 @@ trait StateTrait {
         return $this->getEmptyHexesCount($playerId) <= 2;
     }
 
-    function getEmptyHexesCount($playerId):int{
+    function getEmptyHexesCount($playerId): int {
         $hexes = count($this->getHexesCoordinates());
         return $hexes - count(array_keys($this->getTokensForCompleteBoardByHex($playerId)));
     }
@@ -132,7 +132,7 @@ trait StateTrait {
                 self::dump('*******************calculatedGoalPoints', compact("goal", "score", "playerId"));
                 self::incStat($score, $goal["stat"], $playerId);
                 if ($goal["type"] != ANIMAL_CARDS) {
-                    $this->incPlayerScore($playerId, $score, clienttranslate('${player_name} scores ${delta} points with ${source}'), ["color" => $this->getColorName($goal["type"]), "source" => $goal["nameTr"], "scoreType" => $this->getScoreName($goal["type"], $playerId)]);
+                    $this->incPlayerScore($playerId, $score, clienttranslate('${player_name} scores ${delta} points with ${source}'), ["color" => $this->getColorName($goal["type"]), "source" => $goal["nameTr"], "scoreType" => $this->getScoreName($goal["type"], $playerId), 'i18n' => ['source']]);
                 }
                 $roundScores[$playerId] += $score;
                 $totalScore[$playerId] += $score;
@@ -158,21 +158,20 @@ trait StateTrait {
         }
     }
 
-    function scoreSolo($soloPlayerId, $totalScore){
+    function scoreSolo($soloPlayerId, $totalScore) {
         $suns = $this->convertScoreToSuns($totalScore);
         self::notifyWithName('msg', clienttranslate('${player_name} scores ${sunsCount} sun(s) for ${totalPoints} points'), ["sunsCount" => $suns, "totalPoints" => $totalScore,]);
 
         if ($this->isBoardSideA()) {
             $suns += 1;
             self::notifyWithName('msg', clienttranslate('${player_name} scores 1 sun for using side A of the board'));
-
         }
         if (!$this->isSpiritCardsOn()) {
             $suns += 2;
             self::notifyWithName('msg', clienttranslate('${player_name} scores 2 suns for not using spirit cards'));
         } else {
             $cards = $this->getAnimalCardsToScore($soloPlayerId);
-            $spirits = array_filter($cards, fn ($c) => $c->isSpirit);
+            $spirits = array_filter($cards, fn($c) => $c->isSpirit);
             $spirit = array_pop($spirits);
             if (in_array($spirit->type_arg, [33, 34, 37, 38, 41])) {
                 $suns += 1;
