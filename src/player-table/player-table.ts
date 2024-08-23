@@ -180,18 +180,12 @@ class PlayerTable {
 		const divId = `token-${token.id}`
 		const div = $(divId)
 		if (animate && div) {
+			//exists from the taken token place, when the current player is placing a token
 			div.classList.remove('selected', 'taken-token', 'level-1', 'level-2', 'level-3')
 			div.classList.add(`level-${token.location_arg}`)
-
-			//shows move only coming inside the hex because of hex overflow
-			/*this.game.animationManager.attachWithAnimation(
-				new BgaSlideAnimation({
-					element: div
-				}),
-				$(token.location)
-			)*/
 			this.game.slide(div.id, token.location + '-token-wrapper', { phantom: false })
 		} else {
+			//another player is placing a token (or on loading)
 			const tokenId = this.game.getNextTokenId()
 			let html = `
 			<div id="${tokenId}" class="colored-token color-${token.type_arg} level-${token.location_arg}"></div>

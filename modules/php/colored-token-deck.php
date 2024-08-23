@@ -64,9 +64,13 @@ trait ColoredTokenDeckTrait {
         ]);
     }
 
+    public function getTokenCountOnCell($hexId){
+        return $this->getUniqueIntValueFromDB("SELECT count(card_id) FROM coloredToken where `card_location` = '$hexId'");
+    }
+
     public function moveColoredTokenToBoard($tokenId, $hexId) {
         $playerId = $this->getMostlyActivePlayerId();
-        $zindex = count($this->getTokensAt($hexId, $playerId)) + 1;
+        $zindex = $this->getTokenCountOnCell($hexId) + 1;
         $this->coloredTokens->moveCard($tokenId, $hexId, $zindex);
         $this->updateChosenToken($tokenId, true);
 
