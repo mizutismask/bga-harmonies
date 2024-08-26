@@ -74,6 +74,9 @@ class Harmonies extends Table {
 
         $this->animalCubes = $this->getNew("module.common.deck");
         $this->animalCubes->init("animalCube");
+
+        // EXPERIMENTAL to avoid deadlocks.  This locks the global table early in the game constructor.
+        $this->bSelectGlobalsForUpdate = true;
     }
 
     protected function getGameName() {
@@ -196,12 +199,12 @@ class Harmonies extends Table {
         $result['remainingTokens'] = $this->getDisplayedRemainingTokensInDeck();
 
         if ($isEnd) {
-            $maxScore = max(array_map(fn ($player) => intval($player['score']), $result['players']));
-            $result['winners'] = array_keys(array_filter($result['players'], fn ($player) => intval($player['score'] == $maxScore)));
+            $maxScore = max(array_map(fn($player) => intval($player['score']), $result['players']));
+            $result['winners'] = array_keys(array_filter($result['players'], fn($player) => intval($player['score'] == $maxScore)));
             if (count($result['winners']) > 1) {
-                $tieWinners =  array_filter($result['players'], fn ($player) => in_array($player["id"], $result['winners']));
-                $maxScore = max(array_map(fn ($player) => intval($player['scoreAux']), $tieWinners));
-                $result['winners'] = array_keys(array_filter($tieWinners, fn ($player) => intval($player['scoreAux'] == $maxScore)));
+                $tieWinners =  array_filter($result['players'], fn($player) => in_array($player["id"], $result['winners']));
+                $maxScore = max(array_map(fn($player) => intval($player['scoreAux']), $tieWinners));
+                $result['winners'] = array_keys(array_filter($tieWinners, fn($player) => intval($player['scoreAux'] == $maxScore)));
             }
         } else {
             $result['lastTurn'] = $this->getGameStateValue(LAST_TURN) > 0;
