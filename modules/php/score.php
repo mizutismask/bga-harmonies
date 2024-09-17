@@ -45,10 +45,10 @@ trait ScoreTrait {
     }
 
     public function calculateFieldsPoints($board) {
-        return array_sum(array_map(fn ($zone) => count($zone) > 1 ? 5 : 0, $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken != null && $coloredToken->type_arg === YELLOW)));
+        return array_sum(array_map(fn($zone) => count($zone) > 1 ? 5 : 0, $this->getZonesOfColor($board, fn($coloredToken) => $coloredToken != null && $coloredToken->type_arg === YELLOW)));
     }
 
-    public function getZonesOfColor($board, $topTokenPredicate, $hexPredicate=null) {
+    public function getZonesOfColor($board, $topTokenPredicate, $hexPredicate = null) {
         $visited = []; // Array to keep track of visited tokens
         $exploredZones = []; // Array to store hexes of the explored zones
 
@@ -90,7 +90,7 @@ trait ScoreTrait {
             //self::dump('*******************$neighborHex', $neighborHex);
             $neighborTopToken = $neighborHex['topToken'];
 
-            if ($topTokenPredicate($neighborTopToken) && !isset($visited[$this->getTempHexId($neighborHex)]) && (!$hexPredicate || $hexPredicate($neighborHex)) ) {
+            if ($topTokenPredicate($neighborTopToken) && !isset($visited[$this->getTempHexId($neighborHex)]) && (!$hexPredicate || $hexPredicate($neighborHex))) {
                 // If the neighboring token matches the specified color and is not visited yet, explore its zone recursively
                 $this->exploreZone($board, $neighborHex, $visited, $exploredZone, $topTokenPredicate, $hexPredicate);
             }
@@ -98,12 +98,12 @@ trait ScoreTrait {
     }
 
     public function calculateMountainsPoints($board) {
-        return array_sum(array_map(fn ($zone) => count($zone) > 1 ? $this->countPointsFromMoutainZone($zone) : 0, $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken != null && $coloredToken->type_arg === GRAY)));
+        return array_sum(array_map(fn($zone) => count($zone) > 1 ? $this->countPointsFromMoutainZone($zone) : 0, $this->getZonesOfColor($board, fn($coloredToken) => $coloredToken != null && $coloredToken->type_arg === GRAY)));
     }
 
     public function calculateWaterPoints($board) {
         if ($this->isBoardSideA()) {
-            $blueZones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == BLUE);
+            $blueZones = $this->getZonesOfColor($board, fn($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == BLUE);
             $maxDistance = 0;
             foreach ($blueZones as $zone) {
                 //self::dump('*******************calculateWaterPoints for zone', $this->isBoardSideA());
@@ -120,7 +120,7 @@ trait ScoreTrait {
             }
             return $score;
         } else {
-            return count($this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken == null || $coloredToken->type_arg !== BLUE)) * 5;
+            return count($this->getZonesOfColor($board, fn($coloredToken) => $coloredToken == null || $coloredToken->type_arg !== BLUE)) * 5;
         }
     }
 
@@ -128,13 +128,21 @@ trait ScoreTrait {
         $maxDistance = 0;
         $longestPath = [];
 
-        // Parcourez chaque hexagone dans la zone bleue
+        $loops = $this->detectLoopsInBlueZone($blueZone);
+        if (count($loops) > 0) {
+            $biggestLoop =  array_reduce($loops, function ($longest, $current) {
+                return (count($current) > count($longest)) ? $current : $longest;
+            }, []);
+            $maxDistance = count($biggestLoop);
+            $longestPath = [array_shift($biggestLoop), array_pop($biggestLoop), $maxDistance];
+        }
+
+        // calculate the distance between each hex couple in the blue zone
         foreach ($blueZone as $hex1) {
             foreach ($blueZone as $hex2) {
-                // Calculez la distance entre chaque paire d'hexagones
                 $distance = $this->calculateDistanceBetweenHexagons($hex1, $hex2, $blueZone);
                 if ($distance > $maxDistance) {
-                    // Mettez à jour la plus grande distance et le chemin correspondant
+                    // update the biggest distance and the corresponding path
                     $maxDistance = $distance;
                     $longestPath = [$hex1, $hex2, $maxDistance];
                 }
@@ -193,13 +201,57 @@ trait ScoreTrait {
         return $path;
     }
 
+    public function detectLoopsInBlueZone($blueZone) {
+        $visited = [];
+        $loops = [];
+
+        // Iterate through each hexagon in the blue zone to start loop detection
+        foreach ($blueZone as $hex) {
+            if (!isset($visited[$this->getTempHexId($hex)])) {
+                $this->dfsDetectLoop($hex, null, $blueZone, $visited, [], $loops);
+            }
+        }
+
+        return $loops;
+    }
+
+    private function dfsDetectLoop($currentHex, $previousHex, $blueZone, &$visited, $path, &$loops) {
+        $visited[$this->getTempHexId($currentHex)] = true;
+        $path[] = $currentHex;
+
+        // Iterate through the neighbors of the current hexagon
+        foreach ($this->getNeighbours($currentHex) as $neighbor) {
+            $neighborId = $this->getTempHexId($neighbor);
+
+            // Check if the neighbor is part of the blue zone
+            if ($this->isHexInZone($neighbor, $blueZone)) {
+                // Skip the previous hex to avoid immediate backtracking
+                if ($this->areHexesEqual($neighbor, $previousHex)) {
+                    continue;
+                }
+
+                // If the neighbor is the first hexagon in the path, a loop is detected
+                if (isset($visited[$neighborId]) && $this->areHexesEqual($neighbor, $path[0]) && count($path) > 2) {
+                    // Add the found loop to the list of loops
+                    $loops[] = $path;
+                    continue;
+                }
+
+                // If the neighbor has not been visited yet, continue the DFS
+                if (!isset($visited[$neighborId])) {
+                    $this->dfsDetectLoop($neighbor, $currentHex, $blueZone, $visited, $path, $loops);
+                }
+            }
+        }
+    }
+
     private function countPointsFromMoutainZone($zone) {
         $mountainsPoints = [1, 3, 7];
-        return array_sum(array_map(fn ($hex) => $mountainsPoints[count($hex["tokens"]) - 1], $zone));
+        return array_sum(array_map(fn($hex) => $mountainsPoints[count($hex["tokens"]) - 1], $zone));
     }
 
     private function getTopTokenAtHexFromBoard($board, $coords) {
-        $hex = array_values(array_filter($board, fn ($h) => $this->hexesEquals($h, $coords["col"], $coords["row"])))[0];
+        $hex = array_values(array_filter($board, fn($h) => $this->hexesEquals($h, $coords["col"], $coords["row"])))[0];
         return $hex["tokens"] ? $hex["tokens"][0] : null;
     }
 
@@ -210,7 +262,7 @@ trait ScoreTrait {
 
     public function calculateAnimalCardsPoints($playerId, $board) {
         $cards = $this->getAnimalCardsToScore($playerId);
-        $normalCards = array_filter($cards, fn ($c) => !$c->isSpirit);
+        $normalCards = array_filter($cards, fn($c) => !$c->isSpirit);
         $points = [];
         foreach ($normalCards as $card) {
             $cardScore = 0;
@@ -228,7 +280,7 @@ trait ScoreTrait {
         $points = [];
         if ($this->isSpiritCardsOn()) {
             $cards = $this->getAnimalCardsToScore($playerId);
-            $spiritCards = array_filter($cards, fn ($c) => $c->isSpirit);
+            $spiritCards = array_filter($cards, fn($c) => $c->isSpirit);
             foreach ($spiritCards as $card) {
                 $cardScore = 0;
                 $cubesCount = count($this->getCubesOnCard($card->id));
@@ -246,19 +298,19 @@ trait ScoreTrait {
         switch ($card->type_arg) {
             case 33:
             case 34:
-                $zones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == YELLOW);
-                $pointsPerZone = array_map(fn ($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn ($z) => count($z), $zones));
+                $zones = $this->getZonesOfColor($board, fn($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == YELLOW);
+                $pointsPerZone = array_map(fn($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn($z) => count($z), $zones));
                 $points = array_sum($pointsPerZone);
                 break;
             case 37:
             case 38:
-                $zones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == RED, fn ($hex) => $this->isBuilding($hex["tokens"]));
-                $pointsPerZone = array_map(fn ($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn ($z) => count($z), $zones));
+                $zones = $this->getZonesOfColor($board, fn($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == RED, fn($hex) => $this->isBuilding($hex["tokens"]));
+                $pointsPerZone = array_map(fn($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn($z) => count($z), $zones));
                 $points = array_sum($pointsPerZone);
                 break;
             case 41:
-                $zones = $this->getZonesOfColor($board, fn ($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == BLUE);
-                $pointsPerZone = array_map(fn ($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn ($z) => count($z), $zones));
+                $zones = $this->getZonesOfColor($board, fn($coloredToken) => $coloredToken !== null && $coloredToken->type_arg == BLUE);
+                $pointsPerZone = array_map(fn($count) => $this->getPointsAccordingToZoneLength($card->type_arg, $count), array_map(fn($z) => count($z), $zones));
                 $points = array_sum($pointsPerZone);
                 break;
 

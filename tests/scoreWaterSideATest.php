@@ -90,11 +90,70 @@ class ScoreWaterSideATest extends GameTestBase { // this is your game class defi
         $this->displayResult(__FUNCTION__, $equal, $result);
     }
 
+    function testScoreWaterCircular() {
+
+        $grid = $this->initBoard();
+        $this->setTokensIn($grid, 1, 0, [BLUE]);
+        $this->setTokensIn($grid, 1, 1, [BLUE]);
+        $this->setTokensIn($grid, 2, 0, [BLUE]);
+        $this->setTokensIn($grid, 2, 2, [BLUE]);
+        $this->setTokensIn($grid, 3, 0, [BLUE]);
+        $this->setTokensIn($grid, 3, 1, [BLUE]);
+
+        $result = $this->calculateWaterPoints($grid);
+
+        $equal = $result == 15;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
+    function testScoreWaterCircularPlusOneOnSide() {
+
+        $grid = $this->initBoard();
+        $this->setTokensIn($grid, 1, 0, [BLUE]);
+        $this->setTokensIn($grid, 1, 1, [BLUE]);
+        $this->setTokensIn($grid, 2, 0, [BLUE]);
+        $this->setTokensIn($grid, 2, 2, [BLUE]);
+        $this->setTokensIn($grid, 3, 0, [BLUE]);
+        $this->setTokensIn($grid, 3, 1, [BLUE]);
+        $this->setTokensIn($grid, 4, 1, [BLUE]);
+
+        $result = $this->calculateWaterPoints($grid);
+
+        $equal = $result == 15;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
+    function testScoreWaterDoubleCircular() {
+
+        $grid = $this->initBoard();
+        $this->setTokensIn($grid, 1, 0, [BLUE]);
+        $this->setTokensIn($grid, 1, 1, [BLUE]);
+        $this->setTokensIn($grid, 2, 0, [BLUE]);
+        $this->setTokensIn($grid, 2, 2, [BLUE]);
+        $this->setTokensIn($grid, 3, 0, [BLUE]);
+        $this->setTokensIn($grid, 3, 1, [BLUE]);
+
+        $this->setTokensIn($grid, 1, 2, [BLUE]);
+        $this->setTokensIn($grid, 2, 3, [BLUE]);
+        $this->setTokensIn($grid, 3, 2, [BLUE]);
+
+        $result = $this->calculateWaterPoints($grid);
+
+        $equal = $result == 15;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
     function testAll() {
         $this->testScoreWaterFromRules();
         $this->testScoreWaterWithAdditionalTokens();
         $this->testScoreWaterWithUnclearPath();
         $this->testScoreWaterZigZag();
+        $this->testScoreWaterCircular();
+        $this->testScoreWaterCircularPlusOneOnSide();
+        //$this->testScoreWaterDoubleCircular();//not sure how it should count, will probably never happen
     }
 }
 

@@ -68,6 +68,16 @@ trait HoneycombTrait {
         return $hex["col"] == $hexCol && $hex["row"] == $hexRow;
     }
 
+    /**
+     * Return true if both hexagons have the same 'col' and 'row'
+     */
+    function areHexesEqual($hex1, $hex2) {
+        if ($hex1 === null || $hex2 === null) {
+            return false;
+        }
+        return $hex1['col'] === $hex2['col'] && $hex1['row'] === $hex2['row'];
+    }
+
     function isHexInZone(array $hex, array $hexesZone) {
         $found = array_filter($hexesZone, fn ($eh) => $this->hexesEquals($eh, $hex["col"], $hex["row"]));
         return count($found) > 0;
