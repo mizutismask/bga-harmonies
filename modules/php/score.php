@@ -60,7 +60,7 @@ trait ScoreTrait {
                 if ($topTokenPredicate($topToken) && !isset($visited[$this->getTempHexId($hex)])) {
                     // If the top token matches the specified color and is not visited yet, explore its zone
                     $exploredZone = []; // Array to store hexes of the explored zone
-                    $this->exploreZone($board, $hex, $visited, $exploredZone, $topTokenPredicate);
+                    $this->exploreZone($board, $hex, $visited, $exploredZone, $topTokenPredicate, $hexPredicate);
 
                     // Add the explored zone to the list of explored zones
                     $exploredZones[] = $exploredZone;
@@ -76,7 +76,7 @@ trait ScoreTrait {
     }
 
     // Function to recursively explore the zone of neighboring tokens of specified color
-    private function exploreZone($board, $hex, &$visited, &$exploredZone, $zonePredicate) {
+    private function exploreZone($board, $hex, &$visited, &$exploredZone, $topTokenPredicate, $hexPredicate) {
         // Mark the current hex as visited
         $visited[$this->getTempHexId($hex)] = true;
         $exploredZone[] = $hex; // Add the current hex to the explored zone
@@ -90,9 +90,9 @@ trait ScoreTrait {
             //self::dump('*******************$neighborHex', $neighborHex);
             $neighborTopToken = $neighborHex['topToken'];
 
-            if ($zonePredicate($neighborTopToken) && !isset($visited[$this->getTempHexId($neighborHex)])) {
+            if ($topTokenPredicate($neighborTopToken) && !isset($visited[$this->getTempHexId($neighborHex)]) && (!$hexPredicate || $hexPredicate($neighborHex)) ) {
                 // If the neighboring token matches the specified color and is not visited yet, explore its zone recursively
-                $this->exploreZone($board, $neighborHex, $visited, $exploredZone, $zonePredicate);
+                $this->exploreZone($board, $neighborHex, $visited, $exploredZone, $topTokenPredicate, $hexPredicate);
             }
         }
     }

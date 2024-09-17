@@ -16,6 +16,15 @@ class ScoreBuildingSpiritTest extends GameTestBase { // this is your game class 
             $this->setTokensIn($grid, 2, 3, [RED, BROWN]);
             $this->setTokensIn($grid, 0, 3, [RED]);
             $this->setTokensIn($grid, 4, 2, [RED, RED]);
+        } else if ($playerId == 38) {
+            $this->setTokensIn($grid, 3, 0, [RED, GRAY]);
+
+            $this->setTokensIn($grid, 2, 2, [RED, BROWN]);
+            $this->setTokensIn($grid, 2, 3, [RED, BROWN]);
+            $this->setTokensIn($grid, 4, 1, [RED, RED]);
+
+            $this->setTokensIn($grid, 0, 2, [RED]);
+            $this->setTokensIn($grid, 0, 3, [RED, BROWN]);
         }
         return $grid;
     }
@@ -40,8 +49,22 @@ class ScoreBuildingSpiritTest extends GameTestBase { // this is your game class 
         $this->displayResult(__FUNCTION__, $equal, $result);
     }
 
+    function testCalculatePointsForSpiritCard38() {
+
+        $grid = $this->getBoard(38);
+
+        $card = $this->ANIMAL_CARDS[1][38];
+        $card->type_arg = 38;
+        $result = $this->calculatePointsForSpiritCard("player", $card, $grid);
+
+        $equal = $result == 12;
+
+        $this->displayResult(__FUNCTION__, $equal, $result);
+    }
+
     function testAll() {
         $this->testCalculatePointsForSpiritCard37();
+        $this->testCalculatePointsForSpiritCard38();
     }
 }
 
