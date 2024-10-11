@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `coloredToken` (
     `card_location_arg` int(11) NOT NULL,
     PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+--see method createTokens as it modifies the table
 
 CREATE TABLE IF NOT EXISTS `global_variables` (
   `name` varchar(50) NOT NULL,

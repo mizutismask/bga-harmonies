@@ -321,9 +321,53 @@ class Harmonies extends Table {
     */
 
     function upgradeTableDb($from_version) {
-        $changes = [
-            // [2307071828, "INSERT INTO DBPREFIX_global (`global_id`, `global_value`) VALUES (24, 0)"], 
+        /**
+         * 2409171611 moves the slot inside the card_location and add position to be able to add a unique constraint on the couple : location + location_arg 
+         * to prevent some unexpected tokens being in the same cell and same level
+         * Request 2 puts the tokens in the same cell and same level back in the deck (except the first one) to allow to continue the game
+         */
+        $changes2409171611 = [
+            [2409171611, "UPDATE `DBPREFIX_coloredToken` t1
+                        JOIN (
+                            SELECT t2.card_id,
+                                (
+                                    SELECT COUNT(*) 
+                                    FROM `DBPREFIX_coloredToken` t3 
+                                    WHERE t3.card_location = 'centralBoard'
+                                    AND t3.card_location_arg = t2.card_location_arg
+                                    AND t3.card_id <= t2.card_id
+                                ) AS new_location_arg
+                            FROM `DBPREFIX_coloredToken` t2
+                            WHERE t2.card_location = 'centralBoard'
+                            ORDER BY t2.card_location_arg, t2.card_id
+                        ) AS ordered
+                        ON t1.card_id = ordered.card_id
+                        SET t1.card_location = CONCAT(t1.card_location, '_', t1.card_location_arg),
+                            t1.card_location_arg = ordered.new_location_arg
+                        WHERE t1.card_location = 'centralBoard';
+                        "],
+
+            [2409171611, "UPDATE `DBPREFIX_coloredToken` t1
+                        JOIN `DBPREFIX_coloredToken` t2
+                        ON t1.card_location = t2.card_location
+                           AND t1.card_location_arg = t2.card_location_arg
+                           AND t1.card_id > t2.card_id
+                        JOIN (
+                            SELECT IFNULL(MAX(card_location_arg), 0) + 1 AS new_location_arg
+                            FROM `DBPREFIX_coloredToken`
+                            WHERE card_location = 'deck'
+                        ) AS max_arg
+                        SET t1.card_location = 'deck',
+                            t1.card_location_arg = max_arg.new_location_arg
+                        WHERE t1.card_location LIKE 'cell_%';
+                        "],
+            [2409171611, "ALTER TABLE DBPREFIX_coloredToken ADD CONSTRAINT UC_CellLevel UNIQUE (card_location, card_location_arg)"],
         ];
+        $uniqueConstraints = self::getCollectionFromDB("SHOW INDEX FROM `coloredToken` WHERE Non_unique = 0;");
+        $changes = [];
+        if (count($uniqueConstraints) < 2) { //just primary key, we have to add the unique constraint
+            $changes = array_merge($changes2409171611, $changes);
+        }
 
         foreach ($changes as [$version, $sql]) {
             if ($from_version <= $version) {

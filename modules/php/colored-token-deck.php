@@ -1,7 +1,7 @@
 <?php
 
 require_once(__DIR__ . '/objects/coloredToken.php');
-
+const TABLE_COLORED_TOKEN = "coloredToken";
 trait ColoredTokenDeckTrait {
 
     /**
@@ -11,6 +11,9 @@ trait ColoredTokenDeckTrait {
         $tokens = $this->getColoredTokensToGenerate();
         $this->coloredTokens->createCards($tokens, 'deck');
         $this->coloredTokens->shuffle('deck');
+
+        //add the constraint after the deck is shuffled, because unicity for the constraint is not done before (card_location=deck and card_location_arg=0)
+        self::applyDbUpgradeToAllDB("ALTER TABLE DBPREFIX_coloredToken ADD CONSTRAINT UC_CellLevel UNIQUE (card_location, card_location_arg)");
     }
 
     /**
@@ -37,7 +40,7 @@ trait ColoredTokenDeckTrait {
     public function refillCentralBoard() {
         if ($this->getPlayerCount() === 1) {
             //discard all tokens before replenishing
-            $toDiscard = $this->coloredTokens->getCardsInLocation("centralBoard");
+            $toDiscard = $this->getCardsFromLocationLike(TABLE_COLORED_TOKEN, "centralBoard_");
             $this->coloredTokens->moveCards(array_keys($toDiscard), "discard");
             $this->fillCentralBoard();
         } else {
@@ -64,7 +67,7 @@ trait ColoredTokenDeckTrait {
         ]);
     }
 
-    public function getTokenCountOnCell($hexId){
+    public function getTokenCountOnCell($hexId) {
         return $this->getUniqueIntValueFromDB("SELECT count(card_id) FROM coloredToken where `card_location` = '$hexId'");
     }
 
@@ -135,7 +138,7 @@ trait ColoredTokenDeckTrait {
             $cellName = $this->getCellName($hex, $playerId);
             $alreadyHasCube = in_array($cellName, $existingCubesLocs);
 
-            
+
             /*self::dump('*******************existingTokens', $existingTokens);
             self::dump('*******************isColorAllowedOnTopOfOtherColor', $this->isColorAllowedOnTopOfOtherColor($token->type_arg, $existingTokens[0]->type_arg));
             self::dump('*******************isColorAllowedAtPosition', $this->isColorAllowedAtPosition($token->type_arg, count($existingTokens) + 1));
@@ -199,15 +202,18 @@ trait ColoredTokenDeckTrait {
      * place a number of tokens cards to pick$playerId.
      */
     private function pickTokensForCentralBoard(int $count, int $holeNumber) {
-        $cards = $this->getColoredTokensFromDb($this->coloredTokens->pickCardsForLocation($count, "deck", 'centralBoard', $holeNumber));
+        $cards = [];
+        for ($i = 0; $i < $count; $i++) {
+            $cards[] = $this->getColoredTokenFromDb($this->coloredTokens->pickCardForLocation("deck", "centralBoard_$holeNumber", $i + 1));
+        }
         return $cards;
     }
 
     public function getColoredTokensOnCentralBoard() {
-        $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard'));
+        $tokens = $this->getColoredTokensFromDb($this->getCardsFromLocationLike(TABLE_COLORED_TOKEN, 'centralBoard_'));
         $byHole = $this->getPlayerCount() === 1 ? array_fill_keys([1, 2, 3], []) : array_fill_keys([1, 2, 3, 4, 5], []);
         foreach ($tokens as $tok) {
-            $byHole[$tok->location_arg][] = $tok;
+            $byHole[$this->getPart($tok->location, -1)][] = $tok;
         }
         return $byHole;
     }
