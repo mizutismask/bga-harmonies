@@ -33,7 +33,7 @@ trait ActionTrait {
             }
         }
 
-        $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation("centralBoard_$holeNumber"));
+        $tokens = $this->getColoredTokensFromDb($this->coloredTokens->getCardsInLocation('centralBoard', $holeNumber));
         self::setGameStateValue(EMPTIED_HOLE, $holeNumber);
         $this->setGlobalVariable(TOKENS_IN_HOLE, $tokens);
 
