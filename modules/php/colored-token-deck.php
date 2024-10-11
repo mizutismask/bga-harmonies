@@ -41,7 +41,10 @@ trait ColoredTokenDeckTrait {
         if ($this->getPlayerCount() === 1) {
             //discard all tokens before replenishing
             $toDiscard = $this->getCardsFromLocationLike(TABLE_COLORED_TOKEN, "centralBoard_");
-            $this->coloredTokens->moveCards(array_keys($toDiscard), "discard");
+            $idsToDiscard = array_keys($toDiscard);
+            foreach ($idsToDiscard as $id) {
+                $this->coloredTokens->insertCardOnExtremePosition($id, "discard", true);
+            }
             $this->fillCentralBoard();
         } else {
             $hole = intval(self::getGameStateValue(EMPTIED_HOLE));
