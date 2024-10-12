@@ -329,7 +329,7 @@ class Harmonies extends Table {
                             AND CONSTRAINT_NAME = 'UC_CellLevel';";
         $result = self::getUniqueValueFromDB($constraintExists);
         if (!empty($result)) {
-            self::applyDbUpgradeToAllDB("ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;");
+            $this->customApplyDbUpgrade($from_version, "all", "ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;");
         }
 
         $resetTokensPosition = "UPDATE `DBPREFIX_coloredToken` t1
@@ -345,7 +345,7 @@ class Harmonies extends Table {
                             t1.card_location_arg = original.original_location_arg
                         WHERE t1.card_location LIKE 'centralBoard_%';
                         ";
-        self::applyDbUpgradeToAllDB($resetTokensPosition);
+        $this->customApplyDbUpgrade($from_version, "all", $resetTokensPosition);
 
         $previousVersionChanges = [
             //[2307071828, "INSERT INTO DBPREFIX_global (`global_id`, `global_value`) VALUES (24, 0)"], 
@@ -356,8 +356,7 @@ class Harmonies extends Table {
             /*[2410111632, "ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;"],
             [2410111658, "ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;"],
             [2410111632, $resetTokensPosition],
-            [2410111658, $resetTokensPosition],*/
-        ];
+            [2410111658, $resetTokensPosition],*/];
 
         foreach ($previousVersionChanges as [$version, $sql]) {
             if ($from_version <= $version) {
