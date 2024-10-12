@@ -321,27 +321,70 @@ class Harmonies extends Table {
     */
 
     function upgradeTableDb($from_version) {
-        $changes = [
-            // [2307071828, "INSERT INTO DBPREFIX_global (`global_id`, `global_value`) VALUES (24, 0)"], 
+
+        $constraintExists =  "SELECT CONSTRAINT_NAME
+                            FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+                            WHERE TABLE_NAME = 'coloredToken'
+                            AND CONSTRAINT_TYPE = 'UNIQUE'
+                            AND CONSTRAINT_NAME = 'UC_CellLevel';";
+        $result = self::getUniqueValueFromDB($constraintExists);
+        if (!empty($result)) {
+            self::applyDbUpgradeToAllDB("ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;");
+        }
+
+        $resetTokensPosition = "UPDATE `DBPREFIX_coloredToken` t1
+                        JOIN (
+                            SELECT t2.card_id,
+                                SUBSTRING_INDEX(t2.card_location, '_', -1) AS original_location_arg,
+                                LEFT(t2.card_location, LENGTH(t2.card_location) - LOCATE('_', REVERSE(t2.card_location))) AS original_card_location
+                            FROM `DBPREFIX_coloredToken` t2
+                            WHERE t2.card_location LIKE 'centralBoard_%'
+                        ) AS original
+                        ON t1.card_id = original.card_id
+                        SET t1.card_location = original.original_card_location,
+                            t1.card_location_arg = original.original_location_arg
+                        WHERE t1.card_location LIKE 'centralBoard_%';
+                        ";
+        self::applyDbUpgradeToAllDB($resetTokensPosition);
+
+        $previousVersionChanges = [
+            //[2307071828, "INSERT INTO DBPREFIX_global (`global_id`, `global_value`) VALUES (24, 0)"], 
         ];
 
-        foreach ($changes as [$version, $sql]) {
+
+        $exactVersionChanges = [
+            /*[2410111632, "ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;"],
+            [2410111658, "ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;"],
+            [2410111632, $resetTokensPosition],
+            [2410111658, $resetTokensPosition],*/
+        ];
+
+        foreach ($previousVersionChanges as [$version, $sql]) {
             if ($from_version <= $version) {
-                try {
-                    self::warn("upgradeTableDb apply 1: from_version=$from_version, change=[ $version, $sql ]");
-                    self::applyDbUpgradeToAllDB($sql);
-                } catch (Exception $e) {
-                    // See https://studio.boardgamearena.com/bug?id=64
-                    // BGA framework can produce invalid SQL with non-existant tables when using DBPREFIX_.
-                    // The workaround is to retry the query on the base table only.
-                    self::error("upgradeTableDb apply 1 failed: from_version=$from_version, change=[ $version, $sql ]");
-                    $sql = str_replace("DBPREFIX_", "", $sql);
-                    self::warn("upgradeTableDb apply 2: from_version=$from_version, change=[ $version, $sql ]");
-                    self::applyDbUpgradeToAllDB($sql);
-                }
+                $this->customApplyDbUpgrade($from_version, $version, $sql);
+            }
+        }
+        foreach ($exactVersionChanges as [$version, $sql]) {
+            if ($from_version == $version) {
+                $this->customApplyDbUpgrade($from_version, $version, $sql);
             }
         }
         self::warn("upgradeTableDb complete: from_version=$from_version");
+    }
+
+    function customApplyDbUpgrade($from_version, $version, $sql) {
+        try {
+            self::warn("upgradeTableDb apply 1: from_version=$from_version, change=[ $version, $sql ]");
+            self::applyDbUpgradeToAllDB($sql);
+        } catch (Exception $e) {
+            // See https://studio.boardgamearena.com/bug?id=64
+            // BGA framework can produce invalid SQL with non-existant tables when using DBPREFIX_.
+            // The workaround is to retry the query on the base table only.
+            self::error("upgradeTableDb apply 1 failed: from_version=$from_version, change=[ $version, $sql ]");
+            $sql = str_replace("DBPREFIX_", "", $sql);
+            self::warn("upgradeTableDb apply 2: from_version=$from_version, change=[ $version, $sql ]");
+            self::applyDbUpgradeToAllDB($sql);
+        }
     }
 
     function getPlayerScoreBoard($playerId, $player) {
