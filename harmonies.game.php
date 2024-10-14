@@ -322,16 +322,6 @@ class Harmonies extends Table {
 
     function upgradeTableDb($from_version) {
 
-        $constraintExists =  "SELECT CONSTRAINT_NAME
-                            FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
-                            WHERE TABLE_NAME = 'coloredToken'
-                            AND CONSTRAINT_TYPE = 'UNIQUE'
-                            AND CONSTRAINT_NAME = 'UC_CellLevel';";
-        $result = self::getUniqueValueFromDB($constraintExists);
-        if (!empty($result)) {
-            $this->customApplyDbUpgrade($from_version, "all", "ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;");
-        }
-
         $resetTokensPosition = "UPDATE `DBPREFIX_coloredToken` t1
                         JOIN (
                             SELECT t2.card_id,
