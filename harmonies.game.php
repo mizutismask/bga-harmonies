@@ -325,7 +325,7 @@ class Harmonies extends Table {
         $constraintExists =  "SHOW INDEX FROM `DBPREFIX_coloredToken`
                                 WHERE Non_unique = 0
                                 AND Key_name = 'UC_CellLevel';";
-        $result = self::getCollectionFromDB($constraintExists, true);
+        $result = self::getCollectionFromDB($constraintExists, false);
         if (!empty($result)) {
             $this->customApplyDbUpgrade($from_version, "all", "ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;");
         }
