@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/objects/coloredToken.php');
+require_once(__DIR__ . '/coloredToken.php');
 
 trait ColoredTokenDeckTrait {
 
@@ -64,7 +64,7 @@ trait ColoredTokenDeckTrait {
         ]);
     }
 
-    public function getTokenCountOnCell($hexId){
+    public function getTokenCountOnCell($hexId) {
         return $this->getUniqueIntValueFromDB("SELECT count(card_id) FROM coloredToken where `card_location` = '$hexId'");
     }
 
@@ -135,7 +135,7 @@ trait ColoredTokenDeckTrait {
             $cellName = $this->getCellName($hex, $playerId);
             $alreadyHasCube = in_array($cellName, $existingCubesLocs);
 
-            
+
             /*self::dump('*******************existingTokens', $existingTokens);
             self::dump('*******************isColorAllowedOnTopOfOtherColor', $this->isColorAllowedOnTopOfOtherColor($token->type_arg, $existingTokens[0]->type_arg));
             self::dump('*******************isColorAllowedAtPosition', $this->isColorAllowedAtPosition($token->type_arg, count($existingTokens) + 1));

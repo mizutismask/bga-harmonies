@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__ . '/objects/animalCube.php');
-require_once(__DIR__ . '/objects/animalCard.php');
+require_once(__DIR__ . '/animalCube.php');
+require_once(__DIR__ . '/animalCard.php');
 
 trait AnimalCubeDeckTrait {
 

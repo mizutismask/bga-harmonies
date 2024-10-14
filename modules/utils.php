@@ -1,6 +1,6 @@
 <?php
-//require_once(__DIR__ . '/objects/coloredToken.php');
-//require_once(__DIR__ . '/objects/route.php');
+//require_once(__DIR__ . '/coloredToken.php');
+//require_once(__DIR__ . '/route.php');
 
 trait UtilTrait {
 
@@ -176,21 +176,21 @@ trait UtilTrait {
      * Transforms a ColoredToken Db object array to ColoredToken class array.
      */
     function getColoredTokensFromDb(array $dbObjects) {
-        return array_map(fn ($dbObject) => $this->getColoredTokenFromDb($dbObject), array_values($dbObjects));
+        return array_map(fn($dbObject) => $this->getColoredTokenFromDb($dbObject), array_values($dbObjects));
     }
 
     /**
      * Transforms a AnimalCard Db object array to AnimalCard class array.
      */
     function getAnimalCardsFromDb(array $dbObjects) {
-        return array_map(fn ($dbObject) => $this->getAnimalCardFromDb($dbObject), array_values($dbObjects));
+        return array_map(fn($dbObject) => $this->getAnimalCardFromDb($dbObject), array_values($dbObjects));
     }
 
     /**
      * Transforms a AnimalCard Db object array to AnimalCard class array.
      */
     function getAnimalCubesFromDb(array $dbObjects) {
-        return array_map(fn ($dbObject) => $this->getAnimalCubeFromDb($dbObject), array_values($dbObjects));
+        return array_map(fn($dbObject) => $this->getAnimalCubeFromDb($dbObject), array_values($dbObjects));
     }
 
     /**
@@ -216,7 +216,7 @@ trait UtilTrait {
     function getNonZombiePlayersIds() {
         $sql = "SELECT player_id FROM player WHERE player_eliminated = 0 AND player_zombie = 0 ORDER BY player_no";
         $dbResults = self::getCollectionFromDB($sql);
-        return array_map(fn ($dbResult) => intval($dbResult['player_id']), array_values($dbResults));
+        return array_map(fn($dbResult) => intval($dbResult['player_id']), array_values($dbResults));
     }
 
     /**

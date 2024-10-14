@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/objects/animalCard.php');
+require_once(__DIR__ . '/animalCard.php');
 
 trait AnimalCardDeckTrait {
 
@@ -19,7 +19,7 @@ trait AnimalCardDeckTrait {
     public function pickInitialSpiritsCards() {
         $cardsNumber = $this->getInitialSpiritCardNumber();
         $players = $this->getPlayersIds();
-        $possibleSpirits = array_filter($this->ANIMAL_CARDS[1], fn ($c) => $c->isSpirit === true);
+        $possibleSpirits = array_filter($this->ANIMAL_CARDS[1], fn($c) => $c->isSpirit === true);
         $possibleTypes = array_keys($possibleSpirits);
         foreach ($players as $playerId) {
             for ($c = 0; $c < $cardsNumber; $c++) {
@@ -40,7 +40,7 @@ trait AnimalCardDeckTrait {
         }
         //discards all others
         $remaining  = $this->getCardsOfTypeArgAmongSeveralFromLocation("animalCard", $possibleTypes, "deck");
-        $this->animalCards->moveCards(array_map(fn ($c) => $c["id"], $remaining), "discard");
+        $this->animalCards->moveCards(array_map(fn($c) => $c["id"], $remaining), "discard");
     }
 
     public function getSpiritCardsToChoose($playerId) {
