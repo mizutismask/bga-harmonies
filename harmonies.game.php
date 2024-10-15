@@ -322,12 +322,12 @@ class Harmonies extends Table {
 
     function upgradeTableDb($from_version) {
 
-        $constraintExists =  "SHOW INDEX FROM `DBPREFIX_coloredToken`
+        $constraintExists =  "SHOW INDEX FROM `zz_savepoint_coloredToken`
                                 WHERE Non_unique = 0
                                 AND Key_name = 'UC_CellLevel';";
         $result = self::getCollectionFromDB($constraintExists, false);
         if (!empty($result)) {
-            $this->customApplyDbUpgrade($from_version, "all", "ALTER TABLE `DBPREFIX_coloredToken` DROP INDEX `UC_CellLevel`;");
+            $this->customApplyDbUpgrade($from_version, "all", "ALTER TABLE `zz_savepoint_coloredToken` DROP INDEX `UC_CellLevel`;");
         }
 
         $resetTokensPosition = "UPDATE `DBPREFIX_coloredToken` t1
