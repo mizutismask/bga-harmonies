@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/animalCard.php');
+require_once(__DIR__ . '/objects/animalCard.php');
 
 trait AnimalCardDeckTrait {
 

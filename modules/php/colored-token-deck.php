@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/coloredToken.php');
+require_once(__DIR__ . '/objects/coloredToken.php');
 
 trait ColoredTokenDeckTrait {
 

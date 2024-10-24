@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/animalCard.php');
+require_once(__DIR__ . '/objects/animalCard.php');
 trait ScoreTrait {
     static $treePoints = [1, 3, 7];
     static $riverPoints = [0, 0, 2, 5, 8, 11, 15];

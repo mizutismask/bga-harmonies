@@ -19,18 +19,18 @@
 
 
 require_once(APP_GAMEMODULE_PATH . 'module/table/table.game.php');
-require_once('modules/constants.inc.php');
-require_once('modules/utils.php');
-require_once('modules/states.php');
-require_once('modules/args.php');
-require_once('modules/actions.php');
-require_once('modules/animal-cards-deck.php');
-require_once('modules/animal-cube-deck.php');
-require_once('modules/colored-token-deck.php');
-require_once('modules/debug-util.php');
-require_once('modules/expansion.php');
-require_once('modules/score.php');
-require_once('modules/honeycomb.php');
+require_once('modules/php/constants.inc.php');
+require_once('modules/php/utils.php');
+require_once('modules/php/states.php');
+require_once('modules/php/args.php');
+require_once('modules/php/actions.php');
+require_once('modules/php/animal-cards-deck.php');
+require_once('modules/php/animal-cube-deck.php');
+require_once('modules/php/colored-token-deck.php');
+require_once('modules/php/debug-util.php');
+require_once('modules/php/expansion.php');
+require_once('modules/php/score.php');
+require_once('modules/php/honeycomb.php');
 
 class Harmonies extends Table {
     use UtilTrait;
