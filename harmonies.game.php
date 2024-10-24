@@ -371,7 +371,7 @@ class Harmonies extends Table {
 
     function customApplyDbUpgrade($from_version, $version, $sql) {
         try {
-            self::warn("upgradeTableDb apply 1: from_version=$from_version, change=[ $version, $sql ]");
+            //self::warn("upgradeTableDb apply 1: from_version=$from_version, change=[ $version, $sql ]");
             self::applyDbUpgradeToAllDB($sql);
         } catch (Exception $e) {
             // See https://studio.boardgamearena.com/bug?id=64
