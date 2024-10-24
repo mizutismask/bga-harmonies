@@ -21,6 +21,23 @@ trait UtilTrait {
                 return clienttranslate("mountains");
         }
     }
+    
+    function getColorTypeName(string $tokenTypeArg) {
+        switch ($tokenTypeArg) {
+            case BLUE:
+                return clienttranslate("blue");
+            case GRAY:
+                return clienttranslate("gray");
+            case BROWN:
+                return clienttranslate("brown");
+            case GREEN:
+                return clienttranslate("green");
+            case YELLOW:
+                return clienttranslate("yellow");
+            case RED:
+                return clienttranslate("red");
+        }
+    }
 
     function array_find(array $array, callable $fn) {
         foreach ($array as $value) {

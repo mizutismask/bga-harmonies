@@ -71,15 +71,31 @@ trait ColoredTokenDeckTrait {
     public function moveColoredTokenToBoard($tokenId, $hexId) {
         $playerId = $this->getMostlyActivePlayerId();
         $zindex = $this->getTokenCountOnCell($hexId) + 1;
+
+        /**** To try to debug why some tokens can be in the same cell at the same level */
+        $existingToken = $this->coloredTokens->getCardsInLocation($hexId, $zindex);
+        //$existingToken = $this->coloredTokens->getCard($tokenId);
+        if ($existingToken) {
+            $tokenDesc = json_encode($existingToken);
+            $this->error("MoveColoredTokenToBoard: duplicate location. Trying to place token id $tokenId at $hexId when there is already one: $tokenDesc");
+            $color = $this->getColorTypeName($existingToken['type_arg']);
+            throw new BgaUserException($this->_("There is already a $color token at level $zindex, you can't play there"));
+        }
+
+        /***** */
+
         $this->coloredTokens->moveCard($tokenId, $hexId, $zindex);
         $this->updateChosenToken($tokenId, true);
 
-        $this->notifyAllPlayers('materialMove', "", [
+        $updatedCard = $this->getColoredTokenFromDb($this->coloredTokens->getCard($tokenId));
+        $this->notifyWithName('materialMove', clienttranslate('${player_name} places ${tokens} at level ${level}'), [
             'type' => MATERIAL_TYPE_TOKEN,
             'from' => MATERIAL_LOCATION_DECK,
             'to' => MATERIAL_LOCATION_HEX,
             'toArg' => $playerId,
-            'material' => [$this->getColoredTokenFromDb($this->coloredTokens->getCard($tokenId))],
+            'level' => $updatedCard->location_arg,
+            'material' => [$updatedCard],
+            'tokens' => [$updatedCard],
         ]);
 
         $this->notifyAllPlayers('counter', "", [
